@@ -757,6 +757,7 @@ function toggleJob(i) {
   const idx = S.selectedJobs.indexOf(i);
   if(idx>=0) S.selectedJobs.splice(idx,1); else S.selectedJobs.push(i);
   renderFutureJobs();
+  triggerAutoSave();
 }
 function renderSkills() {
   document.getElementById('skillTags').innerHTML = SKILLS.map(s=>`
@@ -766,12 +767,14 @@ function toggleSkill(s) {
   const i = S.jobDesign.skills.indexOf(s);
   if(i>=0) S.jobDesign.skills.splice(i,1); else S.jobDesign.skills.push(s);
   renderSkills();
+  triggerAutoSave();
 }
 function saveJobDesign() {
   S.jobDesign.name   = document.getElementById('jdName').value;
   S.jobDesign.fields = document.getElementById('jdFields').value;
   S.jobDesign.work   = document.getElementById('jdWork').value;
   S.jobDesign.reason = document.getElementById('jdReason').value;
+  triggerAutoSave();
 }
 
 // ══════════════════════════════════
@@ -817,6 +820,7 @@ function openYrPopup(id) {
 function placeSubj(key) {
   if(pendingSubj && !getAllPlaced().includes(pendingSubj)) {
     S.roadmap[key].push(pendingSubj); updateUnits(); renderSubjLib(); renderRoadmap();
+    triggerAutoSave();
   }
   closeYrPopup();
 }
@@ -825,7 +829,11 @@ function closeYrPopup() {
   document.getElementById('overlay').classList.remove('active');
   pendingSubj=null;
 }
-function removeSubj(key,id) { S.roadmap[key]=S.roadmap[key].filter(x=>x!==id); updateUnits(); renderSubjLib(); renderRoadmap(); }
+function removeSubj(key,id) {
+  S.roadmap[key]=S.roadmap[key].filter(x=>x!==id);
+  updateUnits(); renderSubjLib(); renderRoadmap();
+  triggerAutoSave();
+}
 function getAllPlaced() { return Object.values(S.roadmap).flat(); }
 function updateUnits() {
   const t=getAllPlaced().reduce((a,id)=>a+(SUBJECTS.find(s=>s.id===id)?.unit||0),0);
@@ -997,9 +1005,10 @@ ${readStr}
     </div>
 
     <div class="done-actions">
-      <button class="btn-done-print btn-done-save" onclick="saveData()">💾 Firebase에 저장</button>
+      <button class="btn-done-print btn-done-save" onclick="saveData()">💾 지금 바로 저장</button>
       <button class="btn-done-print btn-done-print-out" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
-    </div>`;
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--muted);">활동할 때마다 자동으로 저장되고 있어요 ✅</div>`;
 }
 
 function copyPrompt() {
@@ -1024,6 +1033,29 @@ function updateProgress() {
 // FIREBASE SAVE / LOAD
 // ══════════════════════════════════
 function docId() { return `${S.grade}_${S.name}`.replace(/\s/g,'_'); }
+
+// 자동저장 debounce (연속 입력 시 1.5초 후 한 번만 저장)
+let autoSaveTimer = null;
+function triggerAutoSave() {
+  if (!S.name || !S.grade) return;
+  setStatus('saving', '저장 중...');
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(async () => {
+    saveJobDesign();
+    try {
+      await db.collection('students').doc(docId()).set({
+        name: S.name, grade: S.grade,
+        jobDesign: S.jobDesign, selectedJobs: S.selectedJobs, roadmap: S.roadmap,
+        subjectCount: getAllPlaced().length,
+        savedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      const t = new Date().toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
+      setStatus('saved', `자동저장 · ${t}`);
+    } catch(e) {
+      setStatus('error', '저장 실패');
+    }
+  }, 1500);
+}
 
 async function saveData() {
   if(!S.name||!S.grade){toast('이름과 학번을 입력해주세요','error');return;}
