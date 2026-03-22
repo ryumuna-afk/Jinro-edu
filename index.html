@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>진로탐색 플랫폼</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg:#0c0e1a; --bg2:#131526; --bg3:#1a1d2e; --bg4:#20243a;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#e4e8f4; --muted:#6b7490; --white:#fff;
+  --c1:#FF4757; --c2:#2ED573; --c3:#3B8BFF; --c4:#FF6B35; --c5:#A855F7; --c6:#FFD43B;
+  --font:'Noto Sans KR',sans-serif; --font-d:'Black Han Sans',sans-serif;
+  /* Holland colors */
+  --hR:#ef5050; --hI:#3B8BFF; --hA:#ec4899; --hS:#2ED573; --hE:#FF6B35; --hC:#FFD43B;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+#main.active{display:flex;flex-direction:column;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(59,139,255,.4)}50%{box-shadow:0 0 0 8px rgba(59,139,255,0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(10px)}}
+
+/* ═══ HOME ═══ */
+#home { background:var(--bg); position:relative; overflow:hidden; }
+.home-glow {
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 700px 500px at 15% 20%,rgba(59,139,255,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 500px 400px at 85% 75%,rgba(168,85,247,.06) 0%,transparent 70%);
+}
+.home-nav {
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 36px;border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--font-d);font-size:18px;background:linear-gradient(90deg,var(--c3),var(--c5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.home-hero{position:relative;z-index:10;text-align:center;padding:56px 36px 44px;animation:fadeUp .5s ease both;}
+.hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;color:var(--c3);background:rgba(59,139,255,.1);border:1px solid rgba(59,139,255,.25);padding:5px 16px;border-radius:20px;margin-bottom:22px;}
+.hero-title{font-family:var(--font-d);font-size:clamp(30px,5vw,54px);color:var(--white);line-height:1.15;margin-bottom:12px;}
+.hero-title span{color:var(--c3);}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 36px;}
+.start-input-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;}
+.start-input{background:var(--bg2);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:14px;padding:12px 18px;border-radius:12px;outline:none;transition:border-color .2s;width:160px;}
+.start-input:focus{border-color:var(--c3);}
+.start-input::placeholder{color:var(--muted);}
+.btn-start{background:linear-gradient(135deg,#1a6de0,var(--c3));border:none;color:white;font-family:var(--font);font-size:14px;font-weight:700;padding:12px 28px;border-radius:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(59,139,255,.3);}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(59,139,255,.4);}
+
+.feature-grid{position:relative;z-index:10;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;padding:0 36px 60px;max-width:1200px;margin:0 auto;}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;animation:fadeUp .5s ease both;}
+.feat-card:nth-child(1){animation-delay:.05s} .feat-card:nth-child(2){animation-delay:.1s}
+.feat-card:nth-child(3){animation-delay:.15s} .feat-card:nth-child(4){animation-delay:.2s}
+.feat-icon{font-size:28px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+.feat-card:nth-child(2) .feat-icon{animation-delay:.5s} .feat-card:nth-child(3) .feat-icon{animation-delay:1s} .feat-card:nth-child(4) .feat-icon{animation-delay:1.5s}
+.feat-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.feat-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* ═══ MAIN APP ═══ */
+.app-header{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.btn-back{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;padding:7px 14px;border-radius:9px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-back:hover{border-color:var(--c3);color:var(--c3);}
+.app-header-info{flex:1;}
+.app-header-name{font-size:15px;font-weight:700;color:var(--white);}
+.app-header-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.progress-bar{height:3px;background:var(--bg3);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--c3),var(--c5));transition:width .4s ease;}
+
+/* db bar */
+.db-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 24px;background:rgba(59,139,255,.04);border-bottom:1px solid rgba(59,139,255,.12);}
+.btn-sm{display:flex;align-items:center;gap:5px;font-family:var(--font);font-size:11px;font-weight:700;padding:6px 13px;border-radius:9px;cursor:pointer;transition:all .2s;border:1px solid;}
+.btn-save-sm{background:rgba(59,139,255,.15);border-color:rgba(59,139,255,.35);color:var(--c3);}
+.btn-save-sm:hover{background:rgba(59,139,255,.25);}
+.btn-load-sm{background:var(--bg3);border-color:var(--border2);color:var(--text);}
+.btn-load-sm:hover{border-color:var(--c3);color:var(--c3);}
+.btn-teacher-sm{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3);color:var(--c5);margin-left:auto;}
+.btn-teacher-sm:hover{background:rgba(168,85,247,.2);}
+.save-status{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--muted);}
+.sdot.saved{background:var(--c2);} .sdot.saving{background:var(--c3);animation:pulse 1s infinite;} .sdot.error{background:var(--c1);}
+
+/* TAB NAV */
+.tab-nav{display:flex;gap:3px;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{display:flex;align-items:center;gap:5px;white-space:nowrap;font-family:var(--font);font-size:12px;font-weight:600;padding:8px 16px;border-radius:9px;cursor:pointer;transition:all .2s;border:1px solid transparent;color:var(--muted);background:transparent;}
+.tab-btn:hover{color:var(--text);background:var(--bg3);}
+.tab-btn.active{background:rgba(59,139,255,.12);border-color:rgba(59,139,255,.3);color:var(--c3);}
+.tab-pane{display:none;animation:fadeIn .2s ease;}
+.tab-pane.active{display:block;}
+
+/* ═══ CONTENT AREA ═══ */
+.content{padding:24px;max-width:900px;margin:0 auto;}
+.section-title{font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+
+/* ═══ HOLLAND ═══ */
+.holland-empty{text-align:center;padding:50px 20px;}
+.holland-empty .ei{font-size:48px;margin-bottom:14px;}
+.holland-empty p{font-size:13px;color:var(--muted);line-height:1.7;}
+.holland-result-card{border-radius:18px;padding:24px;margin-bottom:20px;border:1.5px solid;position:relative;overflow:hidden;}
+.holland-type-big{font-family:var(--font-d);font-size:48px;margin-bottom:4px;}
+.holland-type-name{font-size:20px;font-weight:700;margin-bottom:10px;}
+.holland-type-desc{font-size:13px;line-height:1.75;opacity:.9;}
+.holland-badges{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.h-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px;border:1px solid;opacity:.85;}
+.holland-careers{margin-top:24px;}
+.h-careers-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:12px;}
+.h-career-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;}
+.h-career-chip{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px;text-align:center;font-size:12px;font-weight:600;transition:all .2s;cursor:default;}
+.h-career-chip:hover{border-color:var(--c3);color:var(--c3);}
+
+.holland-combo{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.h-type-mini{border-radius:12px;padding:14px;text-align:center;border:1.5px solid;cursor:pointer;transition:all .2s;}
+.h-type-mini:hover{transform:scale(1.03);}
+.h-type-mini.rank1{opacity:1;} .h-type-mini.rank2{opacity:.7;} .h-type-mini.rank3{opacity:.45;}
+.h-mini-letter{font-family:var(--font-d);font-size:28px;} .h-mini-name{font-size:10px;font-weight:700;margin-top:4px;}
+.h-mini-rank{font-size:9px;opacity:.7;margin-top:2px;}
+
+/* ═══ READING ═══ */
+.reading-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;}
+.reading-book-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.reading-author{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.reading-section{margin-bottom:10px;}
+.reading-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:5px;}
+.reading-text{font-size:13px;line-height:1.7;color:var(--text);background:var(--bg3);border-radius:8px;padding:10px 12px;}
+.reading-empty{text-align:center;padding:50px 20px;color:var(--muted);}
+
+/* ═══ 융합창직 ═══ */
+.job-design-area{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;}
+.jd-label{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);margin-bottom:8px;}
+.jd-input{width:100%;background:var(--bg3);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:13px;padding:10px 14px;border-radius:10px;outline:none;transition:border-color .2s;}
+.jd-input:focus{border-color:var(--c4);}
+.jd-input::placeholder{color:var(--muted);}
+.jd-textarea{width:100%;background:var(--bg3);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:13px;padding:10px 14px;border-radius:10px;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;line-height:1.6;}
+.jd-textarea:focus{border-color:var(--c4);}
+.jd-textarea::placeholder{color:var(--muted);}
+
+.future-job-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px;}
+.fj-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;}
+.fj-card:hover{border-color:var(--c4);transform:translateY(-2px);}
+.fj-card.selected{border-color:var(--c4);background:rgba(255,107,53,.08);}
+.fj-icon{font-size:24px;margin-bottom:8px;}
+.fj-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.fj-field{font-size:10px;color:var(--muted);}
+
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.skill-tag{font-size:11px;padding:4px 10px;border-radius:7px;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--c4);cursor:pointer;transition:all .2s;}
+.skill-tag.selected{background:rgba(255,107,53,.25);border-color:var(--c4);}
+.skill-tag:hover{background:rgba(255,107,53,.2);}
+
+/* ═══ 과목 선택 ═══ */
+.subject-layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 220px);overflow:hidden;}
+.subj-lib{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.subj-lib-header{padding:16px;border-bottom:1px solid var(--border);}
+.subj-lib-title{font-size:13px;font-weight:700;margin-bottom:3px;}
+.subj-lib-sub{font-size:11px;color:var(--muted);}
+.cat-scroll{display:flex;gap:4px;padding:10px 12px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-chip{white-space:nowrap;font-size:11px;font-weight:600;padding:4px 11px;border-radius:7px;cursor:pointer;transition:all .2s;border:1px solid var(--border);color:var(--muted);background:transparent;}
+.cat-chip.active{background:rgba(59,139,255,.15);border-color:rgba(59,139,255,.4);color:var(--c3);}
+.subj-scroll{flex:1;overflow-y:auto;padding:10px;scrollbar-width:thin;scrollbar-color:var(--bg3) transparent;}
+.subj-group{margin-bottom:12px;}
+.subj-group-title{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted);padding:2px 6px;margin-bottom:6px;}
+.subj-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.s-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:5px 10px;border-radius:8px;cursor:pointer;transition:all .2s;border:1px solid;user-select:none;}
+.s-chip:hover{transform:scale(1.03);}
+.s-chip.placed{opacity:.35;cursor:default;} .s-chip.placed:hover{transform:none;}
+.s-chip-unit{font-size:8px;opacity:.7;}
+
+.roadmap-panel{display:flex;flex-direction:column;overflow:hidden;}
+.roadmap-header{padding:16px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.roadmap-title{font-size:13px;font-weight:700;}
+.unit-badge{font-size:11px;font-weight:700;padding:5px 12px;border-radius:9px;background:rgba(59,139,255,.12);border:1px solid rgba(59,139,255,.25);color:var(--c3);}
+.roadmap-scroll{flex:1;overflow-y:auto;padding:16px 22px;scrollbar-width:thin;scrollbar-color:var(--bg3) transparent;}
+.year-sec{margin-bottom:20px;}
+.year-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.y-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:7px;white-space:nowrap;}
+.y-line{flex:1;height:1px;background:var(--border);}
+.y-units{font-size:10px;color:var(--muted);}
+.sem-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sem-slot{border:1.5px dashed var(--border2);border-radius:10px;padding:10px;min-height:76px;transition:border-color .2s;}
+.sem-slot:hover{border-color:rgba(59,139,255,.3);}
+.sem-label{font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;}
+.placed-chips{display:flex;flex-wrap:wrap;gap:4px;}
+.p-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 8px;border-radius:7px;cursor:pointer;border:1px solid;transition:all .2s;}
+.p-chip .px{font-size:10px;opacity:.5;transition:opacity .2s;}
+.p-chip:hover .px{opacity:1;color:#ff6b6b;}
+.slot-hint{font-size:10px;color:var(--border2);width:100%;text-align:center;padding:6px;}
+
+/* year popup */
+.yr-popup{position:fixed;z-index:300;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:fadeUp .15s ease;min-width:200px;}
+.yr-popup-title{font-size:11px;font-weight:700;margin-bottom:8px;color:var(--text);}
+.yr-btns{display:flex;flex-direction:column;gap:5px;}
+.yr-btn{font-family:var(--font);font-size:11px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text);transition:all .2s;text-align:left;}
+.yr-btn:hover:not(.dis){background:rgba(59,139,255,.15);border-color:rgba(59,139,255,.4);color:var(--c3);}
+.yr-btn.dis{opacity:.35;cursor:not-allowed;}
+.yr-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;float:right;margin-top:-2px;}
+
+/* ═══ AI 분석 ═══ */
+.ai-summary{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px;}
+
+/* ═══ 완료 화면 ═══ */
+.done-hero{text-align:center;padding:32px 20px 28px;background:linear-gradient(135deg,rgba(59,139,255,.08),rgba(168,85,247,.06));border-radius:20px;margin-bottom:24px;border:1px solid rgba(59,139,255,.15);}
+.done-emoji{font-size:56px;display:block;margin-bottom:14px;animation:float 3s ease-in-out infinite;}
+.done-title{font-family:var(--font-d);font-size:26px;color:var(--white);margin-bottom:8px;}
+.done-title span{color:var(--c3);}
+.done-sub{font-size:13px;color:var(--muted);line-height:1.7;}
+.done-progress{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.done-step{background:var(--bg2);border:1.5px solid var(--border);border-radius:14px;padding:14px;text-align:center;transition:all .2s;}
+.done-step.complete{border-color:rgba(46,213,115,.35);background:rgba(46,213,115,.05);}
+.done-step.incomplete{opacity:.5;}
+.done-step-icon{font-size:24px;margin-bottom:6px;}
+.done-step-label{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px;}
+.done-step-val{font-size:12px;font-weight:700;color:var(--white);}
+.done-step.complete .done-step-val{color:var(--c2);}
+.done-summary{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.done-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.done-card-header{padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;}
+.done-card-body{padding:14px 16px;font-size:12px;line-height:1.8;color:var(--text);}
+.done-card-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.done-tag{font-size:11px;padding:4px 10px;border-radius:7px;}
+.done-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-done-print{flex:1;min-width:140px;padding:14px;border-radius:12px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;border:none;}
+.btn-done-save{background:linear-gradient(135deg,#1a6de0,var(--c3));color:white;box-shadow:0 6px 20px rgba(59,139,255,.25);}
+.btn-done-save:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(59,139,255,.35);}
+.btn-done-print-out{background:var(--bg2);border:1.5px solid var(--border2)!important;color:var(--text);}
+.btn-done-print-out:hover{border-color:var(--c3)!important;color:var(--c3);}
+.prompt-box{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-top:14px;}
+.prompt-box-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.btn-copy{font-family:var(--font);font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;background:rgba(59,139,255,.15);border:1px solid rgba(59,139,255,.3);color:var(--c3);transition:all .2s;}
+.btn-copy:hover{background:rgba(59,139,255,.25);}
+.prompt-text{font-size:11px;color:var(--muted);line-height:1.75;white-space:pre-wrap;word-break:break-word;max-height:180px;overflow-y:auto;}
+@media print{
+  .app-header,.db-bar,.tab-nav,.done-actions,.prompt-box{display:none!important;}
+  .done-hero,.done-progress,.done-summary{break-inside:avoid;}
+  body{background:white;color:#111;}
+  .done-card,.done-step{background:white;border-color:#ddd;}
+  .done-title,.done-step-val{color:#111;}
+  .done-card-header{color:#111;}
+}
+
+/* ═══ TEACHER MODAL ═══ */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:720px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;animation:fadeUp .2s ease;}
+.modal-hd{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-title{font-size:15px;font-weight:700;}
+.modal-hd-btns{display:flex;align-items:center;gap:8px;}
+.modal-close{background:var(--bg3);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:20px 22px;overflow-y:auto;flex:1;}
+
+.modal-tabs{display:flex;gap:4px;margin-bottom:18px;}
+.m-tab{font-family:var(--font);font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);transition:all .2s;}
+.m-tab.active{background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.35);color:var(--c5);}
+.m-pane{display:none;} .m-pane.active{display:block;}
+
+.upload-area{border:2px dashed var(--border2);border-radius:14px;padding:28px;text-align:center;margin-bottom:16px;cursor:pointer;transition:all .2s;}
+.upload-area:hover{border-color:var(--c5);background:rgba(168,85,247,.04);}
+.upload-icon{font-size:36px;margin-bottom:10px;}
+.upload-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.upload-sub{font-size:11px;color:var(--muted);line-height:1.6;}
+.upload-input{display:none;}
+.upload-format{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.upload-format strong{color:var(--text);}
+.btn-upload{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.35);color:var(--c5);font-family:var(--font);font-size:12px;font-weight:700;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn-upload:hover:not(:disabled){background:rgba(168,85,247,.25);}
+.btn-upload:disabled{opacity:.4;cursor:not-allowed;}
+.upload-progress{margin-top:10px;font-size:12px;color:var(--c2);}
+.upload-error{margin-top:10px;font-size:12px;color:var(--c1);}
+
+.pw-screen{text-align:center;padding:40px 20px;}
+.pw-screen p{font-size:13px;color:var(--muted);margin-bottom:18px;}
+.pw-input{background:var(--bg3);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:14px;padding:11px 16px;border-radius:11px;outline:none;text-align:center;width:200px;display:block;margin:0 auto 12px;}
+.pw-input:focus{border-color:var(--c5);}
+
+.student-list-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .2s;}
+.student-list-item:hover{border-color:var(--c3);}
+.sli-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.sli-name{font-size:13px;font-weight:700;}
+.sli-meta{font-size:10px;color:var(--muted);}
+.sli-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.sli-chip{font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(59,139,255,.1);border:1px solid rgba(59,139,255,.2);color:var(--c3);}
+
+.btn-excel{display:flex;align-items:center;gap:5px;background:rgba(46,213,115,.1);border:1px solid rgba(46,213,115,.3);color:var(--c2);font-family:var(--font);font-size:11px;font-weight:700;padding:7px 14px;border-radius:9px;cursor:pointer;transition:all .2s;}
+.btn-excel:hover{background:rgba(46,213,115,.2);}
+.btn-excel:disabled{opacity:.4;cursor:not-allowed;}
+.teacher-search{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:12px;padding:9px 13px;border-radius:10px;outline:none;margin-bottom:12px;}
+.teacher-search:focus{border-color:var(--c3);}
+.teacher-search::placeholder{color:var(--muted);}
+.empty-list{text-align:center;padding:36px;color:var(--muted);font-size:13px;}
+
+/* ═══ TOAST ═══ */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;}
+.toast{background:var(--bg2);border:1px solid var(--border2);color:var(--text);font-size:12px;font-weight:500;padding:10px 18px;border-radius:11px;box-shadow:0 8px 28px rgba(0,0,0,.5);display:flex;align-items:center;gap:7px;animation:toastIn .2s ease;pointer-events:auto;}
+.toast.success{border-color:rgba(46,213,115,.4);} .toast.error{border-color:rgba(255,71,87,.4);} .toast.info{border-color:rgba(59,139,255,.4);}
+
+/* OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;}
+.overlay.active{display:block;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:860px){
+  .subject-layout{grid-template-columns:1fr;height:auto;}
+  .subj-lib{max-height:260px;}
+  .home-nav,.feature-grid,.start-input-row{padding-left:20px;padding-right:20px;}
+  .holland-combo{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:500px){
+  .sem-grid{grid-template-columns:1fr;}
+  .future-job-list{grid-template-columns:repeat(2,1fr);}
+  .h-career-grid{grid-template-columns:repeat(2,1fr);}
+}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="overlay" id="overlay" onclick="closeYrPopup()"></div>
+
+<!-- Year Popup -->
+<div class="yr-popup" id="yrPopup" style="display:none;">
+  <button class="yr-close" onclick="closeYrPopup()">✕</button>
+  <div class="yr-popup-title" id="yrPopupTitle"></div>
+  <div class="yr-btns" id="yrBtns"></div>
+</div>
+
+<!-- Teacher Modal -->
+<div class="modal-bg" id="teacherModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">👩‍🏫 교사 대시보드</div>
+      <div class="modal-hd-btns">
+        <button class="btn-excel" id="btnExcel" onclick="downloadExcel()" style="display:none;">📊 엑셀 다운로드</button>
+        <button class="modal-close" onclick="closeTeacher()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="teacherBody"></div>
+  </div>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home" class="screen active">
+  <div class="home-glow"></div>
+  <nav class="home-nav">
+    <div class="logo">진로탐색 플랫폼</div>
+    <div style="font-size:11px;color:var(--muted);">고교학점제 진로 통합 시스템</div>
+  </nav>
+  <div class="home-hero">
+    <div class="hero-tag">🌟 홀랜드 · 독서탐구 · 융합창직 · 과목설계</div>
+    <h1 class="hero-title">나만의 진로를<br><span>지금 설계</span>해요</h1>
+    <p class="hero-sub">홀랜드 유형 확인부터 독서탐구, 미래 직업 설계, 선택과목 로드맵까지 — AI와 함께 한번에.</p>
+    <div class="start-input-row">
+      <input class="start-input" id="homeName" placeholder="이름" maxlength="10">
+      <input class="start-input" id="homeGrade" placeholder="학년/반/번호" maxlength="12">
+      <button class="btn-start" onclick="startApp()">시작하기 →</button>
+    </div>
+  </div>
+  <div class="feature-grid">
+    <div class="feat-card" style="border-color:rgba(59,139,255,.2);">
+      <span class="feat-icon">🧭</span>
+      <div class="feat-title">홀랜드 유형 탐색</div>
+      <div class="feat-desc">내 유형(RIASEC)을 확인하고 유형별 추천 직업과 학과를 탐색해요</div>
+    </div>
+    <div class="feat-card" style="border-color:rgba(46,213,115,.2);">
+      <span class="feat-icon">📖</span>
+      <div class="feat-title">독서 탐구 기록</div>
+      <div class="feat-desc">읽은 책과 탐구 내용을 확인하고 진로와 연결해봐요</div>
+    </div>
+    <div class="feat-card" style="border-color:rgba(255,107,53,.2);">
+      <span class="feat-icon">💡</span>
+      <div class="feat-title">융합창직</div>
+      <div class="feat-desc">미래 직업을 탐색하고 나만의 새로운 직업을 직접 설계해요</div>
+    </div>
+    <div class="feat-card" style="border-color:rgba(168,85,247,.2);">
+      <span class="feat-icon">📚</span>
+      <div class="feat-title">선택과목 설계</div>
+      <div class="feat-desc">고2·고3 선택과목을 골라 2년 로드맵을 완성하고 AI 분석을 받아요</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="main" class="screen">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="app-header">
+    <button class="btn-back" onclick="goHome()">← 홈</button>
+    <div class="app-header-info">
+      <div class="app-header-name" id="headerName">학생</div>
+      <div class="app-header-sub" id="headerSub"></div>
+    </div>
+  </div>
+  <div class="db-bar">
+    <button class="btn-sm btn-save-sm" onclick="saveData()">💾 저장</button>
+    <button class="btn-sm btn-load-sm" onclick="loadData()">📂 불러오기</button>
+    <div class="save-status"><span class="sdot" id="sdot"></span><span id="statusTxt">미저장</span></div>
+    <button class="btn-sm btn-teacher-sm" onclick="openTeacher()">👩‍🏫 교사</button>
+  </div>
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('t1',this)">🧭 홀랜드 유형</button>
+    <button class="tab-btn" onclick="switchTab('t2',this)">📖 독서 탐구</button>
+    <button class="tab-btn" onclick="switchTab('t3',this)">💡 융합창직</button>
+    <button class="tab-btn" onclick="switchTab('t4',this)">📚 과목 선택</button>
+    <button class="tab-btn" id="doneTabBtn" onclick="switchTab('t5',this)">🎉 완료 · 요약</button>
+  </div>
+
+  <!-- TAB 1: 홀랜드 -->
+  <div id="t1" class="tab-pane active">
+    <div class="content">
+      <div class="section-title">🧭 나의 홀랜드 유형</div>
+      <div class="section-sub">선생님이 업로드한 검사 결과를 바탕으로 내 유형과 추천 직업을 확인해요</div>
+      <div id="hollandContent"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: 독서탐구 -->
+  <div id="t2" class="tab-pane">
+    <div class="content">
+      <div class="section-title">📖 나의 독서 탐구 기록</div>
+      <div class="section-sub">선생님이 입력한 나의 독서 탐구 자료를 확인하고 진로와 연결해봐요</div>
+      <div id="readingContent"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: 융합창직 -->
+  <div id="t3" class="tab-pane">
+    <div class="content">
+      <div class="section-title">💡 융합창직 — 나만의 직업 설계</div>
+      <div class="section-sub">미래 유망 직업을 탐색하고, 여러 분야를 융합한 나만의 직업을 만들어봐요</div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-bottom:12px;">🔭 미래 유망 직업 탐색 (관심 직업 클릭)</div>
+      <div class="future-job-list" id="futureJobList"></div>
+
+      <div class="job-design-area">
+        <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:16px;">✏️ 나만의 직업 설계하기</div>
+        <div style="margin-bottom:14px;">
+          <div class="jd-label">나만의 직업 이름</div>
+          <input class="jd-input" id="jdName" placeholder="예: AI 감정 치유사, 바이오아트 디자이너" oninput="saveJobDesign()">
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="jd-label">융합한 분야 (어떤 분야들을 합쳤나요?)</div>
+          <input class="jd-input" id="jdFields" placeholder="예: 의료 + AI + 심리학" oninput="saveJobDesign()">
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="jd-label">이 직업이 하는 일</div>
+          <textarea class="jd-textarea" id="jdWork" placeholder="예: AI를 활용해 환자의 감정 상태를 분석하고 맞춤형 심리 치료를 제공한다" oninput="saveJobDesign()"></textarea>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="jd-label">이 직업이 필요한 이유 (미래 사회에서)</div>
+          <textarea class="jd-textarea" id="jdReason" placeholder="예: 고령화와 디지털 스트레스로 정신건강 수요가 폭발적으로 증가할 것이기 때문에..." oninput="saveJobDesign()"></textarea>
+        </div>
+        <div>
+          <div class="jd-label">필요한 핵심 역량 (클릭해서 선택)</div>
+          <div class="skill-tags" id="skillTags"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: 과목 선택 -->
+  <div id="t4" class="tab-pane" style="padding:0;">
+    <div class="subject-layout">
+      <div class="subj-lib">
+        <div class="subj-lib-header">
+          <div class="subj-lib-title">선택과목 라이브러리</div>
+          <div class="subj-lib-sub">과목 클릭 → 학기 선택 → 로드맵에 배치</div>
+        </div>
+        <div class="cat-scroll" id="catScroll"></div>
+        <div class="subj-scroll" id="subjList"></div>
+      </div>
+      <div class="roadmap-panel">
+        <div class="roadmap-header">
+          <div>
+            <div class="roadmap-title">나의 2·3학년 선택과목 로드맵</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">배치된 과목 클릭 → 제거</div>
+          </div>
+          <div class="unit-badge">총 <span id="totalUnits">0</span>단위</div>
+        </div>
+        <div class="roadmap-scroll" id="roadmapGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: 완료 화면 -->
+  <div id="t5" class="tab-pane">
+    <div class="content">
+      <div id="doneScreen"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════
+firebase.initializeApp({
+  apiKey: "AIzaSyBaDjtHa1yyUopa4dD4PLFqycDhFZ2RbG8",
+  authDomain: "jinro-edu.firebaseapp.com",
+  projectId: "jinro-edu",
+  storageBucket: "jinro-edu.firebasestorage.app",
+  messagingSenderId: "782810292510",
+  appId: "1:782810292510:web:7fca9464fab65db284690f"
+});
+const db = firebase.firestore();
+
+// ══════════════════════════════════
+// HOLLAND DATA
+// ══════════════════════════════════
+const HOLLAND = {
+  R: { name:'현실형', emoji:'🔧', color:'#ef5050', desc:'손으로 직접 만들고 조작하는 것을 좋아해요. 기계, 도구, 자연을 다루는 실용적인 활동에 강해요.', careers:['기계 엔지니어','건축가','항공 조종사','소방관','요리사','농업 전문가','스포츠 트레이너','목수'], majors:['기계공학','건축학','전기공학','농업학','체육학'] },
+  I: { name:'탐구형', emoji:'🔬', color:'#3B8BFF', desc:'분석하고 연구하는 것을 즐겨요. 과학적 원리를 탐구하고 문제를 체계적으로 해결하는 데 탁월해요.', careers:['의사','과학자','데이터 분석가','연구원','AI 엔지니어','약사','심리학자','수학자'], majors:['의학','생명과학','수학','컴퓨터공학','화학','물리학'] },
+  A: { name:'예술형', emoji:'🎨', color:'#ec4899', desc:'창의적 표현을 좋아해요. 음악, 미술, 글쓰기 등 예술적 활동을 통해 자신을 표현하는 것이 강점이에요.', careers:['디자이너','작가','음악가','영화감독','UX 디자이너','사진작가','패션 디자이너','게임 아티스트'], majors:['미술학','음악학','문예창작','시각디자인','영화학'] },
+  S: { name:'사회형', emoji:'🤝', color:'#2ED573', desc:'사람과 함께하는 것을 좋아해요. 가르치고 돕고 소통하는 활동에서 보람을 느껴요.', careers:['교사','사회복지사','상담사','간호사','의사','NGO 활동가','HR 전문가','코치'], majors:['교육학','사회복지학','심리학','간호학','사회학'] },
+  E: { name:'기업형', emoji:'🚀', color:'#FF6B35', desc:'리더십과 설득력이 강해요. 목표 달성, 경쟁, 경영 활동에서 에너지를 얻어요.', careers:['창업가','경영자','마케터','변호사','정치인','투자자','영업 전문가','프로젝트 매니저'], majors:['경영학','법학','정치학','경제학','금융학'] },
+  C: { name:'관습형', emoji:'📋', color:'#FFD43B', desc:'체계적이고 꼼꼼해요. 정확성과 질서를 중시하며 규칙에 따른 활동에서 안정감을 느껴요.', careers:['회계사','공무원','세무사','은행원','비서','품질 관리자','도서관 사서','데이터 관리자'], majors:['회계학','행정학','통계학','문헌정보학','세무학'] }
+};
+
+// ══════════════════════════════════
+// ELECTIVE SUBJECTS (고2·고3 only)
+// ══════════════════════════════════
+const SUBJECTS = [
+  // 국어
+  {id:'lit',   name:'문학',         unit:4, cat:'국어', color:'#ef5050'},
+  {id:'read',  name:'독서',         unit:4, cat:'국어', color:'#ef5050'},
+  {id:'speech',name:'화법과 작문',  unit:4, cat:'국어', color:'#ef5050'},
+  {id:'lang',  name:'언어와 매체',  unit:4, cat:'국어', color:'#ef5050'},
+  {id:'classlit',name:'고전읽기',   unit:2, cat:'국어', color:'#ef5050'},
+  // 수학
+  {id:'math1', name:'수학Ⅰ',       unit:4, cat:'수학', color:'#3B8BFF'},
+  {id:'math2', name:'수학Ⅱ',       unit:4, cat:'수학', color:'#3B8BFF'},
+  {id:'calc',  name:'미적분',       unit:4, cat:'수학', color:'#3B8BFF'},
+  {id:'prob',  name:'확률과 통계',  unit:4, cat:'수학', color:'#3B8BFF'},
+  {id:'geom',  name:'기하',         unit:4, cat:'수학', color:'#3B8BFF'},
+  {id:'mathec',name:'경제 수학',    unit:2, cat:'수학', color:'#3B8BFF'},
+  {id:'mathex',name:'수학과제탐구', unit:2, cat:'수학', color:'#3B8BFF'},
+  // 영어
+  {id:'eng1',  name:'영어Ⅰ',       unit:4, cat:'영어', color:'#8b5cf6'},
+  {id:'eng2',  name:'영어Ⅱ',       unit:4, cat:'영어', color:'#8b5cf6'},
+  {id:'engr',  name:'영어 독해와작문',unit:4,cat:'영어', color:'#8b5cf6'},
+  {id:'englit',name:'영미문학읽기', unit:4, cat:'영어', color:'#8b5cf6'},
+  {id:'engcul',name:'영어권 문화',  unit:4, cat:'영어', color:'#8b5cf6'},
+  // 과학
+  {id:'phys1', name:'물리학Ⅰ',     unit:4, cat:'과학', color:'#10b981'},
+  {id:'chem1', name:'화학Ⅰ',       unit:4, cat:'과학', color:'#10b981'},
+  {id:'bio1',  name:'생명과학Ⅰ',   unit:4, cat:'과학', color:'#10b981'},
+  {id:'earth1',name:'지구과학Ⅰ',   unit:4, cat:'과학', color:'#10b981'},
+  {id:'phys2', name:'물리학Ⅱ',     unit:4, cat:'과학', color:'#059669'},
+  {id:'chem2', name:'화학Ⅱ',       unit:4, cat:'과학', color:'#059669'},
+  {id:'bio2',  name:'생명과학Ⅱ',   unit:4, cat:'과학', color:'#059669'},
+  {id:'earth2',name:'지구과학Ⅱ',   unit:4, cat:'과학', color:'#059669'},
+  {id:'scihist',name:'과학사',      unit:2, cat:'과학', color:'#059669'},
+  {id:'lifesci',name:'생활과 과학', unit:2, cat:'과학', color:'#059669'},
+  // 사회
+  {id:'kgeo',  name:'한국지리',     unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'wgeo',  name:'세계지리',     unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'whist', name:'세계사',       unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'east',  name:'동아시아사',   unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'econ',  name:'경제',         unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'socul', name:'사회·문화',    unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'pollaw',name:'정치와 법',    unit:4, cat:'사회', color:'#f59e0b'},
+  {id:'ethics',name:'생활과 윤리',  unit:4, cat:'사회', color:'#d97706'},
+  {id:'ethics2',name:'윤리와 사상', unit:4, cat:'사회', color:'#d97706'},
+  // 정보·기술
+  {id:'info',  name:'정보',         unit:4, cat:'정보·기술', color:'#06b6d4'},
+  {id:'ai',    name:'인공지능 기초',unit:2, cat:'정보·기술', color:'#0891b2'},
+  {id:'prog',  name:'프로그래밍',   unit:4, cat:'정보·기술', color:'#0891b2'},
+  {id:'startup',name:'창업과 기업가정신',unit:2,cat:'정보·기술',color:'#0891b2'},
+  {id:'data',  name:'데이터 과학',  unit:2, cat:'정보·기술', color:'#0891b2'},
+  // 예체능
+  {id:'music', name:'음악',         unit:4, cat:'예체능', color:'#ec4899'},
+  {id:'artcls',name:'미술',         unit:4, cat:'예체능', color:'#ec4899'},
+  {id:'pe',    name:'체육',         unit:4, cat:'예체능', color:'#ec4899'},
+  {id:'design',name:'디자인',       unit:4, cat:'예체능', color:'#db2777'},
+  {id:'drama', name:'연극',         unit:4, cat:'예체능', color:'#db2777'},
+  // 제2외국어
+  {id:'jpn',   name:'일본어Ⅰ',     unit:4, cat:'제2외국어', color:'#f97316'},
+  {id:'chn',   name:'중국어Ⅰ',     unit:4, cat:'제2외국어', color:'#f97316'},
+  {id:'fra',   name:'프랑스어Ⅰ',   unit:4, cat:'제2외국어', color:'#f97316'},
+  {id:'ger',   name:'독일어Ⅰ',     unit:4, cat:'제2외국어', color:'#f97316'},
+  {id:'spa',   name:'스페인어Ⅰ',   unit:4, cat:'제2외국어', color:'#f97316'},
+];
+
+const FUTURE_JOBS = [
+  {icon:'🤖',name:'AI 윤리 감사관',field:'AI·법'},
+  {icon:'🧬',name:'유전자 편집 컨설턴트',field:'바이오·의료'},
+  {icon:'🌱',name:'탄소 감축 설계사',field:'환경·에너지'},
+  {icon:'🎮',name:'메타버스 도시 설계사',field:'IT·건축'},
+  {icon:'🧠',name:'뇌-컴퓨터 인터페이스 개발자',field:'신경과학·IT'},
+  {icon:'🚀',name:'우주 관광 코디네이터',field:'항공우주·관광'},
+  {icon:'💊',name:'개인 맞춤 영양 설계사',field:'의료·식품'},
+  {icon:'🏙️',name:'스마트시티 데이터 플래너',field:'도시공학·IT'},
+  {icon:'🎨',name:'AI 협업 예술 큐레이터',field:'예술·AI'},
+  {icon:'🌊',name:'해양 자원 보호 전문가',field:'환경·해양'},
+  {icon:'👾',name:'사이버보안 위협 헌터',field:'보안·IT'},
+  {icon:'🧪',name:'대체단백질 식품 개발자',field:'식품과학·바이오'},
+];
+
+const SKILLS = ['창의적 사고','데이터 분석','공감 능력','리더십','코딩·프로그래밍','글로벌 소통','융합적 사고','문제 해결','디자인 씽킹','비판적 사고','협업','자기조절'];
+
+const YEAR_MAP = {y2s1:'2학년 1학기',y2s2:'2학년 2학기',y3s1:'3학년 1학기',y3s2:'3학년 2학기'};
+
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+let S = {
+  name:'', grade:'',
+  holland: null,   // {r1, r2, r3} loaded from DB
+  reading: [],     // loaded from DB
+  jobDesign: { name:'', fields:'', work:'', reason:'', skills:[] },
+  selectedJobs: [],
+  roadmap: { y2s1:[], y2s2:[], y3s1:[], y3s2:[] },
+  currentCat: 'all',
+  apiKey: localStorage.getItem('jApiKey') || '',
+};
+
+// ══════════════════════════════════
+// TOAST
+// ══════════════════════════════════
+function toast(msg, type='info', dur=3000) {
+  const w = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'ℹ️'}</span><span>${msg}</span>`;
+  w.appendChild(el);
+  setTimeout(()=>{el.style.animation='toastOut .2s ease forwards';setTimeout(()=>el.remove(),200);},dur);
+}
+function setStatus(s,t){document.getElementById('sdot').className='sdot '+s;document.getElementById('statusTxt').textContent=t;}
+
+// ══════════════════════════════════
+// NAV
+// ══════════════════════════════════
+function startApp() {
+  const n = document.getElementById('homeName').value.trim();
+  const g = document.getElementById('homeGrade').value.trim();
+  if (!n||!g) { toast('이름과 학번을 입력해주세요','error'); return; }
+  S.name = n; S.grade = g;
+  document.getElementById('headerName').textContent = `${n} 학생`;
+  document.getElementById('headerSub').textContent = g;
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('main').classList.add('active');
+  initAll();
+  autoLoad();
+}
+function goHome() {
+  document.getElementById('main').classList.remove('active');
+  document.getElementById('home').classList.add('active');
+}
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='t5') renderDoneScreen();
+  updateProgress();
+}
+
+// ══════════════════════════════════
+// INIT ALL
+// ══════════════════════════════════
+function initAll() {
+  renderHolland();
+  renderReading();
+  renderFutureJobs();
+  renderSkills();
+  renderCatTabs();
+  renderSubjLib();
+  renderRoadmap();
+  renderAISummary();
+}
+
+// ══════════════════════════════════
+// TAB 1: HOLLAND
+// ══════════════════════════════════
+function renderHolland() {
+  const el = document.getElementById('hollandContent');
+  if (!S.holland || !S.holland.r1) {
+    el.innerHTML = `<div class="holland-empty">
+      <div class="ei">🧭</div>
+      <p>선생님이 홀랜드 검사 결과를 아직 업로드하지 않았거나<br>내 이름/학번과 일치하는 결과가 없어요.<br><br>선생님께 업로드를 요청해주세요!</p>
+    </div>`; return;
+  }
+  const types = [S.holland.r1, S.holland.r2, S.holland.r3].filter(Boolean);
+  const main = HOLLAND[types[0]];
+  if (!main) { el.innerHTML=`<div class="holland-empty"><div class="ei">⚠️</div><p>유형 코드를 확인할 수 없어요. 선생님께 문의해주세요.</p></div>`; return; }
+
+  el.innerHTML = `
+    <div class="holland-combo">
+      ${types.map((t,i)=>{
+        const h=HOLLAND[t]; if(!h) return '';
+        return `<div class="h-type-mini rank${i+1}" style="border-color:${h.color}44;background:${h.color}11;">
+          <div class="h-mini-letter" style="color:${h.color}">${t}</div>
+          <div class="h-mini-name" style="color:${h.color}">${h.name}</div>
+          <div class="h-mini-rank">${i===0?'1순위':i===1?'2순위':'3순위'}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="holland-result-card" style="border-color:${main.color}44;background:${main.color}0a;">
+      <div class="holland-type-big">${main.emoji}</div>
+      <div class="holland-type-name" style="color:${main.color}">${types[0]} 유형 · ${main.name}</div>
+      <div class="holland-type-desc">${main.desc}</div>
+      <div class="holland-badges">
+        ${types.map(t=>{const h=HOLLAND[t];return h?`<span class="h-badge" style="background:${h.color}22;border-color:${h.color}55;color:${h.color}">${t} ${h.name}</span>`:''}).join('')}
+      </div>
+    </div>
+    <div class="holland-careers">
+      <div class="h-careers-title">✨ 나의 유형에 어울리는 직업</div>
+      <div class="h-career-grid">
+        ${[...new Set(types.flatMap(t=>HOLLAND[t]?.careers||[]))].slice(0,12).map(c=>`<div class="h-career-chip">${c}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════
+// TAB 2: READING
+// ══════════════════════════════════
+function renderReading() {
+  const el = document.getElementById('readingContent');
+  if (!S.reading || S.reading.length === 0) {
+    el.innerHTML = `<div class="reading-empty"><div style="font-size:40px;margin-bottom:12px">📖</div><p>선생님이 독서탐구 자료를 아직 업로드하지 않았어요.</p></div>`;
+    return;
+  }
+  el.innerHTML = S.reading.map((r,i)=>`
+    <div class="reading-card" style="animation:fadeUp .3s ease ${i*.06}s both;">
+      <div class="reading-book-title">📚 ${r.title||'제목 없음'}</div>
+      <div class="reading-author">${r.author||''}</div>
+      ${r.feeling?`<div class="reading-section"><div class="reading-label">💭 느낀 점</div><div class="reading-text">${r.feeling}</div></div>`:''}
+      ${r.topic?`<div class="reading-section"><div class="reading-label">🔍 탐구 주제</div><div class="reading-text">${r.topic}</div></div>`:''}
+      ${r.content?`<div class="reading-section"><div class="reading-label">📝 탐구 내용</div><div class="reading-text">${r.content}</div></div>`:''}
+    </div>`).join('');
+}
+
+// ══════════════════════════════════
+// TAB 3: 융합창직
+// ══════════════════════════════════
+function renderFutureJobs() {
+  document.getElementById('futureJobList').innerHTML = FUTURE_JOBS.map((j,i)=>`
+    <div class="fj-card ${S.selectedJobs.includes(i)?'selected':''}" onclick="toggleJob(${i})">
+      <div class="fj-icon">${j.icon}</div>
+      <div class="fj-name">${j.name}</div>
+      <div class="fj-field">${j.field}</div>
+    </div>`).join('');
+}
+function toggleJob(i) {
+  const idx = S.selectedJobs.indexOf(i);
+  if(idx>=0) S.selectedJobs.splice(idx,1); else S.selectedJobs.push(i);
+  renderFutureJobs();
+}
+function renderSkills() {
+  document.getElementById('skillTags').innerHTML = SKILLS.map(s=>`
+    <span class="skill-tag ${S.jobDesign.skills.includes(s)?'selected':''}" onclick="toggleSkill('${s}')">${s}</span>`).join('');
+}
+function toggleSkill(s) {
+  const i = S.jobDesign.skills.indexOf(s);
+  if(i>=0) S.jobDesign.skills.splice(i,1); else S.jobDesign.skills.push(s);
+  renderSkills();
+}
+function saveJobDesign() {
+  S.jobDesign.name   = document.getElementById('jdName').value;
+  S.jobDesign.fields = document.getElementById('jdFields').value;
+  S.jobDesign.work   = document.getElementById('jdWork').value;
+  S.jobDesign.reason = document.getElementById('jdReason').value;
+}
+
+// ══════════════════════════════════
+// TAB 4: 과목 선택
+// ══════════════════════════════════
+const CATS = ['all','국어','수학','영어','과학','사회','정보·기술','예체능','제2외국어'];
+function renderCatTabs() {
+  document.getElementById('catScroll').innerHTML = CATS.map(c=>`
+    <button class="cat-chip ${S.currentCat===c?'active':''}" onclick="setCat('${c}',this)">${c==='all'?'전체':c}</button>`).join('');
+}
+function setCat(c) { S.currentCat=c; renderCatTabs(); renderSubjLib(); }
+
+function renderSubjLib() {
+  const placed = getAllPlaced();
+  const filtered = SUBJECTS.filter(s=> S.currentCat==='all'||s.cat===S.currentCat);
+  const groups = {};
+  filtered.forEach(s=>{if(!groups[s.cat])groups[s.cat]=[];groups[s.cat].push(s);});
+  document.getElementById('subjList').innerHTML = Object.entries(groups).map(([g,subs])=>`
+    <div class="subj-group">
+      <div class="subj-group-title">${g}</div>
+      <div class="subj-chips">${subs.map(s=>{
+        const isp=placed.includes(s.id);
+        return `<span class="s-chip ${isp?'placed':''}"
+          style="background:${isp?'rgba(255,255,255,.04)':s.color+'22'};color:${isp?'#555':s.color};border-color:${isp?'rgba(255,255,255,.08)':s.color+'55'};"
+          onclick="${isp?'':'openYrPopup(\''+s.id+'\')'}">${s.name}<span class="s-chip-unit">${s.unit}단</span></span>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+
+let pendingSubj = null;
+function openYrPopup(id) {
+  const s = SUBJECTS.find(x=>x.id===id); if(!s) return;
+  pendingSubj = id;
+  document.getElementById('yrPopupTitle').textContent = `"${s.name}" 배치할 학기를 선택하세요`;
+  document.getElementById('yrBtns').innerHTML = Object.entries(YEAR_MAP).map(([key,label])=>{
+    const full=S.roadmap[key].length>=5, already=S.roadmap[key].includes(id), dis=full||already;
+    return `<button class="yr-btn ${dis?'dis':''}" onclick="${dis?'':'placeSubj(\''+key+'\');'}">${label}${full?' (최대)':''}${already?' (배치됨)':''}</button>`;
+  }).join('');
+  const popup=document.getElementById('yrPopup');
+  popup.style.display='block'; popup.style.top='50%'; popup.style.left='50%'; popup.style.transform='translate(-50%,-50%)';
+  document.getElementById('overlay').classList.add('active');
+}
+function placeSubj(key) {
+  if(pendingSubj && !getAllPlaced().includes(pendingSubj)) {
+    S.roadmap[key].push(pendingSubj); updateUnits(); renderSubjLib(); renderRoadmap();
+  }
+  closeYrPopup();
+}
+function closeYrPopup() {
+  document.getElementById('yrPopup').style.display='none';
+  document.getElementById('overlay').classList.remove('active');
+  pendingSubj=null;
+}
+function removeSubj(key,id) { S.roadmap[key]=S.roadmap[key].filter(x=>x!==id); updateUnits(); renderSubjLib(); renderRoadmap(); }
+function getAllPlaced() { return Object.values(S.roadmap).flat(); }
+function updateUnits() {
+  const t=getAllPlaced().reduce((a,id)=>a+(SUBJECTS.find(s=>s.id===id)?.unit||0),0);
+  document.getElementById('totalUnits').textContent=t;
+  document.getElementById('progressFill').style.width=Math.min(100,Math.round(t/80*100))+'%';
+}
+function renderRoadmap() {
+  const ygs=[{label:'2학년',color:'#3B8BFF',slots:['y2s1','y2s2']},{label:'3학년',color:'#A855F7',slots:['y3s1','y3s2']}];
+  document.getElementById('roadmapGrid').innerHTML = ygs.map(yg=>{
+    const tu=yg.slots.flatMap(s=>S.roadmap[s]).reduce((a,id)=>a+(SUBJECTS.find(s=>s.id===id)?.unit||0),0);
+    return `<div class="year-sec">
+      <div class="year-row">
+        <span class="y-badge" style="background:${yg.color}22;color:${yg.color};border:1px solid ${yg.color}44">${yg.label}</span>
+        <div class="y-line"></div><span class="y-units">${tu}단위</span>
+      </div>
+      <div class="sem-grid">${yg.slots.map(key=>`
+        <div class="sem-slot">
+          <div class="sem-label">${YEAR_MAP[key].replace(yg.label+' ','')}</div>
+          <div class="placed-chips">
+            ${S.roadmap[key].length===0?'<span class="slot-hint">+ 과목 추가</span>':
+              S.roadmap[key].map(id=>{const s=SUBJECTS.find(x=>x.id===id);return s?`<span class="p-chip" style="background:${s.color}22;border-color:${s.color}55;color:${s.color};" onclick="removeSubj('${key}','${id}')">${s.name}<span class="px">✕</span></span>`:''}).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════
+// TAB 5: 완료 화면
+// ══════════════════════════════════
+function renderDoneScreen() {
+  const el = document.getElementById('doneScreen');
+  const placed = getAllPlaced();
+  const hTypes = S.holland ? [S.holland.r1,S.holland.r2,S.holland.r3].filter(Boolean) : [];
+  const hasH = hTypes.length > 0;
+  const hasR = S.reading.length > 0;
+  const hasJ = !!S.jobDesign.name;
+  const hasS = placed.length > 0;
+  const doneCount = [hasH,hasR,hasJ,hasS].filter(Boolean).length;
+
+  const getN = k => S.roadmap[k].map(id=>SUBJECTS.find(s=>s.id===id)?.name||id).join(', ')||'없음';
+
+  // 프롬프트 생성
+  const hTypesStr = hTypes.map(t=>`${t}(${HOLLAND[t]?.name||t})`).join(', ') || '미등록';
+  const readStr = S.reading.map(r=>`• "${r.title}" - 탐구: ${r.topic||''} / 느낀점: ${r.feeling?.slice(0,40)||''}...`).join('\n') || '없음';
+  const prompt = `나는 고등학생이야. 아래 내 진로 탐색 자료를 분석해서 맞춤 진로를 추천해줘.
+
+[홀랜드 유형]
+${hTypesStr}
+
+[독서 탐구 기록]
+${readStr}
+
+[융합창직 설계]
+직업명: ${S.jobDesign.name||'미작성'}
+융합 분야: ${S.jobDesign.fields||'미작성'}
+하는 일: ${S.jobDesign.work||'미작성'}
+필요 역량: ${S.jobDesign.skills?.join(', ')||'미작성'}
+
+[선택과목 로드맵]
+2학년 1학기: ${getN('y2s1')}
+2학년 2학기: ${getN('y2s2')}
+3학년 1학기: ${getN('y3s1')}
+3학년 2학기: ${getN('y3s2')}
+
+위 정보를 바탕으로:
+1. 내 진로 성향 분석
+2. 추천 직업 TOP 3 (이유 포함)
+3. 추천 대학 전공
+4. 선택과목 피드백
+5. 지금 당장 할 수 있는 준비 3가지
+를 친근하게 알려줘!`;
+
+  el.innerHTML = `
+    <div class="done-hero">
+      <span class="done-emoji">🎉</span>
+      <div class="done-title">${S.name} 학생의<br><span>진로 탐색 완료!</span></div>
+      <div class="done-sub">${doneCount}가지 활동을 완료했어요. 아래에서 전체 내용을 확인하고 저장하세요.</div>
+    </div>
+
+    <div class="done-progress">
+      <div class="done-step ${hasH?'complete':'incomplete'}">
+        <div class="done-step-icon">🧭</div>
+        <div class="done-step-label">홀랜드 유형</div>
+        <div class="done-step-val">${hasH ? hTypes.join('·') : '미등록'}</div>
+      </div>
+      <div class="done-step ${hasR?'complete':'incomplete'}">
+        <div class="done-step-icon">📖</div>
+        <div class="done-step-label">독서 탐구</div>
+        <div class="done-step-val">${hasR ? S.reading.length+'권' : '없음'}</div>
+      </div>
+      <div class="done-step ${hasJ?'complete':'incomplete'}">
+        <div class="done-step-icon">💡</div>
+        <div class="done-step-label">융합창직</div>
+        <div class="done-step-val">${hasJ ? S.jobDesign.name.slice(0,8)+(S.jobDesign.name.length>8?'...':'') : '미작성'}</div>
+      </div>
+      <div class="done-step ${hasS?'complete':'incomplete'}">
+        <div class="done-step-icon">📚</div>
+        <div class="done-step-label">선택과목</div>
+        <div class="done-step-val">${hasS ? placed.length+'과목' : '미선택'}</div>
+      </div>
+    </div>
+
+    <div class="done-summary">
+      ${hasH ? `
+      <div class="done-card">
+        <div class="done-card-header" style="background:rgba(59,139,255,.08);">🧭 나의 홀랜드 유형</div>
+        <div class="done-card-body">
+          <div class="done-card-row">
+            ${hTypes.map((t,i)=>{const h=HOLLAND[t];return h?`<span class="done-tag" style="background:${h.color}22;border:1px solid ${h.color}44;color:${h.color}">${i===0?'1순위 ':''}${t} ${h.name}</span>`:''}).join('')}
+          </div>
+          ${HOLLAND[hTypes[0]]?.desc||''}
+        </div>
+      </div>` : ''}
+
+      ${hasR ? `
+      <div class="done-card">
+        <div class="done-card-header" style="background:rgba(46,213,115,.08);">📖 독서 탐구 기록 (${S.reading.length}권)</div>
+        <div class="done-card-body">
+          ${S.reading.map(r=>`<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">
+            <div style="font-weight:700;margin-bottom:3px;">📚 ${r.title||''} ${r.author?`<span style="color:var(--muted);font-weight:400">— ${r.author}</span>`:''}</div>
+            ${r.topic?`<div style="color:var(--muted);font-size:11px;">🔍 탐구주제: ${r.topic}</div>`:''}
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${hasJ ? `
+      <div class="done-card">
+        <div class="done-card-header" style="background:rgba(255,107,53,.08);">💡 나의 융합창직 아이디어</div>
+        <div class="done-card-body">
+          <div style="font-size:16px;font-weight:700;color:var(--c4);margin-bottom:8px;">✨ ${S.jobDesign.name}</div>
+          ${S.jobDesign.fields?`<div style="margin-bottom:6px;"><span style="color:var(--muted);font-size:11px;">융합 분야 </span>${S.jobDesign.fields}</div>`:''}
+          ${S.jobDesign.work?`<div style="margin-bottom:6px;"><span style="color:var(--muted);font-size:11px;">하는 일 </span>${S.jobDesign.work}</div>`:''}
+          ${S.jobDesign.skills?.length?`<div class="done-card-row" style="margin-top:8px;">${S.jobDesign.skills.map(sk=>`<span class="done-tag" style="background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--c4)">${sk}</span>`).join('')}</div>`:''}
+        </div>
+      </div>` : ''}
+
+      ${hasS ? `
+      <div class="done-card">
+        <div class="done-card-header" style="background:rgba(168,85,247,.08);">📚 나의 선택과목 로드맵</div>
+        <div class="done-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            ${Object.entries(YEAR_MAP).map(([k,label])=>`
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px;">${label}</div>
+              <div class="done-card-row">
+                ${S.roadmap[k].map(id=>{const s=SUBJECTS.find(x=>x.id===id);return s?`<span class="done-tag" style="background:${s.color}22;border:1px solid ${s.color}44;color:${s.color}">${s.name}</span>`:''}).join('')||`<span style="color:var(--muted);font-size:11px;">없음</span>`}
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>` : ''}
+
+      <!-- AI 프롬프트 -->
+      <div class="done-card">
+        <div class="done-card-header" style="background:rgba(255,212,59,.06);">🤖 외부 AI에게 진로 분석 요청하기 <span style="font-size:10px;color:var(--muted);font-weight:400;">(선택 사항)</span></div>
+        <div class="done-card-body">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">아래 프롬프트를 복사해서 <strong style="color:var(--text)">ChatGPT / 클로드 / 제미나이</strong> 어디든 붙여넣으면 AI가 나만의 진로를 분석해줘요!</div>
+          <div class="prompt-box">
+            <div class="prompt-box-title">
+              <span>📋 분석 프롬프트</span>
+              <button class="btn-copy" onclick="copyPrompt()">📋 복사하기</button>
+            </div>
+            <div class="prompt-text" id="promptText">${prompt}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="done-actions">
+      <button class="btn-done-print btn-done-save" onclick="saveData()">💾 Firebase에 저장</button>
+      <button class="btn-done-print btn-done-print-out" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+    </div>`;
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText')?.textContent || '';
+  navigator.clipboard.writeText(text).then(()=>{
+    toast('프롬프트가 복사됐어요! AI에 붙여넣기 하세요 🚀','success');
+  }).catch(()=>{
+    toast('복사 실패 — 직접 선택해서 복사해주세요','error');
+  });
+}
+
+function updateProgress() {
+  const placed = getAllPlaced().length;
+  const hasH = S.holland?.r1 ? 1 : 0;
+  const hasR = S.reading.length > 0 ? 1 : 0;
+  const hasJ = S.jobDesign.name ? 1 : 0;
+  const pct = Math.round(((hasH+hasR+hasJ)/3*0.5 + Math.min(placed,10)/10*0.5)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+
+// ══════════════════════════════════
+// FIREBASE SAVE / LOAD
+// ══════════════════════════════════
+function docId() { return `${S.grade}_${S.name}`.replace(/\s/g,'_'); }
+
+async function saveData() {
+  if(!S.name||!S.grade){toast('이름과 학번을 입력해주세요','error');return;}
+  setStatus('saving','저장 중...');
+  saveJobDesign();
+  try {
+    await db.collection('students').doc(docId()).set({
+      name:S.name, grade:S.grade,
+      jobDesign:S.jobDesign, selectedJobs:S.selectedJobs, roadmap:S.roadmap,
+      subjectCount:getAllPlaced().length,
+      savedAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const t=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    setStatus('saved',`저장됨 · ${t}`);
+    toast(`${S.name} 학생 데이터 저장 완료 🎉`,'success');
+  } catch(e){setStatus('error','저장 실패');toast('저장 실패: '+e.message,'error');}
+}
+
+async function loadData() {
+  if(!S.name||!S.grade){toast('이름과 학번을 입력해주세요','info');return;}
+  setStatus('saving','불러오는 중...');
+  try {
+    const doc = await db.collection('students').doc(docId()).get();
+    if(!doc.exists){toast('저장된 데이터가 없어요','info');setStatus('','미저장');return;}
+    const d=doc.data();
+    if(d.jobDesign) { S.jobDesign=d.jobDesign; document.getElementById('jdName').value=d.jobDesign.name||''; document.getElementById('jdFields').value=d.jobDesign.fields||''; document.getElementById('jdWork').value=d.jobDesign.work||''; document.getElementById('jdReason').value=d.jobDesign.reason||''; }
+    if(d.selectedJobs) S.selectedJobs=d.selectedJobs;
+    if(d.roadmap) S.roadmap=d.roadmap;
+    renderFutureJobs(); renderSkills(); renderSubjLib(); renderRoadmap(); updateUnits();
+    const t=d.savedAt?.toDate()?.toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    setStatus('saved',`불러옴 · ${t||''}`);
+    toast(`${S.name} 학생 데이터 불러오기 완료 📂`,'success');
+  } catch(e){setStatus('error','실패');toast('불러오기 실패: '+e.message,'error');}
+}
+
+async function autoLoad() {
+  // 홀랜드, 독서탐구 로드
+  try {
+    const hDoc = await db.collection('holland').doc(docId()).get();
+    if(hDoc.exists) { S.holland=hDoc.data(); renderHolland(); }
+    const rDoc = await db.collection('reading').doc(docId()).get();
+    if(rDoc.exists) { S.reading=rDoc.data().records||[]; renderReading(); }
+  } catch(e) { console.log('autoLoad:', e.message); }
+  // 학생 저장 데이터
+  try {
+    const doc = await db.collection('students').doc(docId()).get();
+    if(doc.exists) {
+      const d=doc.data();
+      if(d.jobDesign){S.jobDesign=d.jobDesign;document.getElementById('jdName').value=d.jobDesign.name||'';document.getElementById('jdFields').value=d.jobDesign.fields||'';document.getElementById('jdWork').value=d.jobDesign.work||'';document.getElementById('jdReason').value=d.jobDesign.reason||'';}
+      if(d.selectedJobs)S.selectedJobs=d.selectedJobs;
+      if(d.roadmap)S.roadmap=d.roadmap;
+      renderFutureJobs();renderSkills();renderSubjLib();renderRoadmap();updateUnits();
+      const t=d.savedAt?.toDate()?.toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      setStatus('saved',`자동불러옴 · ${t||''}`);
+    }
+  } catch(e) {}
+  renderAISummary(); updateProgress();
+}
+
+// ══════════════════════════════════
+// TEACHER MODAL
+// ══════════════════════════════════
+const PW = 'teacher1234';
+let authed = false;
+
+function openTeacher() { document.getElementById('teacherModal').classList.add('open'); authed?renderTeacherMain():renderPw(); }
+function closeTeacher() { document.getElementById('teacherModal').classList.remove('open'); }
+
+function renderPw() {
+  document.getElementById('teacherBody').innerHTML=`<div class="pw-screen"><div style="font-size:40px;margin-bottom:12px">🔒</div><p>교사 전용 대시보드입니다.<br>비밀번호를 입력해주세요.</p><input class="pw-input" type="password" id="pwInp" placeholder="비밀번호" onkeydown="if(event.key==='Enter')checkPw()"><button class="btn-start" style="margin-top:4px;" onclick="checkPw()">확인</button><div id="pwErr" style="color:var(--c1);font-size:12px;margin-top:10px;"></div></div>`;
+  setTimeout(()=>document.getElementById('pwInp')?.focus(),100);
+}
+function checkPw() { if(document.getElementById('pwInp').value===PW){authed=true;renderTeacherMain();}else{document.getElementById('pwErr').textContent='비밀번호가 틀렸습니다';} }
+
+function renderTeacherMain() {
+  document.getElementById('teacherBody').innerHTML=`
+    <div class="modal-tabs">
+      <button class="m-tab active" onclick="switchMTab('mt1',this)">📊 학생 목록</button>
+      <button class="m-tab" onclick="switchMTab('mt2',this)">🧭 홀랜드 업로드</button>
+      <button class="m-tab" onclick="switchMTab('mt3',this)">📖 독서탐구 업로드</button>
+    </div>
+    <div id="mt1" class="m-pane active"></div>
+    <div id="mt2" class="m-pane"></div>
+    <div id="mt3" class="m-pane"></div>`;
+  renderStudentList(); renderHollandUpload(); renderReadingUpload();
+}
+function switchMTab(id,btn) {
+  document.querySelectorAll('.m-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.m-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+}
+
+async function renderStudentList(filter='') {
+  const el=document.getElementById('mt1'); if(!el) return;
+  el.innerHTML=`<div style="text-align:center;padding:24px;color:var(--muted)"><div class="ai-spin" style="margin:0 auto 8px"></div>불러오는 중...</div>`;
+  try {
+    const snap=await db.collection('students').orderBy('savedAt','desc').get();
+    const docs=snap.docs.map(d=>({id:d.id,...d.data()})).filter(d=>!filter||d.name?.includes(filter)||d.grade?.includes(filter));
+    document.getElementById('btnExcel').style.display=snap.docs.length>0?'flex':'none';
+    el.innerHTML=`<input class="teacher-search" placeholder="🔍 이름 또는 학번 검색..." oninput="renderStudentList(this.value)" value="${filter}">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">총 ${snap.docs.length}명 · 표시 ${docs.length}명</div>
+      ${docs.length===0?'<div class="empty-list">📭 저장된 학생이 없습니다</div>':
+        docs.map(d=>{const t=d.savedAt?.toDate();const ts=t?t.toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'-';const placed=d.roadmap?Object.values(d.roadmap).flat():[];
+          return `<div class="student-list-item" onclick="loadStudentForTeacher('${d.id}')">
+            <div class="sli-header"><div><div class="sli-name">${d.name} <span style="font-size:10px;color:var(--muted)">${d.grade}</span></div><div class="sli-meta">💡 ${d.jobDesign?.name||'창직 미작성'} · 과목 ${placed.length}개 · ${ts}</div></div><div style="font-size:11px;color:var(--c3)">보기 →</div></div>
+            <div class="sli-chips">${placed.slice(0,6).map(id=>`<span class="sli-chip">${SUBJECTS.find(s=>s.id===id)?.name||id}</span>`).join('')}${placed.length>6?`<span class="sli-chip">+${placed.length-6}</span>`:''}</div>
+          </div>`;
+        }).join('')}`;
+  } catch(e) { el.innerHTML=`<div style="color:var(--c1);padding:16px;">오류: ${e.message}</div>`; }
+}
+
+async function loadStudentForTeacher(id) {
+  try {
+    const doc=await db.collection('students').doc(id).get(); if(!doc.exists) return;
+    const d=doc.data();
+    S.name=d.name; S.grade=d.grade;
+    document.getElementById('headerName').textContent=`${d.name} 학생`;
+    document.getElementById('headerSub').textContent=d.grade;
+    if(d.jobDesign){S.jobDesign=d.jobDesign;document.getElementById('jdName').value=d.jobDesign.name||'';document.getElementById('jdFields').value=d.jobDesign.fields||'';document.getElementById('jdWork').value=d.jobDesign.work||'';document.getElementById('jdReason').value=d.jobDesign.reason||'';}
+    if(d.selectedJobs)S.selectedJobs=d.selectedJobs;
+    if(d.roadmap)S.roadmap=d.roadmap;
+    renderFutureJobs();renderSkills();renderSubjLib();renderRoadmap();updateUnits();
+    closeTeacher(); toast(`${d.name} 학생 데이터 불러옴`,'success');
+  } catch(e){toast('오류: '+e.message,'error');}
+}
+
+// ══════════════════════════════════
+// UPLOAD: HOLLAND
+// ══════════════════════════════════
+function renderHollandUpload() {
+  const el=document.getElementById('mt2'); if(!el) return;
+  el.innerHTML=`
+    <div class="upload-format"><strong>홀랜드 엑셀 형식 (필수 열)</strong><br>
+    A열: 이름 &nbsp;|&nbsp; B열: 학년/반/번호 &nbsp;|&nbsp; C열: 1순위(R/I/A/S/E/C) &nbsp;|&nbsp; D열: 2순위 &nbsp;|&nbsp; E열: 3순위</div>
+    <label class="upload-area" for="hollandFile">
+      <div class="upload-icon">📊</div>
+      <div class="upload-title">홀랜드 검사 결과 엑셀 업로드</div>
+      <div class="upload-sub">클릭하거나 파일을 드래그하세요<br>.xlsx / .xls 파일</div>
+    </label>
+    <input type="file" id="hollandFile" class="upload-input" accept=".xlsx,.xls" onchange="uploadHolland(this)">
+    <button class="btn-upload" onclick="document.getElementById('hollandFile').click()">📂 파일 선택</button>
+    <div id="hollandProgress"></div>`;
+}
+
+async function uploadHolland(input) {
+  const file=input.files[0]; if(!file) return;
+  const prog=document.getElementById('hollandProgress');
+  prog.className='upload-progress'; prog.textContent='파일 읽는 중...';
+  try {
+    const data=await readExcel(file);
+    let ok=0,fail=0;
+    prog.textContent=`${data.length}행 처리 중...`;
+    for(const row of data) {
+      const name=(row['이름']||row[Object.keys(row)[0]]||'').toString().trim();
+      const grade=(row['학년/반/번호']||row['학번']||row[Object.keys(row)[1]]||'').toString().trim();
+      const r1=(row['1순위']||row[Object.keys(row)[2]]||'').toString().trim().toUpperCase();
+      const r2=(row['2순위']||row[Object.keys(row)[3]]||'').toString().trim().toUpperCase();
+      const r3=(row['3순위']||row[Object.keys(row)[4]]||'').toString().trim().toUpperCase();
+      if(!name||!grade){fail++;continue;}
+      const id=`${grade}_${name}`.replace(/\s/g,'_');
+      await db.collection('holland').doc(id).set({name,grade,r1,r2,r3,uploadedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      ok++;
+    }
+    prog.textContent=`✅ 완료! ${ok}명 업로드 성공${fail>0?` (${fail}명 실패)`:''}.`;
+    toast(`홀랜드 결과 ${ok}명 업로드 완료`,'success');
+  } catch(e){prog.className='upload-error';prog.textContent='오류: '+e.message;}
+}
+
+// ══════════════════════════════════
+// UPLOAD: READING
+// ══════════════════════════════════
+function renderReadingUpload() {
+  const el=document.getElementById('mt3'); if(!el) return;
+  el.innerHTML=`
+    <div class="upload-format"><strong>독서탐구 엑셀 형식 (필수 열)</strong><br>
+    A열: 이름 &nbsp;|&nbsp; B열: 학년/반/번호 &nbsp;|&nbsp; C열: 책 제목 &nbsp;|&nbsp; D열: 저자 &nbsp;|&nbsp; E열: 느낀 점 &nbsp;|&nbsp; F열: 탐구 주제 &nbsp;|&nbsp; G열: 탐구 내용</div>
+    <label class="upload-area" for="readingFile">
+      <div class="upload-icon">📖</div>
+      <div class="upload-title">독서 탐구 기록 엑셀 업로드</div>
+      <div class="upload-sub">클릭하거나 파일을 드래그하세요<br>같은 학생의 여러 행 = 여러 권으로 자동 처리</div>
+    </label>
+    <input type="file" id="readingFile" class="upload-input" accept=".xlsx,.xls" onchange="uploadReading(this)">
+    <button class="btn-upload" onclick="document.getElementById('readingFile').click()">📂 파일 선택</button>
+    <div id="readingProgress"></div>`;
+}
+
+async function uploadReading(input) {
+  const file=input.files[0]; if(!file) return;
+  const prog=document.getElementById('readingProgress');
+  prog.className='upload-progress'; prog.textContent='파일 읽는 중...';
+  try {
+    const data=await readExcel(file);
+    const grouped={};
+    for(const row of data) {
+      const keys=Object.keys(row);
+      const name=(row['이름']||row[keys[0]]||'').toString().trim();
+      const grade=(row['학년/반/번호']||row['학번']||row[keys[1]]||'').toString().trim();
+      if(!name||!grade) continue;
+      const id=`${grade}_${name}`.replace(/\s/g,'_');
+      if(!grouped[id]) grouped[id]={name,grade,records:[]};
+      grouped[id].records.push({
+        title:(row['책 제목']||row['책제목']||row[keys[2]]||'').toString().trim(),
+        author:(row['저자']||row[keys[3]]||'').toString().trim(),
+        feeling:(row['느낀 점']||row['느낀점']||row[keys[4]]||'').toString().trim(),
+        topic:(row['탐구 주제']||row['탐구주제']||row[keys[5]]||'').toString().trim(),
+        content:(row['탐구 내용']||row['탐구내용']||row[keys[6]]||'').toString().trim(),
+      });
+    }
+    let ok=0;
+    for(const [id,val] of Object.entries(grouped)) {
+      await db.collection('reading').doc(id).set({...val,uploadedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      ok++;
+    }
+    prog.textContent=`✅ 완료! ${ok}명의 독서 기록 업로드 성공.`;
+    toast(`독서탐구 ${ok}명 업로드 완료`,'success');
+  } catch(e){prog.className='upload-error';prog.textContent='오류: '+e.message;}
+}
+
+function readExcel(file) {
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const wb=XLSX.read(e.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      res(XLSX.utils.sheet_to_json(ws,{defval:''}));
+    };
+    r.onerror=()=>rej(new Error('파일을 읽을 수 없습니다'));
+    r.readAsBinaryString(file);
+  });
+}
+
+// ══════════════════════════════════
+// EXCEL DOWNLOAD
+// ══════════════════════════════════
+async function downloadExcel() {
+  const btn=document.getElementById('btnExcel');
+  btn.disabled=true; btn.textContent='⏳ 생성 중...';
+  try {
+    const snap=await db.collection('students').orderBy('savedAt','desc').get();
+    if(snap.empty){toast('저장된 학생이 없습니다','info');return;}
+    const getN=rm=>k=>(rm?.[k]||[]).map(id=>SUBJECTS.find(s=>s.id===id)?.name||id).join(', ')||'없음';
+    const rows=snap.docs.map(d=>{
+      const data=d.data(); const rm=data.roadmap||{}; const gn=getN(rm);
+      const t=data.savedAt?.toDate();
+      return {'이름':data.name||'','학년/반/번호':data.grade||'','창직 직업명':data.jobDesign?.name||'','융합 분야':data.jobDesign?.fields||'','필요역량':data.jobDesign?.skills?.join(', ')||'','2학년1학기':gn('y2s1'),'2학년2학기':gn('y2s2'),'3학년1학기':gn('y3s1'),'3학년2학기':gn('y3s2'),'과목수':d.subjectCount||0,'저장시각':t?t.toLocaleString('ko-KR'):''};
+    });
+    const ws=XLSX.utils.json_to_sheet(rows);
+    ws['!cols']=[{wch:10},{wch:14},{wch:20},{wch:18},{wch:24},{wch:28},{wch:28},{wch:28},{wch:28},{wch:8},{wch:20}];
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'학생 진로 현황');
+    const today=new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/ /g,'');
+    XLSX.writeFile(wb,`진로탐색_학생현황_${today}.xlsx`);
+    toast(`${rows.length}명 엑셀 다운로드 완료 📊`,'success');
+  } catch(e){toast('오류: '+e.message,'error');}
+  finally{btn.disabled=false;btn.innerHTML='📊 엑셀 다운로드';}
+}
+</script>
+</body>
+</html>
