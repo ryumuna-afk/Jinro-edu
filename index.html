@@ -356,21 +356,79 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .sdg-emoji { font-size: 22px; margin-bottom: 4px; }
 .sdg-name { font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.3; }
 
-.formula-box {
-  background: linear-gradient(135deg, #1E5BC6 0%, #3B7FDB 100%);
-  border-radius: var(--radius-lg); padding: 24px; color: white; margin: 24px 0;
+/* ===== BRANCH DIAGRAM ===== */
+.branch-diagram {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: var(--radius-lg); padding: 24px; margin: 24px 0;
+  border: 1px solid rgba(255,255,255,0.08);
 }
-.formula-title { font-size: 13px; font-weight: 700; opacity: 0.8; margin-bottom: 12px; letter-spacing: 1px; }
-.formula-items { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.formula-item {
-  background: rgba(255,255,255,0.2); border-radius: 10px;
-  padding: 8px 14px; font-size: 13px; font-weight: 700;
+.branch-title {
+  font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;
 }
-.formula-arrow { font-size: 18px; }
-.formula-result {
-  background: white; color: var(--primary);
-  border-radius: 10px; padding: 8px 16px;
-  font-size: 14px; font-weight: 800;
+.branch-layout {
+  display: flex; align-items: center; gap: 0;
+}
+.branch-left {
+  display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0;
+}
+.branch-node {
+  border-radius: 12px; padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative; transition: all 0.3s;
+}
+.branch-node:hover { transform: translateX(2px); }
+.branch-holland { background: linear-gradient(135deg, rgba(230,126,34,0.25), rgba(230,126,34,0.1)); border-color: rgba(230,126,34,0.4); }
+.branch-reading { background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(52,152,219,0.1)); border-color: rgba(52,152,219,0.4); }
+.branch-sdg { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(39,174,96,0.1)); border-color: rgba(39,174,96,0.4); }
+.branch-node-header {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+}
+.branch-icon { font-size: 14px; }
+.branch-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; text-transform: uppercase; }
+.branch-node-type { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+.branch-node-details { display: flex; flex-direction: column; gap: 3px; }
+.branch-detail-row { font-size: 10px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.branch-detail-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+.branch-detail-tag {
+  font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 20px;
+  background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+}
+.branch-arrows {
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 0 6px; width: 20px; align-self: stretch;
+}
+.branch-arrow-line { flex: 1; width: 2px; background: rgba(255,255,255,0.15); }
+.branch-arrow-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+.branch-connector {
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+  padding: 0 4px; width: 28px; align-self: stretch; gap: 0;
+  position: relative;
+}
+.branch-connector-line {
+  flex: 1; width: 2px; background: rgba(255,255,255,0.2);
+  border-radius: 1px; align-self: flex-end;
+}
+.branch-connector-arrow {
+  font-size: 18px; color: #60a5fa; font-weight: 900; align-self: center;
+  animation: pulse-arrow 1.8s ease-in-out infinite;
+}
+@keyframes pulse-arrow { 0%,100%{opacity:0.6;transform:translateX(0)} 50%{opacity:1;transform:translateX(3px)} }
+.branch-result {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-radius: 14px; padding: 18px 16px; min-width: 100px; max-width: 130px;
+  text-align: center; box-shadow: 0 8px 24px rgba(59,130,246,0.4);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.branch-result-label { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+.branch-result-name { font-size: 14px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 6px; word-break: keep-all; }
+.branch-result-formula { font-size: 9px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+@media (max-width: 480px) {
+  .branch-layout { flex-direction: column; gap: 12px; }
+  .branch-arrows, .branch-connector { flex-direction: row; width: auto; height: 20px; align-self: auto; padding: 0; }
+  .branch-arrow-line, .branch-connector-line { width: auto; height: 2px; flex: 1; }
+  .branch-connector-arrow { transform: rotate(90deg); }
+  .branch-result { max-width: 100%; min-width: 0; width: 100%; }
 }
 
 .card-form { background: white; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--border); margin-bottom: 24px; }
@@ -378,7 +436,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
 
-/* ===== CAREER CARD PREVIEW ===== */
+/* ===== CAREER CARD PREVIEW (REDESIGNED) ===== */
 .theme-selector {
   display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
 }
@@ -389,66 +447,194 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .theme-btn.active { border-color: var(--text); transform: scale(1.15); }
 
 .card-preview-container {
-  perspective: 1000px; margin: 0 auto; max-width: 360px;
-  position: relative; height: 220px; margin-bottom: 16px;
+  perspective: 1000px; margin: 0 auto; max-width: 380px;
+  position: relative; height: 240px; margin-bottom: 16px;
 }
 .career-card {
-  width: 100%; height: 220px; border-radius: 16px;
-  padding: 20px; display: flex; flex-direction: column;
+  width: 100%; height: 240px; border-radius: 18px;
+  padding: 0; display: flex; flex-direction: column;
   font-family: var(--font); position: relative; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
 }
-.cc-dark { background: #1A1A2E; color: white; }
-.cc-light { background: white; color: #1A1A2E; border: 2px solid #E2E0D8; }
-.cc-green { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); color: #1B5E20; }
-.cc-ocean { background: linear-gradient(135deg, #E3F2FD, #BBDEFB); color: #0D47A1; }
-.cc-sunset { background: linear-gradient(135deg, #FFF8E1, #FFECB3); color: #E65100; }
 
-.cc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
-.cc-badge {
-  font-size: 10px; font-weight: 800; padding: 3px 8px;
-  border-radius: 6px; letter-spacing: 0.5px;
+/* THEME BACKGROUNDS */
+.cc-dark {
+  background: #0f172a; color: #f1f5f9;
 }
-.cc-dark .cc-badge { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
-.cc-light .cc-badge { background: #EEF4FF; color: #1E5BC6; }
-.cc-green .cc-badge { background: rgba(27,94,32,0.1); }
-.cc-ocean .cc-badge { background: rgba(13,71,161,0.1); }
-.cc-sunset .cc-badge { background: rgba(230,81,0,0.1); }
-
-.cc-job { font-size: 22px; font-weight: 900; line-height: 1.2; margin-bottom: 2px; letter-spacing: -0.5px; }
-.cc-slogan { font-size: 11px; opacity: 0.7; margin-bottom: 10px; }
-.cc-roles { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-.cc-role-item { font-size: 11px; opacity: 0.85; display: flex; align-items: flex-start; gap: 4px; }
-.cc-role-item::before { content: '▸'; flex-shrink: 0; }
-.cc-keywords {
-  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px;
-}
-.cc-kw {
-  font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px;
+.cc-dark::before {
+  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
+  background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%);
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
   opacity: 0.7;
 }
-.cc-dark .cc-kw { background: rgba(255,255,255,0.12); }
-.cc-light .cc-kw { background: #F3F4F6; }
-.cc-green .cc-kw { background: rgba(27,94,32,0.12); }
-.cc-ocean .cc-kw { background: rgba(13,71,161,0.12); }
-.cc-sunset .cc-kw { background: rgba(230,81,0,0.08); }
+.cc-light {
+  background: #f8faff; color: #0f172a; border: 1.5px solid #e2e8f0;
+}
+.cc-light::before {
+  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.cc-green {
+  background: #052e16; color: #dcfce7;
+}
+.cc-green::before {
+  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
+  background: linear-gradient(135deg, #14532d 0%, #15803d 100%);
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+  opacity: 0.9;
+}
+.cc-ocean {
+  background: #0c1445; color: #e0f2fe;
+}
+.cc-ocean::before {
+  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
+  background: linear-gradient(135deg, #0e7490 0%, #0284c7 100%);
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+  opacity: 0.85;
+}
+.cc-sunset {
+  background: #431407; color: #fef3c7;
+}
+.cc-sunset::before {
+  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+  opacity: 0.9;
+}
 
-.cc-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(128,128,128,0.2); }
-.cc-sdg { font-size: 10px; font-weight: 700; opacity: 0.8; }
+/* GEOMETRIC DECORATION */
+.career-card::after {
+  content:''; position:absolute;
+  width:140px; height:140px; border-radius:50%;
+  border: 20px solid rgba(255,255,255,0.04);
+  bottom:-40px; left:-20px; pointer-events:none;
+}
+.cc-light::after { border-color: rgba(0,0,0,0.04); }
+
+/* CARD INNER LAYOUT */
+.cc-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; height: 100%; padding: 18px 18px 14px;
+}
+
+/* TOP ROW */
+.cc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+.cc-badge {
+  font-size: 10px; font-weight: 800; padding: 4px 10px;
+  border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap;
+  line-height: 1.3; text-align: center;
+}
+.cc-dark .cc-badge { background: rgba(255,255,255,0.15); color: #fff; }
+.cc-light .cc-badge { background: #1e40af; color: #fff; }
+.cc-green .cc-badge { background: rgba(255,255,255,0.15); color: #bbf7d0; }
+.cc-ocean .cc-badge { background: rgba(255,255,255,0.15); color: #bae6fd; }
+.cc-sunset .cc-badge { background: rgba(255,255,255,0.15); color: #fed7aa; }
+
+.cc-sdg {
+  font-size: 9px; font-weight: 800; text-align: right; line-height: 1.4;
+  max-width: 90px;
+}
+.cc-dark .cc-sdg { color: rgba(255,255,255,0.6); }
+.cc-light .cc-sdg { color: #2563eb; }
+.cc-green .cc-sdg { color: rgba(255,255,255,0.65); }
+.cc-ocean .cc-sdg { color: rgba(255,255,255,0.65); }
+.cc-sunset .cc-sdg { color: rgba(255,255,255,0.65); }
+
+/* JOB NAME - big */
+.cc-job {
+  font-size: 24px; font-weight: 900; line-height: 1.15;
+  letter-spacing: -0.5px; margin-bottom: 3px;
+  word-break: keep-all;
+}
+.cc-slogan {
+  font-size: 10px; opacity: 0.6; margin-bottom: 10px;
+  font-style: italic; letter-spacing: 0.3px;
+}
+
+/* ROLES */
+.cc-roles { flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; overflow: hidden; }
+.cc-role-item {
+  font-size: 10px; opacity: 0.82; display: flex; align-items: flex-start; gap: 4px;
+  line-height: 1.4;
+}
+.cc-role-item::before { content: '▸'; flex-shrink: 0; opacity: 0.7; }
+
+/* KEYWORDS */
+.cc-keywords { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.cc-kw {
+  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+}
+.cc-dark .cc-kw { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+.cc-light .cc-kw { background: #1e40af; color: #fff; }
+.cc-green .cc-kw { background: rgba(255,255,255,0.15); color: #d1fae5; }
+.cc-ocean .cc-kw { background: rgba(255,255,255,0.15); color: #bae6fd; }
+.cc-sunset .cc-kw { background: rgba(255,255,255,0.15); color: #fed7aa; }
+
+/* BOTTOM */
+.cc-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid rgba(128,128,128,0.18);
+}
+.cc-dark .cc-bottom, .cc-green .cc-bottom, .cc-ocean .cc-bottom, .cc-sunset .cc-bottom {
+  border-color: rgba(255,255,255,0.1);
+}
 
 .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-padlet { background: #FF5252; color: #fff; }
+.btn-padlet:hover { background: #E53935; }
 
-/* CARD BACK */
-.cc-back-body { display: flex; flex-direction: column; gap: 8px; }
-.cc-formula { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.cc-f-item { font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 4px; }
-.cc-dark .cc-f-item { background: rgba(255,255,255,0.15); }
-.cc-light .cc-f-item { background: #EEF4FF; color: #1E5BC6; }
-.cc-green .cc-f-item { background: rgba(27,94,32,0.12); }
-.cc-ocean .cc-f-item { background: rgba(13,71,161,0.12); }
-.cc-sunset .cc-f-item { background: rgba(230,81,0,0.08); }
-.cc-f-arrow { font-size: 12px; opacity: 0.5; }
-.cc-back-section { font-size: 10px; }
-.cc-back-label { font-size: 9px; font-weight: 800; opacity: 0.6; letter-spacing: 0.5px; margin-bottom: 2px; }
+/* ===== CARD BACK (REDESIGNED) ===== */
+.cc-back-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; height: 100%; padding: 16px 18px 14px;
+  gap: 8px;
+}
+
+/* Formula row - icon+arrow style */
+.cc-formula {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.cc-f-item {
+  font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+  display: flex; align-items: center; gap: 3px; line-height: 1.3;
+}
+.cc-dark .cc-f-item { background: rgba(255,255,255,0.14); color: #f1f5f9; }
+.cc-light .cc-f-item { background: #1e40af; color: #fff; }
+.cc-green .cc-f-item { background: rgba(255,255,255,0.14); color: #d1fae5; }
+.cc-ocean .cc-f-item { background: rgba(255,255,255,0.14); color: #bae6fd; }
+.cc-sunset .cc-f-item { background: rgba(255,255,255,0.14); color: #fed7aa; }
+
+.cc-f-arrow { font-size: 13px; opacity: 0.6; font-weight: 900; }
+.cc-f-result {
+  font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;
+}
+.cc-dark .cc-f-result { background: #3b82f6; color: #fff; }
+.cc-light .cc-f-result { background: #1e40af; color: #fff; }
+.cc-green .cc-f-result { background: #16a34a; color: #fff; }
+.cc-ocean .cc-f-result { background: #0284c7; color: #fff; }
+.cc-sunset .cc-f-result { background: #ea580c; color: #fff; }
+
+/* Back sections - color block style */
+.cc-back-sections {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; flex: 1;
+}
+.cc-back-section {
+  border-radius: 8px; padding: 8px 10px;
+}
+.cc-dark .cc-back-section { background: rgba(255,255,255,0.07); }
+.cc-light .cc-back-section { background: #f1f5f9; }
+.cc-green .cc-back-section { background: rgba(255,255,255,0.08); }
+.cc-ocean .cc-back-section { background: rgba(255,255,255,0.08); }
+.cc-sunset .cc-back-section { background: rgba(255,255,255,0.08); }
+
+.cc-back-label {
+  font-size: 8px; font-weight: 800; opacity: 0.55;
+  letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 3px;
+}
+.cc-back-value { font-size: 9px; opacity: 0.85; line-height: 1.5; }
+
 .flip-btn-row { display: flex; gap: 8px; margin-bottom: 12px; }
 .flip-btn {
   flex: 1; padding: 8px; border: 2px solid var(--border);
@@ -981,17 +1167,70 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="sdg-grid" id="sdgGrid"></div>
     </div>
 
-    <!-- FORMULA -->
-    <div class="formula-box" id="formulaBox">
-      <div class="formula-title">▶ 창직 공식</div>
-      <div class="formula-items">
-        <div class="formula-item" id="fHolland">홀랜드 유형</div>
-        <div class="formula-arrow">+</div>
-        <div class="formula-item" id="fBook">독서 탐구 주제</div>
-        <div class="formula-arrow">+</div>
-        <div class="formula-item" id="fSdg">SDGs 선택</div>
-        <div class="formula-arrow">=</div>
-        <div class="formula-result" id="fResult">나만의 직업</div>
+    <!-- BRANCH CONVERGENCE DIAGRAM -->
+    <div class="branch-diagram" id="formulaBox">
+      <div class="branch-title">🔗 나의 융합 도식도</div>
+      <div class="branch-layout">
+        <!-- LEFT BRANCHES -->
+        <div class="branch-left">
+          <!-- Holland Branch -->
+          <div class="branch-node branch-holland" id="branchHolland">
+            <div class="branch-node-header">
+              <span class="branch-icon" id="branchHollandIcon">🧭</span>
+              <span class="branch-label">홀랜드 유형</span>
+            </div>
+            <div class="branch-node-type" id="branchHollandType">유형 미등록</div>
+            <div class="branch-node-details">
+              <div class="branch-detail-row" id="branchHollandStrengths"></div>
+              <div class="branch-detail-tags" id="branchHollandTraits"></div>
+            </div>
+          </div>
+          <!-- Reading Branch -->
+          <div class="branch-node branch-reading" id="branchReading">
+            <div class="branch-node-header">
+              <span class="branch-icon">📖</span>
+              <span class="branch-label">독서 탐구</span>
+            </div>
+            <div class="branch-node-type" id="branchBookTitle">도서 미등록</div>
+            <div class="branch-node-details">
+              <div class="branch-detail-row" id="branchCareerInterest"></div>
+              <div class="branch-detail-row" id="branchHollandConn"></div>
+            </div>
+          </div>
+          <!-- SDG Branch -->
+          <div class="branch-node branch-sdg" id="branchSdg">
+            <div class="branch-node-header">
+              <span class="branch-icon" id="branchSdgEmoji">🌍</span>
+              <span class="branch-label">SDGs 목표</span>
+            </div>
+            <div class="branch-node-type" id="branchSdgTitle">목표 미선택</div>
+            <div class="branch-node-details">
+              <div class="branch-detail-row" id="branchSdgDesc"></div>
+            </div>
+          </div>
+        </div>
+        <!-- ARROWS -->
+        <div class="branch-arrows">
+          <div class="branch-arrow-line"></div>
+          <div class="branch-arrow-dot"></div>
+          <div class="branch-arrow-line"></div>
+          <div class="branch-arrow-dot"></div>
+          <div class="branch-arrow-line"></div>
+        </div>
+        <!-- CENTER RESULT -->
+        <div class="branch-center">
+          <div class="branch-connector">
+            <div class="branch-connector-line top"></div>
+            <div class="branch-connector-line mid"></div>
+            <div class="branch-connector-line bot"></div>
+            <div class="branch-connector-arrow">→</div>
+          </div>
+          <div class="branch-result" id="branchResult">
+            <div class="branch-result-label">나만의 직업</div>
+            <div class="branch-result-name" id="fResult">직업명 입력 대기</div>
+            <div class="branch-result-formula" id="fFormulaSummary"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1063,56 +1302,61 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
       <!-- CARD FRONT PREVIEW -->
       <div id="cardFrontPreview" class="career-card cc-dark" style="margin-bottom:8px;">
-        <div class="cc-top">
-          <div class="cc-badge" id="cardHollandBadge">— 형</div>
-          <div class="cc-sdg" id="cardSdgBadge">SDGs —</div>
-        </div>
-        <div class="cc-job" id="cardJobName">직업명을 입력하세요</div>
-        <div class="cc-slogan" id="cardSlogan">슬로건을 입력하세요</div>
-        <div class="cc-roles" id="cardRoles">
-          <div class="cc-role-item" id="cardCoreRole">핵심 역할</div>
-          <div class="cc-role-item" id="cardFirstTask">1호 과제</div>
-        </div>
-        <div class="cc-keywords" id="cardKeywords"></div>
-        <div class="cc-bottom">
-          <div style="font-size:9px;font-weight:800;opacity:0.5;letter-spacing:1px;">INVENT YOUR CAREER</div>
-          <div style="font-size:9px;opacity:0.5;">화원고등학교</div>
+        <div class="cc-inner">
+          <div class="cc-top">
+            <div class="cc-badge" id="cardHollandBadge">— 형</div>
+            <div class="cc-sdg" id="cardSdgBadge">SDGs —</div>
+          </div>
+          <div class="cc-job" id="cardJobName">직업명을 입력하세요</div>
+          <div class="cc-slogan" id="cardSlogan">슬로건을 입력하세요</div>
+          <div class="cc-roles" id="cardRoles">
+            <div class="cc-role-item" id="cardCoreRole">핵심 역할</div>
+            <div class="cc-role-item" id="cardFirstTask">1호 과제</div>
+          </div>
+          <div class="cc-keywords" id="cardKeywords"></div>
+          <div class="cc-bottom">
+            <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
+            <div style="font-size:9px;opacity:0.4;">화원고등학교</div>
+          </div>
         </div>
       </div>
 
       <!-- CARD BACK PREVIEW -->
       <div id="cardBackPreview" class="career-card cc-dark hidden" style="margin-bottom:8px;">
-        <div class="cc-top">
-          <div class="cc-badge">창직공식</div>
-        </div>
-        <div class="cc-back-body">
+        <div class="cc-back-inner">
+          <div class="cc-top" style="margin-bottom:6px;">
+            <div class="cc-badge">✦ 창직 공식</div>
+          </div>
           <div class="cc-formula" id="backFormula">
-            <div class="cc-f-item" id="bfHolland">—형</div>
+            <div class="cc-f-item" id="bfHolland">🧭 —형</div>
             <div class="cc-f-arrow">+</div>
-            <div class="cc-f-item" id="bfBook">—</div>
+            <div class="cc-f-item" id="bfBook">📖 —</div>
             <div class="cc-f-arrow">+</div>
-            <div class="cc-f-item" id="bfSdg">SDGs —</div>
+            <div class="cc-f-item" id="bfSdg">🌍 SDGs —</div>
             <div class="cc-f-arrow">=</div>
-            <div class="cc-f-item" id="bfResult" style="font-weight:900;">—</div>
+            <div class="cc-f-result" id="bfResult">—</div>
           </div>
-          <div class="cc-back-section">
-            <div class="cc-back-label">SOCIAL PROBLEM</div>
-            <div id="backSocialProblem" style="font-size:10px;opacity:0.85;line-height:1.5;">—</div>
+          <div class="cc-back-sections">
+            <div class="cc-back-section">
+              <div class="cc-back-label">🌐 해결 사회문제</div>
+              <div class="cc-back-value" id="backSocialProblem">—</div>
+            </div>
+            <div class="cc-back-section">
+              <div class="cc-back-label">📅 2040 하루 루틴</div>
+              <div class="cc-back-value" id="backDailyRoutine">—</div>
+            </div>
           </div>
-          <div class="cc-back-section">
-            <div class="cc-back-label">2040 하루 루틴</div>
-            <div id="backDailyRoutine" style="font-size:10px;opacity:0.85;line-height:1.5;">—</div>
+          <div class="cc-bottom">
+            <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
+            <div style="font-size:9px;opacity:0.4;">화원고등학교</div>
           </div>
-        </div>
-        <div class="cc-bottom">
-          <div style="font-size:9px;font-weight:800;opacity:0.5;letter-spacing:1px;">INVENT YOUR CAREER</div>
-          <div style="font-size:9px;opacity:0.5;">화원고등학교</div>
         </div>
       </div>
 
       <!-- DOWNLOAD ACTIONS -->
       <div class="card-actions no-print">
         <button class="btn btn-primary" onclick="downloadCardPng()">📥 PNG 다운로드</button>
+        <button class="btn btn-padlet" id="padletBtn" onclick="openPadlet()" style="display:none;">📌 패들렛 열기</button>
         <button class="btn btn-outline" onclick="openMiriCanvas()">🎨 미리캔버스 열기</button>
         <button class="btn btn-ghost" onclick="openCanva()">✏️ 캔바 열기</button>
       </div>
@@ -1427,7 +1671,20 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   <!-- TEACHER PANEL 4: SETTINGS -->
   <div class="teacher-panel" id="tPanel4">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">⚙️ 설정</h2>
-    <div class="card" style="max-width:600px;">
+
+    <!-- PADLET URL -->
+    <div class="card" style="max-width:600px;margin-bottom:20px;">
+      <div class="card-form-title">📌 패들렛 URL 설정</div>
+      <div class="alert alert-info" style="font-size:13px;margin-bottom:16px;">
+        패들렛 URL을 등록하면 학생 창직카드 화면에 "패들렛 열기" 버튼이 표시됩니다.
+      </div>
+      <div class="input-group">
+        <label class="label">패들렛 URL</label>
+        <input type="url" id="padletUrlInput" class="input-field" placeholder="https://padlet.com/...">
+      </div>
+      <button class="btn btn-primary" onclick="savePadletUrl()">URL 저장</button>
+      <div id="padletUrlMsg" style="margin-top:10px;"></div>
+    </div>
       <div class="card-form-title">타임캡슐 Google Apps Script 연결</div>
       <div class="alert alert-info" style="font-size:13px;margin-bottom:16px;">
         📌 Google Apps Script를 웹 앱으로 배포한 뒤 URL을 입력하세요.<br>
@@ -1729,6 +1986,7 @@ function showStudentApp() {
   updateFormulaBox();
   updateCardPreview();
   updateDeclaration();
+  updatePadletBtn();
   checkTabDone();
 }
 
@@ -1921,15 +2179,53 @@ function updateFormulaBox() {
   const r = STATE.readingData;
   const cc = STATE.careerCard;
   const r1 = h ? (h.rank1||'').toUpperCase() : null;
-  const hName = r1 && HOLLAND[r1] ? `${HOLLAND[r1].emoji} ${r1}형 ${HOLLAND[r1].name}` : '홀랜드 유형';
-  const bookName = r ? (r.book || '독서 탐구 주제') : '독서 탐구 주제';
+  const hData = r1 && HOLLAND[r1] ? HOLLAND[r1] : null;
   const sdg = cc.selectedSDG ? SDGS.find(s=>s.num===cc.selectedSDG) : null;
-  const sdgName = sdg ? `${sdg.emoji} SDGs ${sdg.num}번 ${sdg.name}` : 'SDGs 선택';
-  const jobResult = cc.jobName || '나만의 직업';
-  document.getElementById('fHolland').textContent = hName;
-  document.getElementById('fBook').textContent = bookName;
-  document.getElementById('fSdg').textContent = sdgName;
+  const jobResult = cc.jobName || '직업명 입력 대기';
+
+  // Holland branch
+  if (hData) {
+    document.getElementById('branchHollandIcon').textContent = hData.emoji;
+    document.getElementById('branchHollandType').textContent = `${r1}형 · ${hData.name}`;
+    document.getElementById('branchHollandStrengths').textContent = `💡 ${hData.strengths}`;
+    const traitsEl = document.getElementById('branchHollandTraits');
+    traitsEl.innerHTML = (hData.traits||[]).map(t=>`<span class="branch-detail-tag">${t}</span>`).join('');
+    document.getElementById('branchHolland').style.borderColor = hData.color+'66';
+  } else {
+    document.getElementById('branchHollandType').textContent = '유형 미등록 (선생님께 확인)';
+    document.getElementById('branchHollandStrengths').textContent = '';
+    document.getElementById('branchHollandTraits').innerHTML = '';
+  }
+
+  // Reading branch
+  if (r && r.book) {
+    document.getElementById('branchBookTitle').textContent = `『${r.book}』`;
+    document.getElementById('branchCareerInterest').textContent = r.careerInterest ? `🎯 관심 진로: ${r.careerInterest}` : '';
+    document.getElementById('branchHollandConn').textContent = r.hollandConn ? `🔗 홀랜드 연결: ${r.hollandConn}` : '';
+  } else {
+    document.getElementById('branchBookTitle').textContent = '도서 미등록 (선생님께 확인)';
+    document.getElementById('branchCareerInterest').textContent = '';
+    document.getElementById('branchHollandConn').textContent = '';
+  }
+
+  // SDG branch
+  if (sdg) {
+    document.getElementById('branchSdgEmoji').textContent = sdg.emoji;
+    document.getElementById('branchSdgTitle').textContent = `SDG ${sdg.num} · ${sdg.name}`;
+    document.getElementById('branchSdgDesc').textContent = `🌐 ${sdg.desc||''}`;
+    document.getElementById('branchSdg').style.borderColor = sdg.color+'66';
+  } else {
+    document.getElementById('branchSdgTitle').textContent = '목표 미선택 (위에서 선택하세요)';
+    document.getElementById('branchSdgDesc').textContent = '';
+  }
+
+  // Result
   document.getElementById('fResult').textContent = jobResult;
+  // Formula summary
+  const h1 = hData ? `${r1}형` : '?';
+  const b1 = r&&r.book ? r.book.slice(0,8) : '?';
+  const s1 = sdg ? `SDG${sdg.num}` : '?';
+  document.getElementById('fFormulaSummary').textContent = `${h1} + ${b1} + ${s1}`;
 }
 
 function restoreCareerForm() {
@@ -1963,13 +2259,20 @@ function updateCardPreview() {
   document.getElementById('cardCoreRole').textContent = coreRole || '핵심 역할 입력';
   document.getElementById('cardFirstTask').textContent = firstTask || '1호 과제 입력';
   document.getElementById('cardHollandBadge').textContent = r1 ? `${HOLLAND[r1]?.emoji || ''} ${r1}형` : '유형';
-  document.getElementById('cardSdgBadge').textContent = sdg ? `SDGs ${sdg.num}번 ${sdg.emoji}` : 'SDGs';
+  // SDG 앞면 배지 - 두 줄
+  const sdgBadgeEl = document.getElementById('cardSdgBadge');
+  if (sdg) {
+    sdgBadgeEl.innerHTML = `SDGs ${sdg.num}번<br>${sdg.name}`;
+  } else {
+    sdgBadgeEl.textContent = 'SDGs —';
+  }
   document.getElementById('cardKeywords').innerHTML = keywords.map(k=>`<span class="cc-kw">${k}</span>`).join('');
 
   // Back
-  document.getElementById('backFormula').querySelector('#bfHolland').textContent = r1 ? `${r1}형` : '—형';
-  document.getElementById('bfBook').textContent = STATE.readingData ? (STATE.readingData.book || '—') : '—';
-  document.getElementById('bfSdg').textContent = sdg ? `SDGs ${sdg.num}` : '—';
+  const hEmoji = r1 && HOLLAND[r1] ? HOLLAND[r1].emoji : '🧭';
+  document.getElementById('backFormula').querySelector('#bfHolland').textContent = r1 ? `${hEmoji} ${r1}형` : '🧭 —형';
+  document.getElementById('bfBook').textContent = STATE.readingData ? `📖 ${STATE.readingData.book || '—'}` : '📖 —';
+  document.getElementById('bfSdg').textContent = sdg ? `${sdg.emoji} SDGs ${sdg.num}번 ${sdg.name}` : '🌍 SDGs —';
   document.getElementById('bfResult').textContent = jobName;
   document.getElementById('backSocialProblem').textContent = socialProblem;
   document.getElementById('backDailyRoutine').textContent = dailyRoutine;
@@ -2612,10 +2915,36 @@ function saveGasUrl() {
   msg.className='alert alert-success'; msg.textContent='✅ URL이 저장되었습니다. (이 기기에 저장됨)';
 }
 
-// Load GAS URL on page load
+/* ============================================================
+   SETTINGS: PADLET URL
+   ============================================================ */
+function savePadletUrl() {
+  const url = document.getElementById('padletUrlInput').value.trim();
+  localStorage.setItem('padletUrl', url);
+  const msg = document.getElementById('padletUrlMsg');
+  msg.className='alert alert-success'; msg.textContent='✅ 패들렛 URL이 저장되었습니다.';
+  updatePadletBtn();
+}
+
+function updatePadletBtn() {
+  const url = localStorage.getItem('padletUrl');
+  const btn = document.getElementById('padletBtn');
+  if (btn) btn.style.display = url ? '' : 'none';
+}
+
+function openPadlet() {
+  const url = localStorage.getItem('padletUrl');
+  if (!url) { showToast('패들렛 URL이 설정되지 않았습니다.', 'error'); return; }
+  window.open(url, '_blank');
+}
+
+// Load GAS URL & Padlet URL on page load
 window.addEventListener('load', () => {
-  const saved = localStorage.getItem('gasUrl');
-  if (saved) { const el = document.getElementById('gasUrlInput'); if(el) el.value = saved; }
+  const savedGas = localStorage.getItem('gasUrl');
+  if (savedGas) { const el = document.getElementById('gasUrlInput'); if(el) el.value = savedGas; }
+  const savedPadlet = localStorage.getItem('padletUrl');
+  if (savedPadlet) { const el = document.getElementById('padletUrlInput'); if(el) el.value = savedPadlet; }
+  updatePadletBtn();
 });
 
 /* ============================================================
