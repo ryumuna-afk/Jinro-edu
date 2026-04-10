@@ -868,10 +868,9 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
 /* ===== PRINT ===== */
 @media print {
-  /* 기본: 모든 것 숨기기 */
   body > * { display: none !important; }
-  /* 창직카드만 표시 */
   #worksheetPrintArea { display: block !important; }
+  #completionPrintArea { display: block !important; }
 }
 .worksheet-print-wrap {
   position: fixed; inset: 0; background: white; z-index: 99999;
@@ -1056,6 +1055,79 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   font-size: 10px; color: var(--text3); margin-left: 4px;
   vertical-align: super; cursor: help;
 }
+
+
+/* ===== CREATIVE TAB STEPS ===== */
+.cc-step-block {
+  background: var(--surface); border-radius: var(--radius-lg);
+  border: 1px solid var(--border); padding: 24px;
+  margin-bottom: 20px; box-shadow: var(--shadow);
+}
+.cc-step-label {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 18px; font-weight: 900; color: var(--text);
+  margin-bottom: 6px; flex-wrap: wrap;
+}
+.cc-step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #1e3a5f; color: #fff;
+  font-size: 15px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.cc-step-desc { font-size: 14px; color: var(--text3); margin-bottom: 16px; line-height: 1.6; }
+
+/* 나를 돌아봐요 카드 */
+.cc-myinfo-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+@media (max-width: 500px) { .cc-myinfo-grid { grid-template-columns: 1fr; } }
+.cc-myinfo-card {
+  border-radius: 14px; padding: 20px 18px; text-align: center;
+  border: 2px solid transparent;
+}
+.cc-myinfo-holland { background: linear-gradient(135deg, #fff7ed, #fed7aa); border-color: #f97316; }
+.cc-myinfo-book    { background: linear-gradient(135deg, #eff6ff, #bfdbfe); border-color: #3b82f6; }
+.cc-myinfo-icon { font-size: 36px; margin-bottom: 6px; }
+.cc-myinfo-tag {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.8px; color: #64748b; margin-bottom: 8px;
+}
+.cc-myinfo-main { font-size: 20px; font-weight: 900; color: #1e293b; margin-bottom: 4px; line-height: 1.3; }
+.cc-myinfo-sub { font-size: 13px; color: #475569; line-height: 1.6; }
+
+/* 추천 근거 박스 */
+.rec-source-box {
+  background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 16px;
+}
+.rec-source-title { font-size: 13px; font-weight: 800; color: #1e3a5f; margin-bottom: 10px; }
+.rec-source-list { display: flex; flex-direction: column; gap: 6px; }
+.rec-source-item { font-size: 12px; color: #475569; line-height: 1.6; }
+.rec-source-item strong { color: #1e293b; }
+
+/* 역량 요약 표시 */
+.comp-summary-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;
+}
+.comp-summary-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 10px; border: 1.5px solid;
+  font-size: 13px; font-weight: 700;
+}
+.comp-summary-chip.knowledge { background:#dbeafe; color:#1e40af; border-color:#93c5fd; }
+.comp-summary-chip.skill     { background:#fef3c7; color:#92400e; border-color:#fbbf24; }
+.comp-summary-chip.attitude  { background:#d1fae5; color:#065f46; border-color:#6ee7b7; }
+.comp-summary-chip-label { font-size:10px; opacity:0.7; }
+
+/* 워크시트 역량 태그 */
+.ws-comp-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 700;
+  border: 1.5px solid;
+}
+.ws-comp-knowledge { background:#dbeafe; color:#1e40af; border-color:#93c5fd; }
+.ws-comp-skill     { background:#fef3c7; color:#92400e; border-color:#fbbf24; }
+.ws-comp-attitude  { background:#d1fae5; color:#065f46; border-color:#6ee7b7; }
 
 </style>
 </head>
@@ -1302,100 +1374,36 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   <!-- TAB 3: CAREER CREATION -->
   <div class="tab-panel" id="panel2">
     <div class="section-title">💡 융합창직</div>
-    <div class="section-desc">홀랜드 유형 + 독서 탐구 + SDGs를 연결해 세상에 없는 나만의 직업을 만들어보세요!</div>
+    <div class="section-desc">나의 이해 → 사회기여 목표 → 아이디어 발명 → 창직카드 완성 순서로 진행하세요</div>
 
-    <!-- 단어구름 창직 발명소 -->
-    <div class="card word-cloud-card" id="inventorCard" style="margin-bottom:24px;">
-      <div class="card-form-title">🚀 나만의 직업 발명소
-        <span style="font-size:13px;font-weight:500;color:var(--text3);">— 관심 단어를 입력하면 AI가 직업을 제안해드려요</span>
-      </div>
-
-      <!-- 자동 불러온 데이터 표시 -->
-      <div class="inventor-context" id="inventorContext"></div>
-
-      <!-- 단어 입력 -->
-      <div class="word-input-row">
-        <input type="text" id="wordInput" class="input-field" placeholder="관심있는 단어 입력 후 Enter (예: 기후, 심리, 청소년...)" style="flex:1;"
-          onkeydown="if(event.key==='Enter'){addWord();event.preventDefault()}">
-        <button class="btn btn-outline btn-sm" onclick="addWord()">+ 추가</button>
-      </div>
-
-      <!-- 예시 단어 -->
-      <div class="example-words">
-        <span style="font-size:12px;color:var(--text3);margin-right:6px;">빠른 추가:</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">기후</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">AI</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">심리</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">청소년</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">예술</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">건강</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">데이터</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">교육</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">환경</span>
-        <span class="example-word-tag" onclick="addExampleWord(this)">문화</span>
-      </div>
-
-      <!-- 단어 구름 영역 -->
-      <div class="word-cloud-area" id="wordCloudArea">
-        <div style="font-size:13px;color:var(--text3);text-align:center;padding-top:20px;">단어를 입력하면 여기에 구름처럼 모여요 ☁️</div>
-      </div>
-
-      <!-- 버튼 -->
-      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="generateJobs()" id="generateBtn" disabled>
-          🚀 직업 발명하기
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="clearWords()">초기화</button>
-      </div>
-
-      <!-- AI 로딩 -->
-      <div id="aiLoading" class="hidden" style="text-align:center;padding:24px;">
-        <div class="ai-spinner"></div>
-        <div style="font-size:14px;color:var(--text3);margin-top:12px;">AI가 나만의 직업을 발명하는 중...</div>
-      </div>
-
-      <!-- 결과 카드들 -->
-      <div id="jobResultArea" class="hidden" style="margin-top:16px;">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text2);">✨ AI가 제안하는 나만의 직업</div>
-        <div id="jobCards" style="display:flex;flex-direction:column;gap:10px;"></div>
-        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-          <button class="btn btn-outline btn-sm" onclick="generateJobs()">🔄 다시 생성</button>
-          <button class="btn btn-sm" style="background:var(--text3);color:#fff;" onclick="skipAI()">직접 만들게요 →</button>
+    <!-- ① 나를 돌아봐요 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">1</span> 나를 돌아봐요</div>
+      <div class="cc-step-desc">지금까지 알게 된 나의 흥미 유형과 독서 탐구 내용을 확인하세요</div>
+      <div class="cc-myinfo-grid" id="ccMyInfo">
+        <div class="cc-myinfo-card cc-myinfo-holland">
+          <div class="cc-myinfo-icon" id="ccHollandIcon">🧭</div>
+          <div class="cc-myinfo-tag">홀랜드 유형</div>
+          <div class="cc-myinfo-main" id="ccHollandMain">유형 미등록</div>
+          <div class="cc-myinfo-sub" id="ccHollandSub"></div>
         </div>
-      </div>
-
-      <!-- 선택 후 수정 단계 -->
-      <div id="jobModifyArea" class="hidden" style="margin-top:16px;">
-        <div class="modify-box">
-          <div style="font-size:13px;font-weight:700;color:var(--text3);margin-bottom:8px;">AI가 제안한 직업명 (읽기 전용)</div>
-          <div id="aiOriginalJob" style="font-size:16px;font-weight:800;color:var(--primary);padding:10px;background:var(--bg2);border-radius:8px;margin-bottom:16px;"></div>
-          <div class="input-group">
-            <label class="label">Q1. 이 직업을 선택한 이유 <span style="color:var(--danger)">*</span></label>
-            <textarea id="jobSelectReason" class="input-field" rows="2" placeholder="AI가 제안한 3~5개 중 이 직업을 고른 이유는?" oninput="checkModifyComplete()"></textarea>
-          </div>
-          <div class="input-group">
-            <label class="label">Q2. 내가 새로 붙인 직업명 <span style="color:var(--danger)">*</span></label>
-            <input type="text" id="jobModifiedName" class="input-field" placeholder="AI 제안에서 내가 바꾼 직업명 (바꾸지 않아도 됩니다)" oninput="checkModifyComplete()">
-          </div>
-          <div class="input-group">
-            <label class="label">Q3. AI 제안에서 바꾼 부분과 이유 <span style="color:var(--danger)">*</span></label>
-            <textarea id="jobModifyReason" class="input-field" rows="2" placeholder="무엇을 왜 바꿨나요? (바꾸지 않았다면 '그대로 사용' 이라고 써주세요)" oninput="checkModifyComplete()"></textarea>
-          </div>
-          <button class="btn btn-primary btn-block" id="applyJobBtn" onclick="applySelectedJob()" disabled>
-            창직카드에 적용하기 →
-          </button>
+        <div class="cc-myinfo-card cc-myinfo-book">
+          <div class="cc-myinfo-icon">📖</div>
+          <div class="cc-myinfo-tag">독서 탐구</div>
+          <div class="cc-myinfo-main" id="ccBookMain">도서 미등록</div>
+          <div class="cc-myinfo-sub" id="ccBookSub"></div>
         </div>
       </div>
     </div>
 
-    <!-- STEP 1: SDG SELECTION -->
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-form-title">① UN SDGs 선택</div>
+    <!-- ② SDGs 선택 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">2</span> 사회기여 목표 선택 <span style="font-size:13px;font-weight:500;color:var(--text3);">— UN SDGs 중 하나를 골라보세요</span></div>
       <div class="sdg-why-box">
         <div class="sdg-why-title">🌍 왜 SDGs인가요?</div>
         <div class="sdg-why-text">
           UN 지속가능발전목표(SDGs)는 2030년까지 전 세계가 함께 해결해야 할 17가지 사회문제입니다.<br>
-          <strong>내가 만들 직업이 어떤 문제를 해결하는지</strong> 연결하면, 직업의 사회적 가치와 방향이 뚜렷해집니다.
+          <strong>내 직업이 어떤 문제를 해결하는지</strong> 연결하면 직업의 사회적 가치와 방향이 뚜렷해집니다.
         </div>
         <a href="https://sdgs.un.org/goals" target="_blank" class="sdg-link-btn">🔗 UN SDGs 공식 사이트 탐색하기</a>
       </div>
@@ -1403,247 +1411,167 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="sdg-grid" id="sdgGrid"></div>
     </div>
 
-    <!-- BRANCH CONVERGENCE DIAGRAM -->
-    <div class="branch-diagram" id="formulaBox">
-      <div class="branch-title">🔗 나의 융합 도식도</div>
-      <div class="branch-layout">
-        <!-- LEFT BRANCHES -->
-        <div class="branch-left">
-          <!-- Holland Branch -->
-          <div class="branch-node branch-holland" id="branchHolland">
-            <div class="branch-node-header">
-              <span class="branch-icon" id="branchHollandIcon">🧭</span>
-              <span class="branch-label">홀랜드 유형</span>
+    <!-- ③ 융합 도식도 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">3</span> 융합 도식도</div>
+      <div class="cc-step-desc">홀랜드 유형 + 독서 탐구 + SDGs가 어떻게 연결되는지 확인하세요</div>
+      <div class="branch-diagram" id="formulaBox">
+        <div class="branch-title">🔗 나의 융합 도식도</div>
+        <div class="branch-layout">
+          <div class="branch-left">
+            <div class="branch-node branch-holland" id="branchHolland">
+              <div class="branch-node-header">
+                <span class="branch-icon" id="branchHollandIcon">🧭</span>
+                <span class="branch-label">홀랜드 유형</span>
+              </div>
+              <div class="branch-node-type" id="branchHollandType">유형 미등록</div>
+              <div class="branch-node-details">
+                <div class="branch-detail-row" id="branchHollandStrengths"></div>
+                <div class="branch-detail-tags" id="branchHollandTraits"></div>
+              </div>
             </div>
-            <div class="branch-node-type" id="branchHollandType">유형 미등록</div>
-            <div class="branch-node-details">
-              <div class="branch-detail-row" id="branchHollandStrengths"></div>
-              <div class="branch-detail-tags" id="branchHollandTraits"></div>
+            <div class="branch-node branch-reading" id="branchReading">
+              <div class="branch-node-header">
+                <span class="branch-icon">📖</span>
+                <span class="branch-label">독서 탐구</span>
+              </div>
+              <div class="branch-node-type" id="branchBookTitle">도서 미등록</div>
+              <div class="branch-node-details">
+                <div class="branch-detail-row" id="branchCareerInterest"></div>
+                <div class="branch-detail-row" id="branchHollandConn"></div>
+              </div>
+            </div>
+            <div class="branch-node branch-sdg" id="branchSdg">
+              <div class="branch-node-header">
+                <span class="branch-icon" id="branchSdgEmoji">🌍</span>
+                <span class="branch-label">SDGs 목표</span>
+              </div>
+              <div class="branch-node-type" id="branchSdgTitle">목표 미선택</div>
+              <div class="branch-node-details">
+                <div class="branch-detail-row" id="branchSdgDesc"></div>
+              </div>
             </div>
           </div>
-          <!-- Reading Branch -->
-          <div class="branch-node branch-reading" id="branchReading">
-            <div class="branch-node-header">
-              <span class="branch-icon">📖</span>
-              <span class="branch-label">독서 탐구</span>
-            </div>
-            <div class="branch-node-type" id="branchBookTitle">도서 미등록</div>
-            <div class="branch-node-details">
-              <div class="branch-detail-row" id="branchCareerInterest"></div>
-              <div class="branch-detail-row" id="branchHollandConn"></div>
-            </div>
+          <div class="branch-arrows">
+            <div class="branch-arrow-line"></div>
+            <div class="branch-arrow-dot"></div>
+            <div class="branch-arrow-line"></div>
+            <div class="branch-arrow-dot"></div>
+            <div class="branch-arrow-line"></div>
           </div>
-          <!-- SDG Branch -->
-          <div class="branch-node branch-sdg" id="branchSdg">
-            <div class="branch-node-header">
-              <span class="branch-icon" id="branchSdgEmoji">🌍</span>
-              <span class="branch-label">SDGs 목표</span>
+          <div class="branch-center">
+            <div class="branch-connector">
+              <div class="branch-connector-line top"></div>
+              <div class="branch-connector-line mid"></div>
+              <div class="branch-connector-line bot"></div>
+              <div class="branch-connector-arrow">→</div>
             </div>
-            <div class="branch-node-type" id="branchSdgTitle">목표 미선택</div>
-            <div class="branch-node-details">
-              <div class="branch-detail-row" id="branchSdgDesc"></div>
+            <div class="branch-result" id="branchResult">
+              <div class="branch-result-label">나만의 직업</div>
+              <div class="branch-result-name" id="fResult">직업명 입력 대기</div>
+              <div class="branch-result-formula" id="fFormulaSummary"></div>
             </div>
-          </div>
-        </div>
-        <!-- ARROWS -->
-        <div class="branch-arrows">
-          <div class="branch-arrow-line"></div>
-          <div class="branch-arrow-dot"></div>
-          <div class="branch-arrow-line"></div>
-          <div class="branch-arrow-dot"></div>
-          <div class="branch-arrow-line"></div>
-        </div>
-        <!-- CENTER RESULT -->
-        <div class="branch-center">
-          <div class="branch-connector">
-            <div class="branch-connector-line top"></div>
-            <div class="branch-connector-line mid"></div>
-            <div class="branch-connector-line bot"></div>
-            <div class="branch-connector-arrow">→</div>
-          </div>
-          <div class="branch-result" id="branchResult">
-            <div class="branch-result-label">나만의 직업</div>
-            <div class="branch-result-name" id="fResult">직업명 입력 대기</div>
-            <div class="branch-result-formula" id="fFormulaSummary"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- STEP 2: CARD FORM -->
-    <div class="card-form">
-      <div class="card-form-title">② 창직카드 작성 — 앞면</div>
-      <div class="input-group">
-        <label class="label">직업명 *</label>
-        <input type="text" id="jobName" class="input-field" placeholder="예) 기후정의 경험 디자이너"
-          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
+    <!-- ④ 직업 발명소 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">4</span> 나만의 직업 발명소</div>
+      <div class="cc-step-desc">관심 단어를 입력하면 AI가 창직 아이디어를 제안해드려요. 아이디어를 얻고 나서 직접 다듬어보세요!</div>
+      <div class="word-cloud-card" id="inventorCard">
+        <div class="inventor-context" id="inventorContext"></div>
+        <div class="word-input-row">
+          <input type="text" id="wordInput" class="input-field" placeholder="관심 단어 입력 후 Enter (예: 기후, 심리, 청소년...)" style="flex:1;"
+            onkeydown="if(event.key==='Enter'){addWord();event.preventDefault()}">
+          <button class="btn btn-outline btn-sm" onclick="addWord()">+ 추가</button>
+        </div>
+        <div class="example-words">
+          <span style="font-size:12px;color:var(--text3);margin-right:6px;">빠른 추가:</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">기후</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">AI</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">심리</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">청소년</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">예술</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">건강</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">데이터</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">교육</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">환경</span>
+          <span class="example-word-tag" onclick="addExampleWord(this)">문화</span>
+        </div>
+        <div class="word-cloud-area" id="wordCloudArea">
+          <div style="font-size:13px;color:var(--text3);text-align:center;padding-top:20px;">단어를 입력하면 여기에 구름처럼 모여요 ☁️</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="generateJobs()" id="generateBtn" disabled>🚀 직업 발명하기</button>
+          <button class="btn btn-outline btn-sm" onclick="clearWords()">초기화</button>
+          <button class="btn btn-ghost btn-sm" onclick="skipAI()">직접 만들게요 →</button>
+        </div>
+        <div id="aiLoading" class="hidden" style="text-align:center;padding:24px;">
+          <div class="ai-spinner"></div>
+          <div style="font-size:14px;color:var(--text3);margin-top:12px;">AI가 나만의 직업을 발명하는 중...</div>
+        </div>
+        <div id="jobResultArea" class="hidden" style="margin-top:16px;">
+          <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--text);">✨ AI가 제안하는 나만의 직업</div>
+          <div id="jobCards" style="display:flex;flex-direction:column;gap:10px;"></div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="generateJobs()">🔄 다시 생성</button>
+          </div>
+        </div>
+        <div id="jobModifyArea" class="hidden" style="margin-top:16px;">
+          <div class="modify-box">
+            <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;">AI가 제안한 직업명 (참고용)</div>
+            <div id="aiOriginalJob" style="font-size:17px;font-weight:800;color:#1e3a5f;padding:10px 14px;background:#fff;border-radius:8px;border:1.5px solid #fbbf24;margin-bottom:16px;"></div>
+            <div class="input-group">
+              <label class="label">Q1. 이 직업을 선택한 이유 <span style="color:var(--danger)">*</span></label>
+              <textarea id="jobSelectReason" class="input-field" rows="2" placeholder="AI가 제안한 직업 중 이 직업을 고른 이유는?" oninput="checkModifyComplete()"></textarea>
+            </div>
+            <div class="input-group">
+              <label class="label">Q2. 내가 새로 붙인 직업명 <span style="color:var(--danger)">*</span></label>
+              <input type="text" id="jobModifiedName" class="input-field" placeholder="나만의 방식으로 직업명을 다듬어보세요" oninput="checkModifyComplete()">
+            </div>
+            <div class="input-group">
+              <label class="label">Q3. 바꾼 부분과 이유 <span style="color:var(--danger)">*</span></label>
+              <textarea id="jobModifyReason" class="input-field" rows="2" placeholder="무엇을 왜 바꿨나요? (그대로라면 '그대로 사용' 이라고 써주세요)" oninput="checkModifyComplete()"></textarea>
+            </div>
+            <button class="btn btn-primary btn-block" id="applyJobBtn" onclick="applySelectedJob()" disabled>창직카드에 적용하기 →</button>
+          </div>
+        </div>
       </div>
-      <div class="input-group">
-        <label class="label">슬로건 *</label>
-        <input type="text" id="jobSlogan" class="input-field" placeholder="나의 직업을 한 줄로 표현하세요"
-          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
-      </div>
-      <div class="form-row">
+    </div>
+
+    <!-- ⑤ 창직카드 작성 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">5</span> 창직카드 작성</div>
+      <div class="cc-step-desc">직업명과 해결하고 싶은 사회문제를 직접 작성하세요</div>
+      <div class="card-form">
         <div class="input-group">
-          <label class="label">핵심 역할</label>
-          <input type="text" id="coreRole" class="input-field" placeholder="주요 업무"
-            oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
+          <label class="label" style="font-size:15px;">직업명 <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="jobName" class="input-field" style="font-size:18px;font-weight:700;"
+            placeholder="예) 기후정의 경험 디자이너"
+            oninput="updateWorksheet();updateCardPreview();updateCompetencyPanel();scheduleSave();">
         </div>
         <div class="input-group">
-          <label class="label">1호 과제</label>
-          <input type="text" id="firstTask" class="input-field" placeholder="첫 번째 해결 과제"
-            oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
+          <label class="label">해결하는 사회문제</label>
+          <textarea id="socialProblem" class="input-field" rows="3"
+            placeholder="내 직업이 해결하려는 사회문제를 구체적으로 써보세요"
+            oninput="updateWorksheet();updateCardPreview();updateCompetencyPanel();scheduleSave();"></textarea>
         </div>
-      </div>
-      <div class="input-group">
-        <label class="label">핵심 키워드 (쉼표로 구분)</label>
-        <input type="text" id="keywords" class="input-field" placeholder="예) 지속가능, 기후, 디자인, 경험"
-          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
       </div>
     </div>
 
-    <div class="card-form">
-      <div class="card-form-title">② 창직카드 작성 — 뒷면</div>
-      <div class="input-group">
-        <label class="label">해결하는 사회문제</label>
-        <textarea id="socialProblem" class="input-field" rows="2" placeholder="내 직업이 해결하려는 구체적인 사회문제를 써보세요"
-          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();"></textarea>
+    <!-- ⑥ 역량 찾기 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">6</span> 역량 찾기</div>
+      <div class="cc-step-desc">창직한 직업을 위해 어떤 역량이 필요한지 생각해보세요. AI가 힌트를 드려요!</div>
+      <div class="comp-job-display" id="compJobDisplay" style="margin-bottom:14px;">
+        <span style="color:var(--text3);font-size:13px;">직업명을 입력하면 여기에 표시됩니다</span>
       </div>
-      <div class="input-group">
-        <label class="label">2040년, 나의 하루 루틴</label>
-        <textarea id="dailyRoutine" class="input-field" rows="3" placeholder="2040년에 이 직업으로 일하는 나의 하루를 상상해서 써보세요"
-          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();"></textarea>
+      <div id="compHintArea" class="hidden" style="margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text3);margin-bottom:8px;">✨ AI 역량 힌트 — 클릭하면 바로 입력돼요</div>
+        <div id="compHints" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
       </div>
-    </div>
-
-    <!-- CARD PREVIEW -->
-    <div class="card" style="margin-bottom:24px;">
-      <div class="card-form-title">③ 창직카드 미리보기</div>
-
-
-
-      <!-- A4 WORKSHEET CARD -->
-      <div class="worksheet-container" id="worksheetCard">
-        <div class="worksheet-header">
-          <div>
-            <div class="worksheet-header-title">✦ 나만의 창직카드</div>
-            <div class="worksheet-header-sub">Invent Your Career — 내가 만든 직업, 내가 선택한 과목</div>
-          </div>
-          <div style="font-size:11px;opacity:0.6;text-align:right;" id="wsStudentInfo"></div>
-        </div>
-        <div class="worksheet-body">
-          <!-- 배지 행 -->
-          <div class="ws-section" style="padding-bottom:12px;margin-bottom:12px;">
-            <div class="ws-badge-row" id="wsBadgeRow">
-              <span class="ws-badge ws-badge-holland" id="wsHollandBadge">— 형</span>
-              <span class="ws-badge ws-badge-sdg" id="wsSdgBadge">SDGs —</span>
-            </div>
-          </div>
-          <!-- 직업명 & 슬로건 -->
-          <div class="ws-section">
-            <div class="ws-label">직업명</div>
-            <div class="ws-field" id="wsJobName" style="font-size:22px;font-weight:900;color:#1e3a5f;border-bottom:2px solid #1e3a5f;">직업명을 입력하세요</div>
-            <div class="ws-label" style="margin-top:10px;">슬로건</div>
-            <div class="ws-field" id="wsSlogan" style="font-style:italic;color:#475569;">슬로건을 입력하세요</div>
-          </div>
-          <!-- 핵심역할 & 1호과제 -->
-          <div class="ws-section ws-grid-2">
-            <div>
-              <div class="ws-label">핵심 역할</div>
-              <div class="ws-field" id="wsCoreRole" style="min-height:52px;"></div>
-            </div>
-            <div>
-              <div class="ws-label">1호 과제</div>
-              <div class="ws-field" id="wsFirstTask" style="min-height:52px;"></div>
-            </div>
-          </div>
-          <!-- 창직 공식 -->
-          <div class="ws-section">
-            <div class="ws-label">창직 공식</div>
-            <div class="ws-formula" id="wsFormula">
-              <span class="ws-formula-item" id="wsfHolland">홀랜드 유형</span>
-              <span class="ws-formula-arrow">+</span>
-              <span class="ws-formula-item" id="wsfBook">독서 탐구</span>
-              <span class="ws-formula-arrow">+</span>
-              <span class="ws-formula-item" id="wsfSdg">SDGs</span>
-              <span class="ws-formula-arrow">=</span>
-              <span class="ws-formula-result" id="wsfResult">나만의 직업</span>
-            </div>
-          </div>
-          <!-- 사회문제 & 2040루틴 -->
-          <div class="ws-section ws-grid-2">
-            <div>
-              <div class="ws-label">해결하는 사회문제</div>
-              <div class="ws-field" id="wsSocialProblem" style="min-height:60px;"></div>
-            </div>
-            <div>
-              <div class="ws-label">2040년 나의 하루 루틴</div>
-              <div class="ws-field" id="wsDailyRoutine" style="min-height:60px;"></div>
-            </div>
-          </div>
-          <!-- 키워드 -->
-          <div class="ws-section" style="margin-bottom:0;border-bottom:none;">
-            <div class="ws-label">핵심 키워드</div>
-            <div class="ws-badge-row" id="wsKeywords" style="margin-top:6px;"></div>
-          </div>
-        </div>
-        <div class="ws-footer">
-          <div class="ws-footer-text">INVENT YOUR CAREER</div>
-          <div class="ws-footer-text" id="wsDateStamp"></div>
-        </div>
-      </div>
-
-      <!-- 숨김 - 하위 호환용 (JS에서 참조) -->
-      <div id="cardFrontPreview" class="hidden"></div>
-      <div id="cardBackPreview" class="hidden"></div>
-      <div id="backFormula" class="hidden">
-        <span id="bfHolland"></span><span id="bfBook"></span>
-        <span id="bfSdg"></span><span id="bfResult"></span>
-      </div>
-      <div id="backSocialProblem" class="hidden"></div>
-      <div id="backDailyRoutine" class="hidden"></div>
-      <div id="cardHollandBadge" class="hidden"></div>
-      <div id="cardSdgBadge" class="hidden"></div>
-      <div id="cardJobName" class="hidden"></div>
-      <div id="cardSlogan" class="hidden"></div>
-      <div id="cardCoreRole" class="hidden"></div>
-      <div id="cardFirstTask" class="hidden"></div>
-      <div id="cardKeywords" class="hidden"></div>
-
-      <!-- 인쇄/다운로드 -->
-      <div class="card-actions no-print" style="margin-top:16px;">
-        <button class="btn btn-primary" onclick="printWorksheet()">🖨️ 활동지 인쇄 / PDF</button>
-        <button class="btn btn-padlet" id="padletBtn" onclick="openPadlet()" style="display:none;">📌 패들렛 열기</button>
-        <button class="btn btn-outline" onclick="openMiriCanvas()">🎨 미리캔버스</button>
-        <button class="btn btn-ghost" onclick="openCanva()">✏️ 캔바</button>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- TAB 4: SUBJECTS -->
-  <div class="tab-panel" id="panel3">
-    <div class="section-title">📚 과목 선택</div>
-    <div class="section-desc">창직 직업 → 역량 도출 → 과목 연결 흐름으로 나만의 학습 로드맵을 완성하세요!</div>
-
-    <!-- 역량 도출 STEP 1 -->
-    <div class="competency-card" id="competencyCard">
-      <div class="comp-step-header">
-        <span class="comp-step-num">1</span>
-        <span class="comp-step-title">역량 도출</span>
-        <span class="comp-step-desc">창직카드에서 만든 직업을 위해 어떤 역량이 필요한지 생각해보세요</span>
-      </div>
-      <div class="comp-job-display" id="compJobDisplay">
-        <span style="color:var(--text3);font-size:13px;">창직카드에서 직업명을 입력하면 여기에 표시됩니다</span>
-      </div>
-
-      <!-- AI 역량 힌트 -->
-      <div id="compHintArea" class="hidden">
-        <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">✨ AI 역량 힌트 (참고만 하세요 — 체크하고 수정해도 됩니다)</div>
-        <div id="compHints" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;"></div>
-      </div>
-
-      <!-- 역량 입력 (지식/기술/태도) -->
       <div class="comp-inputs">
         <div class="comp-input-group">
           <div class="comp-type-label comp-knowledge">📚 지식 역량</div>
@@ -1663,20 +1591,106 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       </div>
     </div>
 
-    <!-- 역량-과목 매핑 STEP 2 -->
-    <div class="competency-card" id="mappingCard" style="margin-top:16px;">
+    <!-- ⑦ 창직카드 미리보기 -->
+    <div class="cc-step-block">
+      <div class="cc-step-label"><span class="cc-step-num">7</span> 창직카드 미리보기 &amp; 저장</div>
+      <div class="worksheet-container" id="worksheetCard">
+        <div class="worksheet-header">
+          <div>
+            <div class="worksheet-header-title">✦ 나만의 창직카드</div>
+            <div class="worksheet-header-sub">Invent Your Career — 내가 만든 직업, 내가 선택한 과목</div>
+          </div>
+          <div style="font-size:11px;opacity:0.6;text-align:right;" id="wsStudentInfo"></div>
+        </div>
+        <div class="worksheet-body">
+          <div class="ws-section" style="padding-bottom:12px;margin-bottom:12px;">
+            <div class="ws-badge-row" id="wsBadgeRow">
+              <span class="ws-badge ws-badge-holland" id="wsHollandBadge">— 형</span>
+              <span class="ws-badge ws-badge-sdg" id="wsSdgBadge">SDGs —</span>
+            </div>
+          </div>
+          <div class="ws-section">
+            <div class="ws-label">직업명</div>
+            <div class="ws-field" id="wsJobName" style="font-size:22px;font-weight:900;color:#1e3a5f;border-bottom:2px solid #1e3a5f;">직업명을 입력하세요</div>
+          </div>
+          <div class="ws-section">
+            <div class="ws-label">창직 공식</div>
+            <div class="ws-formula" id="wsFormula">
+              <span class="ws-formula-item" id="wsfHolland">홀랜드 유형</span>
+              <span class="ws-formula-arrow">+</span>
+              <span class="ws-formula-item" id="wsfBook">독서 탐구</span>
+              <span class="ws-formula-arrow">+</span>
+              <span class="ws-formula-item" id="wsfSdg">SDGs</span>
+              <span class="ws-formula-arrow">=</span>
+              <span class="ws-formula-result" id="wsfResult">나만의 직업</span>
+            </div>
+          </div>
+          <div class="ws-section">
+            <div class="ws-label">해결하는 사회문제</div>
+            <div class="ws-field" id="wsSocialProblem" style="min-height:60px;"></div>
+          </div>
+          <div class="ws-section" style="border-bottom:none;margin-bottom:0;">
+            <div class="ws-label">핵심 역량</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;" id="wsCompetencies"></div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-text">INVENT YOUR CAREER</div>
+          <div class="ws-footer-text" id="wsDateStamp"></div>
+        </div>
+      </div>
+      <!-- 숨김 호환용 -->
+      <div id="cardFrontPreview" class="hidden"></div>
+      <div id="cardBackPreview" class="hidden"></div>
+      <div id="backFormula" class="hidden"><span id="bfHolland"></span><span id="bfBook"></span><span id="bfSdg"></span><span id="bfResult"></span></div>
+      <div id="backSocialProblem" class="hidden"></div>
+      <div id="backDailyRoutine" class="hidden"></div>
+      <div id="cardHollandBadge" class="hidden"></div>
+      <div id="cardSdgBadge" class="hidden"></div>
+      <div id="cardJobName" class="hidden"></div>
+      <div id="cardSlogan" class="hidden"></div>
+      <div id="cardCoreRole" class="hidden"></div>
+      <div id="cardFirstTask" class="hidden"></div>
+      <div id="cardKeywords" class="hidden"></div>
+      <div class="card-actions no-print" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="printWorksheet()">🖨️ 활동지 인쇄 / PDF</button>
+        <button class="btn btn-padlet" id="padletBtn" onclick="openPadlet()" style="display:none;">📌 패들렛 열기</button>
+        <button class="btn btn-outline" onclick="openMiriCanvas()">🎨 미리캔버스</button>
+        <button class="btn btn-ghost" onclick="openCanva()">✏️ 캔바</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tab-panel" id="panel3">
+    <div class="section-title">📚 과목 선택</div>
+    <div class="section-desc">창직에서 찾은 역량을 선택과목과 연결해 나만의 학습 로드맵을 완성하세요</div>
+
+    <!-- STEP 1: 역량 확인 -->
+    <div class="competency-card" style="margin-bottom:20px;">
+      <div class="comp-step-header">
+        <span class="comp-step-num">1</span>
+        <span class="comp-step-title">창직에서 찾은 역량 확인</span>
+      </div>
+      <div id="compSummaryDisplay">
+        <div style="font-size:14px;color:var(--text3);padding:8px 0;">융합창직 탭에서 역량을 입력하면 여기에 나타납니다</div>
+      </div>
+    </div>
+
+    <!-- STEP 2: 역량-과목 연계 -->
+    <div class="competency-card" id="mappingCard" style="margin-bottom:20px;">
       <div class="comp-step-header">
         <span class="comp-step-num">2</span>
         <span class="comp-step-title">역량 → 과목 연결</span>
         <span class="comp-step-desc">각 역량을 기르는 데 도움이 되는 과목을 선택하고 이유를 써보세요</span>
       </div>
       <div id="mappingArea">
-        <div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">역량을 먼저 입력하면 여기에 매핑 칸이 나타납니다</div>
+        <div style="font-size:14px;color:var(--text3);text-align:center;padding:20px 0;">역량을 먼저 입력하면 여기에 매핑 칸이 나타납니다</div>
       </div>
     </div>
 
-    <!-- 로드맵 STEP 3 -->
-    <div class="competency-card" id="roadmapCard" style="margin-top:16px;display:none;">
+    <!-- STEP 3: 로드맵 -->
+    <div class="competency-card" id="roadmapCard" style="margin-bottom:20px;display:none;">
       <div class="comp-step-header">
         <span class="comp-step-num">3</span>
         <span class="comp-step-title">나의 학습 로드맵</span>
@@ -1687,43 +1701,56 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="roadmap-sentence" id="roadmapSentence"></div>
     </div>
 
-    <!-- 전공 연계 검색 -->
-    <div class="major-search-box" id="majorSearchBox">
-      <div class="major-search-title">🔍 관심 전공 검색 — 권장과목 확인하기</div>
-      <div class="major-search-row">
-        <input type="text" id="majorSearchInput" class="input-field" placeholder="전공명 또는 계열 입력 (예: 컴퓨터공학, 의학, 경영)" oninput="searchMajor(this.value)" style="flex:1;">
+    <!-- STEP 4: 과목 선택 -->
+    <div class="competency-card" style="margin-bottom:20px;">
+      <div class="comp-step-header">
+        <span class="comp-step-num">4</span>
+        <span class="comp-step-title">선택과목 고르기</span>
+        <span class="comp-step-desc">학기별 선택과목 목록에서 수강할 과목을 선택하세요</span>
       </div>
-      <div id="majorSearchResult" class="major-search-result hidden"></div>
+
+      <!-- 추천 근거 안내 -->
+      <div class="rec-source-box">
+        <div class="rec-source-title">🧭 추천 배지 근거 안내</div>
+        <div class="rec-source-list">
+          <div class="rec-source-item">① <strong>Holland(1997)</strong> — Making Vocational Choices: RIASEC 유형별 강점 분야와 선호 학습 환경 이론</div>
+          <div class="rec-source-item">② <strong>교육부 고시 제2022-33호</strong> — 2022 개정 교육과정 총론: 과목별 핵심역량 기술</div>
+          <div class="rec-source-item">③ <strong>경희대·고려대·성균관대·연세대·중앙대 공동연구(2022)</strong> — 대학 자연계열 전공 학문 분야의 교과 이수 권장과목 안내</div>
+          <div class="rec-source-item">④ <strong>경북교육청 고교학점제지원센터</strong> — 계열별 선택과목 안내 (curri.gyo6.net)</div>
+          <div class="rec-source-item">⑤ <strong>황매향·최희철(2012)</strong> — 직업별 RIASEC 코드의 수렴타당도. 상담학연구 13(2)</div>
+        </div>
+      </div>
+
+      <!-- 전공 연계 검색 -->
+      <div class="major-search-box" id="majorSearchBox" style="margin-bottom:16px;">
+        <div class="major-search-title">🔍 관심 전공 검색 — 권장과목 확인하기</div>
+        <div class="major-search-row">
+          <input type="text" id="majorSearchInput" class="input-field" placeholder="전공명 또는 계열 입력 (예: 컴퓨터공학, 의학, 경영)" oninput="searchMajor(this.value)" style="flex:1;">
+        </div>
+        <div id="majorSearchResult" class="major-search-result hidden"></div>
+      </div>
+
+      <!-- 홀랜드 연계 안내 -->
+      <div class="subject-insight-box" id="hollandSubjectBox" style="display:none;margin-bottom:12px;">
+        <div class="insight-label">🧭 홀랜드 유형 추천 과목</div>
+        <div id="hollandSubjectContent"></div>
+      </div>
+
+      <!-- 선택 조합 진단 -->
+      <div class="subject-diagnosis-box" id="subjectDiagnosisBox" style="display:none;margin-bottom:12px;">
+        <div class="diagnosis-label">📊 선택 조합 진단</div>
+        <div id="subjectDiagnosisContent"></div>
+      </div>
+
+      <div id="refFileBtnArea" class="hidden" style="margin-bottom:12px;">
+        <a id="refFileBtn" class="ref-file-btn" target="_blank">📄 대학 전공 연계 권장과목 안내 보기</a>
+      </div>
+
+      <div id="subjectGradeArea"></div>
     </div>
 
-    <!-- 창직 직업 연계 -->
-    <div class="subject-insight-box" id="jobSubjectBox" style="display:none;">
-      <div class="insight-label">💡 나의 창직 직업과 과목 연계</div>
-      <div id="jobSubjectContent"></div>
-    </div>
-
-    <!-- 홀랜드 연계 안내 -->
-    <div class="subject-insight-box" id="hollandSubjectBox" style="display:none;">
-      <div class="insight-label">🧭 홀랜드 유형 추천 과목</div>
-      <div id="hollandSubjectContent"></div>
-    </div>
-
-    <!-- 선택 조합 진단 -->
-    <div class="subject-diagnosis-box" id="subjectDiagnosisBox" style="display:none;">
-      <div class="diagnosis-label">📊 선택 조합 진단</div>
-      <div id="subjectDiagnosisContent"></div>
-    </div>
-
-    <div id="refFileBtnArea" class="hidden">
-      <a id="refFileBtn" class="ref-file-btn" target="_blank">
-        📄 대학 전공 연계 권장과목 안내 보기
-      </a>
-    </div>
-
-    <div id="subjectGradeArea"></div>
   </div>
 
-  <!-- TAB 5: EXTRA -->
   <div class="tab-panel" id="panel4">
     <div class="section-title">✍️ 추가 활동</div>
     <div class="section-desc">3년 후 미래의 나에게 편지를 써보세요.</div>
@@ -1813,7 +1840,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
-      <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ 인쇄하기</button>
+      <button class="btn btn-primary btn-lg" onclick="printCompletion()">🖨️ 완료페이지 인쇄</button>
       <button class="btn btn-outline btn-lg" onclick="saveToFirebase(true)">💾 최종 저장</button>
       <button class="btn btn-ghost btn-lg" onclick="hideCompletion()">← 돌아가기</button>
     </div>
@@ -2454,7 +2481,7 @@ async function saveToFirebase(showMsg) {
   if (!key || key === '_') return;
   try {
     STATE.careerCard.jobName = document.getElementById('jobName')?.value || STATE.careerCard.jobName;
-    STATE.careerCard.slogan = document.getElementById('jobSlogan')?.value || STATE.careerCard.slogan;
+    STATE.careerCard.slogan = document.getElementById('jobSlogan')?.value ?? STATE.careerCard.slogan ?? '';
     STATE.careerCard.coreRole = document.getElementById('coreRole')?.value || STATE.careerCard.coreRole;
     STATE.careerCard.firstTask = document.getElementById('firstTask')?.value || STATE.careerCard.firstTask;
     STATE.careerCard.keywords = document.getElementById('keywords')?.value || STATE.careerCard.keywords;
@@ -2663,7 +2690,7 @@ function updateFormulaBox() {
 function restoreCareerForm() {
   const cc = STATE.careerCard;
   if (cc.jobName) document.getElementById('jobName').value = cc.jobName;
-  if (cc.slogan) document.getElementById('jobSlogan').value = cc.slogan;
+  if (cc.slogan) { const el = document.getElementById('jobSlogan'); if(el) el.value = cc.slogan; }
   if (cc.coreRole) document.getElementById('coreRole').value = cc.coreRole;
   if (cc.firstTask) document.getElementById('firstTask').value = cc.firstTask;
   if (cc.keywords) document.getElementById('keywords').value = cc.keywords;
@@ -2695,25 +2722,26 @@ function updateWorksheet() {
   };
 
   setWs('wsJobName', jobName, '직업명을 입력하세요');
-  setWs('wsSlogan', slogan, '슬로건을 입력하세요');
-  setWs('wsCoreRole', coreRole);
-  setWs('wsFirstTask', firstTask);
   setWs('wsSocialProblem', problem);
-  setWs('wsDailyRoutine', routine);
   setWs('wsfResult', jobName || '나만의 직업');
   setWs('wsfHolland', hData ? `${hData.emoji} ${r1}형 ${hData.name}` : '홀랜드 유형');
   setWs('wsfBook', r ? (r.book||'독서 탐구') : '독서 탐구');
   setWs('wsfSdg', sdg ? `SDG${sdg.num} ${sdg.name}` : 'SDGs');
 
-  // 배지
   const hollandBadge = document.getElementById('wsHollandBadge');
   if (hollandBadge) hollandBadge.textContent = hData ? `${hData.emoji} ${r1}형 ${hData.name}` : '홀랜드 — 미입력';
   const sdgBadge = document.getElementById('wsSdgBadge');
   if (sdgBadge) sdgBadge.textContent = sdg ? `${sdg.emoji} SDG${sdg.num} ${sdg.name}` : 'SDGs — 미선택';
-  // 키워드 배지
-  const kwEl = document.getElementById('wsKeywords');
-  if (kwEl) kwEl.innerHTML = keywords.map(k=>`<span class="ws-badge ws-badge-keyword">${k}</span>`).join('') || '<span style="color:#94a3b8;font-size:13px;">키워드 없음</span>';
-  // 학생 정보 & 날짜
+  // 역량 태그
+  const compEl = document.getElementById('wsCompetencies');
+  if (compEl) {
+    const comps = [
+      STATE.competency?.knowledge ? {label:'📚 지식', val:STATE.competency.knowledge, cls:'ws-comp-knowledge'} : null,
+      STATE.competency?.skill     ? {label:'🛠 기술', val:STATE.competency.skill,     cls:'ws-comp-skill'}     : null,
+      STATE.competency?.attitude  ? {label:'💛 태도', val:STATE.competency.attitude,  cls:'ws-comp-attitude'}  : null,
+    ].filter(Boolean);
+    compEl.innerHTML = comps.map(cp=>`<span class="ws-comp-tag ${cp.cls}"><span style="opacity:.7;font-size:10px;">${cp.label}</span> ${cp.val}</span>`).join('') || '<span style="color:#94a3b8;font-size:13px;">역량 탭에서 입력 후 표시됩니다</span>';
+  }
   const si = document.getElementById('wsStudentInfo');
   if (si) si.innerHTML = `${STATE.studentName||''}<br>${STATE.sessionCode||''}`;
   const ds = document.getElementById('wsDateStamp');
@@ -3760,6 +3788,22 @@ function switchTeacherTab(idx) {
 /* ============================================================
    PRINT WORKSHEET
    ============================================================ */
+function printCompletion() {
+  const el = document.getElementById('completionScreen');
+  if (!el) { window.print(); return; }
+  const div = document.createElement('div');
+  div.id = 'completionPrintArea';
+  div.style.cssText = 'position:fixed;inset:0;background:white;z-index:99999;overflow:auto;padding:32px;';
+  div.innerHTML = el.innerHTML;
+  // 버튼 숨김
+  div.querySelectorAll('button,.no-print').forEach(b => b.style.display='none');
+  document.body.appendChild(div);
+  const cleanup = () => { if(document.getElementById('completionPrintArea')) document.body.removeChild(div); window.removeEventListener('afterprint', cleanup); };
+  window.addEventListener('afterprint', cleanup);
+  window.print();
+  setTimeout(() => { if(document.getElementById('completionPrintArea')) cleanup(); }, 2000);
+}
+
 function printWorksheet() {
   // 워크시트만 인쇄 영역으로 복제
   const ws = document.getElementById('worksheetCard');
@@ -3795,18 +3839,41 @@ const BUBBLE_COLORS = [
 ];
 
 function updateInventorContext() {
+  // 발명소 컨텍스트 칩
   const el = document.getElementById('inventorContext');
-  if (!el) return;
-  const chips = [];
+  if (el) {
+    const chips = [];
+    const h = STATE.hollandData;
+    const r1 = h ? (h.rank1||'').toUpperCase() : null;
+    if (r1 && HOLLAND[r1]) chips.push(`${HOLLAND[r1].emoji} ${r1}형 ${HOLLAND[r1].name}`);
+    if (STATE.readingData && STATE.readingData.book) chips.push(`📖 ${STATE.readingData.book.slice(0,12)}`);
+    if (STATE.careerCard.selectedSDG) {
+      const sdg = SDGS.find(s=>s.num===STATE.careerCard.selectedSDG);
+      if (sdg) chips.push(`${sdg.emoji} SDG${sdg.num}`);
+    }
+    el.innerHTML = chips.map(t=>`<span class="context-chip">${t}</span>`).join('');
+  }
+  // ① 나를 돌아봐요 카드 업데이트
+  updateMyInfoCards();
+}
+
+function updateMyInfoCards() {
   const h = STATE.hollandData;
   const r1 = h ? (h.rank1||'').toUpperCase() : null;
-  if (r1 && HOLLAND[r1]) chips.push(`${HOLLAND[r1].emoji} ${r1}형 ${HOLLAND[r1].name}`);
-  if (STATE.readingData && STATE.readingData.book) chips.push(`📖 ${STATE.readingData.book.slice(0,12)}`);
-  if (STATE.careerCard.selectedSDG) {
-    const sdg = SDGS.find(s=>s.num===STATE.careerCard.selectedSDG);
-    if (sdg) chips.push(`${sdg.emoji} SDG${sdg.num}`);
-  }
-  el.innerHTML = chips.map(t=>`<span class="context-chip">${t}</span>`).join('');
+  const hData = r1 && HOLLAND[r1] ? HOLLAND[r1] : null;
+  const r = STATE.readingData;
+
+  const iconEl = document.getElementById('ccHollandIcon');
+  const mainEl = document.getElementById('ccHollandMain');
+  const subEl  = document.getElementById('ccHollandSub');
+  if (iconEl) iconEl.textContent = hData ? hData.emoji : '🧭';
+  if (mainEl) mainEl.textContent = hData ? `${r1}형 — ${hData.name}` : '유형 미등록';
+  if (subEl)  subEl.textContent  = hData ? (hData.traits||[]).slice(0,3).join(' · ') : '홀랜드 유형 탭을 먼저 확인하세요';
+
+  const bkMain = document.getElementById('ccBookMain');
+  const bkSub  = document.getElementById('ccBookSub');
+  if (bkMain) bkMain.textContent = r ? (r.book || '도서 미등록') : '도서 미등록';
+  if (bkSub)  bkSub.textContent  = r ? (r.careerInterest || r.q1Question || '독서탐구 탭을 먼저 확인하세요') : '독서탐구 탭을 먼저 확인하세요';
 }
 
 function addWord() {
@@ -4069,14 +4136,37 @@ function applyHint(type, hint) {
    COMPETENCY: MAPPING & ROADMAP
    ============================================================ */
 function updateCompetencyPanel() {
-  const jobName = STATE.careerCard.jobName || '';
+  const jobName = STATE.careerCard.jobName || document.getElementById('jobName')?.value || '';
+  // 융합창직 탭의 역량 찾기
   const el = document.getElementById('compJobDisplay');
-  if (el) el.textContent = jobName ? `🎯 ${jobName}` : '창직카드에서 직업명을 입력하면 여기에 표시됩니다';
+  if (el) el.textContent = jobName ? `🎯 ${jobName}` : '직업명을 입력하면 여기에 표시됩니다';
   if (jobName && !STATE.competencyHintLoaded) {
     STATE.competencyHintLoaded = true;
     generateCompetencyHints(jobName);
   }
+  // 선택과목 탭의 역량 요약 표시
+  updateCompSummaryDisplay();
   updateRoadmap();
+}
+
+function updateCompSummaryDisplay() {
+  const el = document.getElementById('compSummaryDisplay');
+  if (!el) return;
+  const k = STATE.competency?.knowledge;
+  const s = STATE.competency?.skill;
+  const a = STATE.competency?.attitude;
+  const job = STATE.careerCard.jobName || '';
+  if (!k && !s && !a) {
+    el.innerHTML = `<div style="font-size:14px;color:var(--text3);padding:8px 0;">융합창직 탭 ⑥번에서 역량을 입력하면 여기에 나타납니다</div>`;
+    return;
+  }
+  el.innerHTML = `
+    ${job ? `<div style="font-size:16px;font-weight:800;color:#1e3a5f;margin-bottom:12px;">🎯 ${job}</div>` : ''}
+    <div class="comp-summary-row">
+      ${k ? `<div class="comp-summary-chip knowledge"><span class="comp-summary-chip-label">📚 지식</span> ${k}</div>` : ''}
+      ${s ? `<div class="comp-summary-chip skill"><span class="comp-summary-chip-label">🛠 기술</span> ${s}</div>` : ''}
+      ${a ? `<div class="comp-summary-chip attitude"><span class="comp-summary-chip-label">💛 태도</span> ${a}</div>` : ''}
+    </div>`;
 }
 
 function updateRoadmap() {
@@ -4084,7 +4174,6 @@ function updateRoadmap() {
   const skill = document.getElementById('compSkill')?.value.trim() || '';
   const attitude = document.getElementById('compAttitude')?.value.trim() || '';
 
-  // Save to state
   STATE.competency = { knowledge, skill, attitude,
     knowledgeWhy: document.getElementById('compKnowledgeWhy')?.value || '',
     skillWhy: document.getElementById('compSkillWhy')?.value || '',
@@ -4174,6 +4263,8 @@ function updateRoadmapGrid() {
   document.getElementById('roadmapSentence').innerHTML =
     `나는 <strong>「${job}」</strong>이(가) 되기 위해<br>${comps.join(' · ')} 역량을 기르는 과목들을 선택했습니다.`;
 
+  updateCompSummaryDisplay();
+  updateWorksheet();
   scheduleSave();
 }
 
@@ -4181,4 +4272,3 @@ function updateRoadmapGrid() {
 </script>
 </body>
 </html>
- 
