@@ -1129,6 +1129,27 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .ws-comp-skill     { background:#fef3c7; color:#92400e; border-color:#fbbf24; }
 .ws-comp-attitude  { background:#d1fae5; color:#065f46; border-color:#6ee7b7; }
 
+
+/* ===== LOGIN ID FORMAT ===== */
+.login-id-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1.5px solid #93c5fd; border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 20px; text-align: center;
+}
+.login-id-format { font-size: 12px; font-weight: 800; color: #1e40af; margin-bottom: 10px; letter-spacing: 0.5px; }
+.login-id-example {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  flex-wrap: wrap; margin-bottom: 8px;
+}
+.login-id-part {
+  font-size: 18px; font-weight: 900; padding: 4px 12px; border-radius: 8px;
+}
+.login-id-part.year { background: #1e40af; color: #fff; }
+.login-id-part.num  { background: #0369a1; color: #fff; }
+.login-id-sep, .login-id-arrow { font-size: 16px; color: #64748b; font-weight: 700; }
+.login-id-full { font-size: 20px; font-weight: 900; color: #1e3a5f; background: #fff; padding: 4px 14px; border-radius: 8px; border: 2px solid #1e40af; }
+.login-id-desc { font-size: 12px; color: #475569; }
+
 </style>
 </head>
 <body>
@@ -1155,19 +1176,32 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
     <!-- STUDENT LOGIN -->
     <div id="studentLoginSection" class="login-section active">
-      <div class="input-group">
-        <label class="label">세션코드</label>
-        <input type="text" id="sessionInput" class="input-field" placeholder="예) 2026-1-3"
-          oninput="clearLoginMsg(); clearNameDisplay()">
+      <div class="login-id-info">
+        <div class="login-id-format">학번 형식 안내</div>
+        <div class="login-id-example">
+          <span class="login-id-part year">2026</span>
+          <span class="login-id-sep">+</span>
+          <span class="login-id-part num">10300</span>
+          <span class="login-id-arrow">→</span>
+          <span class="login-id-full">202610300</span>
+        </div>
+        <div class="login-id-desc">입학년도 4자리 + 학번을 이어서 입력하세요</div>
       </div>
+
+      <!-- 숨김 필드 (JS 호환용) -->
+      <input type="hidden" id="sessionInput" value="">
+
       <div class="input-group">
-        <label class="label">학번</label>
-        <input type="text" id="idInput" class="input-field" placeholder="예) 10103"
-          oninput="clearLoginMsg(); clearNameDisplay()">
+        <label class="label" style="font-size:15px;font-weight:800;">학번 입력</label>
+        <input type="text" id="idInput" class="input-field" style="font-size:20px;font-weight:700;letter-spacing:2px;"
+          placeholder="예) 202610300" maxlength="12"
+          oninput="clearLoginMsg(); clearNameDisplay(); autoFormatStudentId(this)"
+          onkeydown="if(event.key==='Enter') lookupName()">
       </div>
-      <button class="btn btn-outline btn-block" style="margin-bottom:10px" onclick="lookupName()">
+
+      <button class="btn btn-primary btn-lg btn-block" style="margin-bottom:10px" onclick="lookupName()">
         <span id="lookupSpinner" class="hidden"><span class="spinner" style="width:16px;height:16px;border-width:2px;"></span></span>
-        이름 확인하기
+        이름 확인하기 →
       </button>
 
       <div id="nameDisplayArea" class="hidden">
@@ -1184,11 +1218,6 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       </div>
 
       <div id="loginMsg" class="hidden"></div>
-
-      <div class="login-divider">또는</div>
-      <button class="btn btn-ghost btn-block" style="font-size:13px;" onclick="showReconnectMode()">
-        🔄 이전 활동 이어서 하기
-      </button>
     </div>
 
     <!-- TEACHER LOGIN -->
@@ -1715,9 +1744,9 @@ textarea.input-field { resize: vertical; min-height: 100px; }
         <div class="rec-source-list">
           <div class="rec-source-item">① <strong>Holland(1997)</strong> — Making Vocational Choices: RIASEC 유형별 강점 분야와 선호 학습 환경 이론</div>
           <div class="rec-source-item">② <strong>교육부 고시 제2022-33호</strong> — 2022 개정 교육과정 총론: 과목별 핵심역량 기술</div>
-          <div class="rec-source-item">③ <strong>경희대·고려대·성균관대·연세대·중앙대 공동연구(2022)</strong> — 대학 자연계열 전공 학문 분야의 교과 이수 권장과목 안내</div>
-          <div class="rec-source-item">④ <strong>경북교육청 고교학점제지원센터</strong> — 계열별 선택과목 안내 (curri.gyo6.net)</div>
-          <div class="rec-source-item">⑤ <strong>황매향·최희철(2012)</strong> — 직업별 RIASEC 코드의 수렴타당도. 상담학연구 13(2)</div>
+          <div class="rec-source-item">③ <strong>고려대·연세대·성균관대·중앙대·경희대 공동연구(2023)</strong> — 「고등학생 교과이수 과목의 대입전형 반영 방안 연구: 자연계열 모집단위를 중심으로」 — 14개 학문 분야별 핵심과목·권장과목 제시</div>
+          <div class="rec-source-item">③-2 <strong>한국대학교육협의회(대교협, 2026)</strong> — 「2028학년도 권역별 대학별 권장과목」 — 45개 대학 모집단위별 핵심과목·권장과목 (대입정보포털 어디가 adiga.kr 공개)</div>
+          <div class="rec-source-item">④ <strong>황매향·최희철(2012)</strong> — 직업별 RIASEC 코드의 수렴타당도. 상담학연구 13(2)</div>
         </div>
       </div>
 
@@ -2344,27 +2373,69 @@ function showLoginMsg(msg, type='error') {
   el.textContent = msg;
 }
 
+function autoFormatStudentId(inp) {
+  // 숫자만 허용
+  inp.value = inp.value.replace(/[^0-9]/g, '');
+}
+
+function parseStudentInput(raw) {
+  // 형식: 2026XXXXX (4자리 년도 + 학번)
+  // 세션코드 추출: 년도-학년-반 (학번 5번째 자리=학년, 나머지=반+번호)
+  raw = raw.replace(/[^0-9]/g, '');
+  if (raw.length < 6) return null;
+  const year = raw.slice(0, 4);          // 2026
+  const gradeChar = raw[4];              // 학년 (1 or 2)
+  const classAndNum = raw.slice(5);     // 반+번호 (예: 0300 → 반3, 번00)
+  // 학번에서 반 추출: classAndNum 앞 1~2자리
+  // 예) 10300 → 1학년, 3반, 00번
+  // classAndNum: "0300" → 반=03=3반, 번=00
+  const grade = parseInt(gradeChar);
+  const classNum = parseInt(classAndNum.slice(0, 2));
+  const sessionCode = `${year}-${grade}-${classNum}`;
+  const studentId = raw; // 전체 학번을 ID로 사용
+  return { year, grade, classNum, sessionCode, studentId };
+}
+
 async function lookupName() {
-  const sessionCode = document.getElementById('sessionInput').value.trim();
-  const studentId = document.getElementById('idInput').value.trim();
-  if (!sessionCode || !studentId) { showLoginMsg('세션코드와 학번을 모두 입력해주세요.'); return; }
+  const raw = document.getElementById('idInput').value.trim();
+  if (!raw || raw.length < 6) { showLoginMsg('학번을 입력해주세요. (예: 202610300)'); return; }
+
+  const parsed = parseStudentInput(raw);
+  if (!parsed) { showLoginMsg('학번 형식이 올바르지 않습니다. (예: 202610300)'); return; }
 
   document.getElementById('lookupSpinner').classList.remove('hidden');
   clearLoginMsg();
 
   try {
-    const sessionDoc = await db.collection('sessions').doc(sessionCode).get();
-    if (!sessionDoc.exists) { showLoginMsg('세션코드가 존재하지 않습니다. 선생님께 확인해주세요.'); return; }
-    const sessionData = sessionDoc.data();
-    const students = sessionData.students || [];
-    const found = students.find(s => String(s.id) === String(studentId));
+    // 세션 찾기: 파싱된 세션코드로 먼저 시도, 없으면 students 컬렉션 전체에서 ID로 검색
+    let found = null;
+    let usedSessionCode = parsed.sessionCode;
+
+    const sessionDoc = await db.collection('sessions').doc(parsed.sessionCode).get();
+    if (sessionDoc.exists) {
+      const students = sessionDoc.data().students || [];
+      found = students.find(s => String(s.id) === String(parsed.studentId));
+    }
+
+    // 세션코드 매칭 실패 시 전체 세션에서 학번 검색 (fallback)
+    if (!found) {
+      const allSessions = await db.collection('sessions').get();
+      for (const sdoc of allSessions.docs) {
+        const students = sdoc.data().students || [];
+        const match = students.find(s => String(s.id) === String(parsed.studentId));
+        if (match) { found = match; usedSessionCode = sdoc.id; break; }
+      }
+    }
+
     if (!found) { showLoginMsg('학번을 찾을 수 없습니다. 학번을 다시 확인해주세요.'); return; }
 
     document.getElementById('foundName').textContent = found.name;
-    const grade = parseInt(String(studentId)[0]);
+    const grade = parsed.grade;
     document.getElementById('gradeChip').textContent = grade === 1 ? '고1 → 2학년 선택' : grade === 2 ? '고2 → 3학년 선택' : '';
     document.getElementById('nameDisplayArea').classList.remove('hidden');
-    STATE.sessionCode = sessionCode; STATE.studentId = studentId; STATE.studentName = found.name;
+    STATE.sessionCode = usedSessionCode;
+    STATE.studentId = parsed.studentId;
+    STATE.studentName = found.name;
     STATE.grade = grade;
   } catch(err) {
     showLoginMsg('오류: ' + err.message);
@@ -2399,9 +2470,8 @@ async function startStudent() {
 }
 
 function showReconnectMode() {
-  // Same as normal login — just scroll to inputs
-  document.getElementById('sessionInput').focus();
-  showLoginMsg('세션코드와 학번을 입력하고 "이름 확인하기"를 눌러주세요.', 'info');
+  document.getElementById('idInput').focus();
+  showLoginMsg('학번을 입력하고 "이름 확인하기"를 눌러주세요.', 'info');
 }
 
 async function loginTeacher() {
@@ -2443,7 +2513,7 @@ function showStudentApp() {
   updateDeclaration();
   updatePadletBtn();
   loadMajorLinkage();
-  updateInventorContext();
+  updateMyInfoCards();
   updateInventorContext();
   updateCompetencyPanel();
   checkTabDone();
@@ -2453,6 +2523,9 @@ function switchTab(idx) {
   document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
   document.getElementById('completionScreen').style.display = 'none';
+  // 탭별 데이터 갱신
+  if (idx === 2) { updateMyInfoCards(); updateFormulaBox(); updateCompetencyPanel(); }
+  if (idx === 3) { updateCompSummaryDisplay(); updateRoadmap(); updateSubjectInsights(); }
   document.querySelectorAll('.tab-panel').forEach(p => p.style.display = '');
   document.getElementById(`panel${idx}`).classList.add('active');
 }
@@ -2567,6 +2640,8 @@ function renderHollandTab() {
       <div class="htc-careers"><span>추천 직업: </span>${ht.careers.join(' · ')}</div>`;
     container.appendChild(div);
   });
+  // 융합창직 탭의 ① 카드도 동기화
+  updateMyInfoCards();
 }
 
 /* ============================================================
@@ -2581,6 +2656,7 @@ function renderReadingTab() {
   const r = STATE.readingData;
   document.getElementById('readingNoData').classList.add('hidden');
   document.getElementById('readingDataArea').classList.remove('hidden');
+  updateMyInfoCards();
   document.getElementById('readingBookTitle').textContent = r.book || '—';
   document.getElementById('readingAuthor').textContent = r.author || '—';
 
@@ -2959,7 +3035,7 @@ function renderSubjectTab() {
             const isSelected = selected.includes(s);
             const isHolland = hollandRec.includes(s);
             const extraClass = isHolland ? ' holland-match' : '';
-            const hollandBadge = isHolland ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:700;" title="근거: Holland(1997) RIASEC 이론 / 교육부 고시 제2022-33호 2022 개정 교육과정 / 경북교육청 계열별 선택과목 안내">🧭추천</span>' : '';
+            const hollandBadge = isHolland ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:700;" title="근거: Holland(1997) / 교육부 고시 제2022-33호 / 5개대 공동연구(2023) / 대교협 2028 권장과목(2026) / 황매향·최희철(2012)">🧭추천</span>' : '';
             return `<label class="subject-item${isSelected?' selected':''}${extraClass}" onclick="toggleSubject(event,'${grp.group}','${s}',${grp.count})">
               <div class="subject-check">${isSelected?'✓':''}</div>
               <span class="subject-name">${s}${hollandBadge}</span>
@@ -3866,14 +3942,26 @@ function updateMyInfoCards() {
   const iconEl = document.getElementById('ccHollandIcon');
   const mainEl = document.getElementById('ccHollandMain');
   const subEl  = document.getElementById('ccHollandSub');
-  if (iconEl) iconEl.textContent = hData ? hData.emoji : '🧭';
-  if (mainEl) mainEl.textContent = hData ? `${r1}형 — ${hData.name}` : '유형 미등록';
-  if (subEl)  subEl.textContent  = hData ? (hData.traits||[]).slice(0,3).join(' · ') : '홀랜드 유형 탭을 먼저 확인하세요';
+
+  if (hData) {
+    if (iconEl) iconEl.textContent = hData.emoji;
+    if (mainEl) { mainEl.textContent = `${r1}형 — ${hData.name}`; mainEl.style.color = '#c2410c'; }
+    if (subEl)  subEl.textContent  = (hData.traits||[]).slice(0,3).join(' · ');
+  } else {
+    if (iconEl) iconEl.textContent = '🧭';
+    if (mainEl) { mainEl.textContent = '유형 미등록'; mainEl.style.color = '#94a3b8'; }
+    if (subEl)  subEl.textContent  = '홀랜드 유형 탭을 먼저 확인하세요';
+  }
 
   const bkMain = document.getElementById('ccBookMain');
   const bkSub  = document.getElementById('ccBookSub');
-  if (bkMain) bkMain.textContent = r ? (r.book || '도서 미등록') : '도서 미등록';
-  if (bkSub)  bkSub.textContent  = r ? (r.careerInterest || r.q1Question || '독서탐구 탭을 먼저 확인하세요') : '독서탐구 탭을 먼저 확인하세요';
+  if (r && r.book) {
+    if (bkMain) { bkMain.textContent = r.book; bkMain.style.color = '#1e40af'; }
+    if (bkSub)  bkSub.textContent = r.careerInterest || r.q1Question || '';
+  } else {
+    if (bkMain) { bkMain.textContent = '도서 미등록'; bkMain.style.color = '#94a3b8'; }
+    if (bkSub)  bkSub.textContent = '독서탐구 탭을 먼저 확인하세요';
+  }
 }
 
 function addWord() {
