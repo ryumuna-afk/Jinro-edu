@@ -2411,10 +2411,18 @@ async function lookupName() {
     let found = null;
     let usedSessionCode = parsed.sessionCode;
 
+    // 매칭 함수: 전체 학번(202610300)과 기존 단축 학번(10300) 둘 다 허용
+    const idMatch = (s) => {
+      const sid = String(s.id);
+      const fullId = String(parsed.studentId);       // 202610300
+      const shortId = fullId.slice(4);               // 10300 (년도 4자리 제거)
+      return sid === fullId || sid === shortId;
+    };
+
     const sessionDoc = await db.collection('sessions').doc(parsed.sessionCode).get();
     if (sessionDoc.exists) {
       const students = sessionDoc.data().students || [];
-      found = students.find(s => String(s.id) === String(parsed.studentId));
+      found = students.find(idMatch);
     }
 
     // 세션코드 매칭 실패 시 전체 세션에서 학번 검색 (fallback)
@@ -2422,7 +2430,7 @@ async function lookupName() {
       const allSessions = await db.collection('sessions').get();
       for (const sdoc of allSessions.docs) {
         const students = sdoc.data().students || [];
-        const match = students.find(s => String(s.id) === String(parsed.studentId));
+        const match = students.find(idMatch);
         if (match) { found = match; usedSessionCode = sdoc.id; break; }
       }
     }
@@ -2434,7 +2442,8 @@ async function lookupName() {
     document.getElementById('gradeChip').textContent = grade === 1 ? '고1 → 2학년 선택' : grade === 2 ? '고2 → 3학년 선택' : '';
     document.getElementById('nameDisplayArea').classList.remove('hidden');
     STATE.sessionCode = usedSessionCode;
-    STATE.studentId = parsed.studentId;
+    // Firebase key 호환: 기존 엑셀 학번(10300) 형식으로 저장
+    STATE.studentId = String(found.id);
     STATE.studentName = found.name;
     STATE.grade = grade;
   } catch(err) {
