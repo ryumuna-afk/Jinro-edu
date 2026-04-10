@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invent Your Career</title>
+<title>Invent Your Career — 내가 만든 직업, 내가 선택한 과목</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -358,13 +358,13 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
 /* ===== BRANCH DIAGRAM ===== */
 .branch-diagram {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-radius: var(--radius-lg); padding: 24px; margin: 24px 0;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+  border-radius: var(--radius-lg); padding: 28px; margin: 24px 0;
+  border: 2px solid #93c5fd;
 }
 .branch-title {
-  font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6);
-  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;
+  font-size: 16px; font-weight: 900; color: #1e3a5f;
+  letter-spacing: 0.5px; margin-bottom: 20px;
 }
 .branch-layout {
   display: flex; align-items: center; gap: 0;
@@ -373,44 +373,44 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0;
 }
 .branch-node {
-  border-radius: 12px; padding: 12px 14px;
-  border: 1px solid rgba(255,255,255,0.1);
-  position: relative; transition: all 0.3s;
+  border-radius: 12px; padding: 14px 16px;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  position: relative; transition: all 0.3s; background: #fff;
 }
-.branch-node:hover { transform: translateX(2px); }
-.branch-holland { background: linear-gradient(135deg, rgba(230,126,34,0.25), rgba(230,126,34,0.1)); border-color: rgba(230,126,34,0.4); }
-.branch-reading { background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(52,152,219,0.1)); border-color: rgba(52,152,219,0.4); }
-.branch-sdg { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(39,174,96,0.1)); border-color: rgba(39,174,96,0.4); }
+.branch-node:hover { transform: translateX(2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.branch-holland { background: linear-gradient(135deg, #fff7ed, #fed7aa); border-color: #f97316; }
+.branch-reading { background: linear-gradient(135deg, #eff6ff, #bfdbfe); border-color: #3b82f6; }
+.branch-sdg { background: linear-gradient(135deg, #f0fdf4, #bbf7d0); border-color: #22c55e; }
 .branch-node-header {
   display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
 }
 .branch-icon { font-size: 14px; }
-.branch-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; text-transform: uppercase; }
-.branch-node-type { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+.branch-label { font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase; }
+.branch-node-type { font-size: 15px; font-weight: 900; color: #1e293b; margin-bottom: 6px; line-height: 1.3; }
 .branch-node-details { display: flex; flex-direction: column; gap: 3px; }
-.branch-detail-row { font-size: 10px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.branch-detail-row { font-size: 12px; color: #475569; line-height: 1.6; }
 .branch-detail-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
 .branch-detail-tag {
-  font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 20px;
-  background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  background: rgba(0,0,0,0.06); color: #374151;
 }
 .branch-arrows {
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
   padding: 0 6px; width: 20px; align-self: stretch;
 }
-.branch-arrow-line { flex: 1; width: 2px; background: rgba(255,255,255,0.15); }
-.branch-arrow-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+.branch-arrow-line { flex: 1; width: 2px; background: #cbd5e1; }
+.branch-arrow-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
 .branch-connector {
   display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
   padding: 0 4px; width: 28px; align-self: stretch; gap: 0;
   position: relative;
 }
 .branch-connector-line {
-  flex: 1; width: 2px; background: rgba(255,255,255,0.2);
+  flex: 1; width: 2px; background: #cbd5e1;
   border-radius: 1px; align-self: flex-end;
 }
 .branch-connector-arrow {
-  font-size: 18px; color: #60a5fa; font-weight: 900; align-self: center;
+  font-size: 22px; color: #2563eb; font-weight: 900; align-self: center;
   animation: pulse-arrow 1.8s ease-in-out infinite;
 }
 @keyframes pulse-arrow { 0%,100%{opacity:0.6;transform:translateX(0)} 50%{opacity:1;transform:translateX(3px)} }
@@ -420,9 +420,9 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   text-align: center; box-shadow: 0 8px 24px rgba(59,130,246,0.4);
   border: 1px solid rgba(255,255,255,0.2);
 }
-.branch-result-label { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-.branch-result-name { font-size: 16px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 6px; word-break: keep-all; }
-.branch-result-formula { font-size: 9px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.branch-result-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.branch-result-name { font-size: 18px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 6px; word-break: keep-all; }
+.branch-result-formula { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.6; }
 @media (max-width: 480px) {
   .branch-layout { flex-direction: column; gap: 12px; }
   .branch-arrows, .branch-connector { flex-direction: row; width: auto; height: 20px; align-self: auto; padding: 0; }
@@ -446,194 +446,75 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 }
 .theme-btn.active { border-color: var(--text); transform: scale(1.15); }
 
-.card-preview-container {
-  perspective: 1000px; margin: 0 auto; max-width: 480px;
-  position: relative; height: 340px; margin-bottom: 16px;
+/* ===== A4 WORKSHEET CARD ===== */
+.worksheet-container {
+  background: #fff; border: 2px solid #e2e8f0;
+  border-radius: 12px; padding: 0;
+  max-width: 640px; margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  font-family: var(--font);
 }
-.career-card {
-  width: 100%; height: 340px; border-radius: 18px;
-  padding: 0; display: flex; flex-direction: column;
-  font-family: var(--font); position: relative; overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+.worksheet-header {
+  background: #1e3a5f; color: #fff;
+  padding: 16px 24px; border-radius: 10px 10px 0 0;
+  display: flex; align-items: center; justify-content: space-between;
 }
-
-/* THEME BACKGROUNDS */
-.cc-dark {
-  background: #0f172a; color: #f1f5f9;
+.worksheet-header-title { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
+.worksheet-header-sub { font-size: 11px; opacity: 0.7; }
+.worksheet-body { padding: 20px 24px; }
+.ws-section {
+  margin-bottom: 16px; padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
-.cc-dark::before {
-  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
-  background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%);
-  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
-  opacity: 0.7;
+.ws-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ws-label {
+  font-size: 11px; font-weight: 800; color: #64748b;
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px;
 }
-.cc-light {
-  background: #f8faff; color: #0f172a; border: 1.5px solid #e2e8f0;
+.ws-field {
+  font-size: 15px; font-weight: 700; color: #1e293b;
+  min-height: 24px; padding: 6px 0;
+  border-bottom: 1.5px solid #e2e8f0;
+  line-height: 1.5;
 }
-.cc-light::before {
-  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
-  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+.ws-field-empty { color: #94a3b8; font-weight: 400; }
+.ws-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ws-badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.ws-badge {
+  font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px;
+  border: 1.5px solid;
 }
-.cc-green {
-  background: #052e16; color: #dcfce7;
+.ws-badge-holland { background: #fff7ed; color: #c2410c; border-color: #f97316; }
+.ws-badge-sdg { background: #f0fdf4; color: #166534; border-color: #22c55e; }
+.ws-badge-keyword { background: #eff6ff; color: #1e40af; border-color: #3b82f6; }
+.ws-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ws-formula {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 12px 14px; display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-top: 8px;
 }
-.cc-green::before {
-  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
-  background: linear-gradient(135deg, #14532d 0%, #15803d 100%);
-  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
-  opacity: 0.9;
+.ws-formula-item {
+  font-size: 12px; font-weight: 700; padding: 4px 10px;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
+  color: #1e293b;
 }
-.cc-ocean {
-  background: #0c1445; color: #e0f2fe;
+.ws-formula-arrow { font-size: 14px; color: #94a3b8; }
+.ws-formula-result {
+  font-size: 13px; font-weight: 900; padding: 6px 14px;
+  background: #1e3a5f; color: #fff; border-radius: 6px;
 }
-.cc-ocean::before {
-  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
-  background: linear-gradient(135deg, #0e7490 0%, #0284c7 100%);
-  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
-  opacity: 0.85;
-}
-.cc-sunset {
-  background: #431407; color: #fef3c7;
-}
-.cc-sunset::before {
-  content:''; position:absolute; top:0; right:0; width:55%; height:100%;
-  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
-  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
-  opacity: 0.9;
-}
-
-/* GEOMETRIC DECORATION */
-.career-card::after {
-  content:''; position:absolute;
-  width:140px; height:140px; border-radius:50%;
-  border: 20px solid rgba(255,255,255,0.04);
-  bottom:-40px; left:-20px; pointer-events:none;
-}
-.cc-light::after { border-color: rgba(0,0,0,0.04); }
-
-/* CARD INNER LAYOUT */
-.cc-inner {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; height: 100%; padding: 18px 18px 14px;
-}
-
-/* TOP ROW */
-.cc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
-.cc-badge {
-  font-size: 10px; font-weight: 800; padding: 4px 10px;
-  border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap;
-  line-height: 1.3; text-align: center;
-}
-.cc-dark .cc-badge { background: rgba(255,255,255,0.15); color: #fff; }
-.cc-light .cc-badge { background: #1e40af; color: #fff; }
-.cc-green .cc-badge { background: rgba(255,255,255,0.15); color: #bbf7d0; }
-.cc-ocean .cc-badge { background: rgba(255,255,255,0.15); color: #bae6fd; }
-.cc-sunset .cc-badge { background: rgba(255,255,255,0.15); color: #fed7aa; }
-
-.cc-sdg {
-  font-size: 9px; font-weight: 800; text-align: right; line-height: 1.4;
-  max-width: 90px;
-}
-.cc-dark .cc-sdg { color: rgba(255,255,255,0.6); }
-.cc-light .cc-sdg { color: #2563eb; }
-.cc-green .cc-sdg { color: rgba(255,255,255,0.65); }
-.cc-ocean .cc-sdg { color: rgba(255,255,255,0.65); }
-.cc-sunset .cc-sdg { color: rgba(255,255,255,0.65); }
-
-/* JOB NAME - big */
-.cc-job {
-  font-size: 28px; font-weight: 900; line-height: 1.15;
-  letter-spacing: -0.5px; margin-bottom: 3px;
-  word-break: keep-all;
-}
-.cc-slogan {
-  font-size: 12px; opacity: 0.6; margin-bottom: 10px;
-  font-style: italic; letter-spacing: 0.3px;
-}
-
-/* ROLES */
-.cc-roles { flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; overflow: hidden; }
-.cc-role-item {
-  font-size: 12px; opacity: 0.82; display: flex; align-items: flex-start; gap: 4px;
-  line-height: 1.4;
-}
-.cc-role-item::before { content: '▸'; flex-shrink: 0; opacity: 0.7; }
-
-/* KEYWORDS */
-.cc-keywords { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
-.cc-kw {
-  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
-}
-.cc-dark .cc-kw { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
-.cc-light .cc-kw { background: #1e40af; color: #fff; }
-.cc-green .cc-kw { background: rgba(255,255,255,0.15); color: #d1fae5; }
-.cc-ocean .cc-kw { background: rgba(255,255,255,0.15); color: #bae6fd; }
-.cc-sunset .cc-kw { background: rgba(255,255,255,0.15); color: #fed7aa; }
-
-/* BOTTOM */
-.cc-bottom {
+.ws-footer {
+  background: #f8fafc; padding: 10px 24px;
+  border-top: 1px solid #e2e8f0; border-radius: 0 0 10px 10px;
   display: flex; justify-content: space-between; align-items: center;
-  margin-top: 8px; padding-top: 8px;
-  border-top: 1px solid rgba(128,128,128,0.18);
 }
-.cc-dark .cc-bottom, .cc-green .cc-bottom, .cc-ocean .cc-bottom, .cc-sunset .cc-bottom {
-  border-color: rgba(255,255,255,0.1);
-}
+.ws-footer-text { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: 1px; }
 
-.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.btn-padlet { background: #FF5252; color: #fff; }
-.btn-padlet:hover { background: #E53935; }
-
-/* ===== CARD BACK (REDESIGNED) ===== */
-.cc-back-inner {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; height: 100%; padding: 16px 18px 14px;
-  gap: 8px;
+@media print {
+  .worksheet-container { box-shadow: none; border: 1px solid #ccc; max-width: 100%; }
+  .no-print { display: none !important; }
+  body { background: white !important; }
 }
-
-/* Formula row - icon+arrow style */
-.cc-formula {
-  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
-}
-.cc-f-item {
-  font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
-  display: flex; align-items: center; gap: 3px; line-height: 1.3;
-}
-.cc-dark .cc-f-item { background: rgba(255,255,255,0.14); color: #f1f5f9; }
-.cc-light .cc-f-item { background: #1e40af; color: #fff; }
-.cc-green .cc-f-item { background: rgba(255,255,255,0.14); color: #d1fae5; }
-.cc-ocean .cc-f-item { background: rgba(255,255,255,0.14); color: #bae6fd; }
-.cc-sunset .cc-f-item { background: rgba(255,255,255,0.14); color: #fed7aa; }
-
-.cc-f-arrow { font-size: 13px; opacity: 0.6; font-weight: 900; }
-.cc-f-result {
-  font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;
-}
-.cc-dark .cc-f-result { background: #3b82f6; color: #fff; }
-.cc-light .cc-f-result { background: #1e40af; color: #fff; }
-.cc-green .cc-f-result { background: #16a34a; color: #fff; }
-.cc-ocean .cc-f-result { background: #0284c7; color: #fff; }
-.cc-sunset .cc-f-result { background: #ea580c; color: #fff; }
-
-/* Back sections - color block style */
-.cc-back-sections {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; flex: 1;
-}
-.cc-back-section {
-  border-radius: 8px; padding: 8px 10px;
-}
-.cc-dark .cc-back-section { background: rgba(255,255,255,0.07); }
-.cc-light .cc-back-section { background: #f1f5f9; }
-.cc-green .cc-back-section { background: rgba(255,255,255,0.08); }
-.cc-ocean .cc-back-section { background: rgba(255,255,255,0.08); }
-.cc-sunset .cc-back-section { background: rgba(255,255,255,0.08); }
-
-.cc-back-label {
-  font-size: 8px; font-weight: 800; opacity: 0.55;
-  letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 3px;
-}
-.cc-back-value { font-size: 11px; opacity: 0.85; line-height: 1.5; }
 
 .flip-btn-row { display: flex; gap: 8px; margin-bottom: 12px; }
 .flip-btn {
@@ -976,7 +857,11 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
 /* ===== PRINT ===== */
 @media print {
-  #loginScreen, .tab-nav, .app-header, .card-actions, .no-print, .teacher-header { display: none !important; }
+  #loginScreen, .tab-nav, .app-header, .card-actions, .no-print, .teacher-header,
+  .competency-card, .major-search-box, .subject-insight-box, .subject-diagnosis-box,
+  .card-form, .branch-diagram, .inventor-card { display: none !important; }
+  .tab-panel { display: block !important; }
+  .worksheet-container { box-shadow: none !important; border: 1px solid #ccc !important; max-width: 100% !important; }
   body { background: white; }
   .tab-panel { display: block !important; }
   .career-card { page-break-inside: avoid; }
@@ -1136,6 +1021,29 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   font-size: 14px; font-weight: 700; line-height: 1.7;
 }
 
+
+/* SDG WHY BOX */
+.sdg-why-box {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #93c5fd; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 16px;
+}
+.sdg-why-title { font-size: 15px; font-weight: 800; color: #1e40af; margin-bottom: 6px; }
+.sdg-why-text { font-size: 13px; color: #1e3a5f; line-height: 1.7; margin-bottom: 10px; }
+.sdg-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #2563eb; color: #fff; padding: 7px 14px;
+  border-radius: 8px; font-size: 13px; font-weight: 700;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.sdg-link-btn:hover { opacity: 0.85; }
+
+/* 추천 근거 툴팁 */
+.subject-item .rec-source {
+  font-size: 10px; color: var(--text3); margin-left: 4px;
+  vertical-align: super; cursor: help;
+}
+
 </style>
 </head>
 <body>
@@ -1146,7 +1054,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
     <div class="login-school-badge">🏫 진로연계교육 프로그램</div>
     <h1 class="login-title">
       <span>Invent Your Career</span><br>
-      세상에 없는 나만의 직업 만들기
+      내가 만든 직업, 내가 선택한 과목
     </h1>
     <p class="login-subtitle">
       Know Myself · Explore Deeply · Change the World<br>
@@ -1469,7 +1377,16 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
     <!-- STEP 1: SDG SELECTION -->
     <div class="card" style="margin-bottom:24px;">
-      <div class="card-form-title">① UN SDGs 선택 <span style="font-size:13px;font-weight:500;color:var(--text3);">— 해결하고 싶은 사회문제를 하나 선택하세요</span></div>
+      <div class="card-form-title">① UN SDGs 선택</div>
+      <div class="sdg-why-box">
+        <div class="sdg-why-title">🌍 왜 SDGs인가요?</div>
+        <div class="sdg-why-text">
+          UN 지속가능발전목표(SDGs)는 2030년까지 전 세계가 함께 해결해야 할 17가지 사회문제입니다.<br>
+          <strong>내가 만들 직업이 어떤 문제를 해결하는지</strong> 연결하면, 직업의 사회적 가치와 방향이 뚜렷해집니다.
+        </div>
+        <a href="https://sdgs.un.org/goals" target="_blank" class="sdg-link-btn">🔗 UN SDGs 공식 사이트 탐색하기</a>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:12px;">👇 17개 목표 중 내 직업과 가장 관련 있는 것을 하나 선택하세요</div>
       <div class="sdg-grid" id="sdgGrid"></div>
     </div>
 
@@ -1546,29 +1463,29 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="input-group">
         <label class="label">직업명 *</label>
         <input type="text" id="jobName" class="input-field" placeholder="예) 기후정의 경험 디자이너"
-          oninput="updateCardPreview(); scheduleSave()">
+          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
       </div>
       <div class="input-group">
         <label class="label">슬로건 *</label>
         <input type="text" id="jobSlogan" class="input-field" placeholder="나의 직업을 한 줄로 표현하세요"
-          oninput="updateCardPreview(); scheduleSave()">
+          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
       </div>
       <div class="form-row">
         <div class="input-group">
           <label class="label">핵심 역할</label>
           <input type="text" id="coreRole" class="input-field" placeholder="주요 업무"
-            oninput="updateCardPreview(); scheduleSave()">
+            oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
         </div>
         <div class="input-group">
           <label class="label">1호 과제</label>
           <input type="text" id="firstTask" class="input-field" placeholder="첫 번째 해결 과제"
-            oninput="updateCardPreview(); scheduleSave()">
+            oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
         </div>
       </div>
       <div class="input-group">
         <label class="label">핵심 키워드 (쉼표로 구분)</label>
         <input type="text" id="keywords" class="input-field" placeholder="예) 지속가능, 기후, 디자인, 경험"
-          oninput="updateCardPreview(); scheduleSave()">
+          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();">
       </div>
     </div>
 
@@ -1577,12 +1494,12 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="input-group">
         <label class="label">해결하는 사회문제</label>
         <textarea id="socialProblem" class="input-field" rows="2" placeholder="내 직업이 해결하려는 구체적인 사회문제를 써보세요"
-          oninput="updateCardPreview(); scheduleSave()"></textarea>
+          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();"></textarea>
       </div>
       <div class="input-group">
         <label class="label">2040년, 나의 하루 루틴</label>
         <textarea id="dailyRoutine" class="input-field" rows="3" placeholder="2040년에 이 직업으로 일하는 나의 하루를 상상해서 써보세요"
-          oninput="updateCardPreview(); scheduleSave()"></textarea>
+          oninput="updateWorksheet(); updateCardPreview(); scheduleSave();"></textarea>
       </div>
     </div>
 
@@ -1595,76 +1512,100 @@ textarea.input-field { resize: vertical; min-height: 100px; }
         <button class="flip-btn" id="flipBackBtn" onclick="showCardSide('back')">뒷면</button>
       </div>
 
-      <div style="margin-bottom:12px;">
-        <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">색상 테마 선택</div>
-        <div class="theme-selector">
-          <button class="theme-btn active" style="background:#1A1A2E;border-color:#1A1A2E;" title="다크" onclick="setTheme('dark',this)"></button>
-          <button class="theme-btn" style="background:#FFFFFF;border-color:#DDD;" title="라이트" onclick="setTheme('light',this)"></button>
-          <button class="theme-btn" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);" title="그린" onclick="setTheme('green',this)"></button>
-          <button class="theme-btn" style="background:linear-gradient(135deg,#1565C0,#42A5F5);" title="오션" onclick="setTheme('ocean',this)"></button>
-          <button class="theme-btn" style="background:linear-gradient(135deg,#FF8F00,#E64A19);" title="선셋" onclick="setTheme('sunset',this)"></button>
+      <!-- A4 WORKSHEET CARD -->
+      <div class="worksheet-container" id="worksheetCard">
+        <div class="worksheet-header">
+          <div>
+            <div class="worksheet-header-title">✦ 나만의 창직카드</div>
+            <div class="worksheet-header-sub">Invent Your Career — 내가 만든 직업, 내가 선택한 과목</div>
+          </div>
+          <div style="font-size:11px;opacity:0.6;text-align:right;" id="wsStudentInfo"></div>
         </div>
-      </div>
-
-      <!-- CARD FRONT PREVIEW -->
-      <div id="cardFrontPreview" class="career-card cc-dark" style="margin-bottom:8px;">
-        <div class="cc-inner">
-          <div class="cc-top">
-            <div class="cc-badge" id="cardHollandBadge">— 형</div>
-            <div class="cc-sdg" id="cardSdgBadge">SDGs —</div>
-          </div>
-          <div class="cc-job" id="cardJobName">직업명을 입력하세요</div>
-          <div class="cc-slogan" id="cardSlogan">슬로건을 입력하세요</div>
-          <div class="cc-roles" id="cardRoles">
-            <div class="cc-role-item" id="cardCoreRole">핵심 역할</div>
-            <div class="cc-role-item" id="cardFirstTask">1호 과제</div>
-          </div>
-          <div class="cc-keywords" id="cardKeywords"></div>
-          <div class="cc-bottom">
-            <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
-            <div style="font-size:9px;opacity:0.4;">INVENT YOUR CAREER</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD BACK PREVIEW -->
-      <div id="cardBackPreview" class="career-card cc-dark hidden" style="margin-bottom:8px;">
-        <div class="cc-back-inner">
-          <div class="cc-top" style="margin-bottom:6px;">
-            <div class="cc-badge">✦ 창직 공식</div>
-          </div>
-          <div class="cc-formula" id="backFormula">
-            <div class="cc-f-item" id="bfHolland">🧭 —형</div>
-            <div class="cc-f-arrow">+</div>
-            <div class="cc-f-item" id="bfBook">📖 —</div>
-            <div class="cc-f-arrow">+</div>
-            <div class="cc-f-item" id="bfSdg">🌍 SDGs —</div>
-            <div class="cc-f-arrow">=</div>
-            <div class="cc-f-result" id="bfResult">—</div>
-          </div>
-          <div class="cc-back-sections">
-            <div class="cc-back-section">
-              <div class="cc-back-label">🌐 해결 사회문제</div>
-              <div class="cc-back-value" id="backSocialProblem">—</div>
-            </div>
-            <div class="cc-back-section">
-              <div class="cc-back-label">📅 2040 하루 루틴</div>
-              <div class="cc-back-value" id="backDailyRoutine">—</div>
+        <div class="worksheet-body">
+          <!-- 배지 행 -->
+          <div class="ws-section" style="padding-bottom:12px;margin-bottom:12px;">
+            <div class="ws-badge-row" id="wsBadgeRow">
+              <span class="ws-badge ws-badge-holland" id="wsHollandBadge">— 형</span>
+              <span class="ws-badge ws-badge-sdg" id="wsSdgBadge">SDGs —</span>
             </div>
           </div>
-          <div class="cc-bottom">
-            <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
-            <div style="font-size:9px;opacity:0.4;">INVENT YOUR CAREER</div>
+          <!-- 직업명 & 슬로건 -->
+          <div class="ws-section">
+            <div class="ws-label">직업명</div>
+            <div class="ws-field" id="wsJobName" style="font-size:22px;font-weight:900;color:#1e3a5f;border-bottom:2px solid #1e3a5f;">직업명을 입력하세요</div>
+            <div class="ws-label" style="margin-top:10px;">슬로건</div>
+            <div class="ws-field" id="wsSlogan" style="font-style:italic;color:#475569;">슬로건을 입력하세요</div>
           </div>
+          <!-- 핵심역할 & 1호과제 -->
+          <div class="ws-section ws-grid-2">
+            <div>
+              <div class="ws-label">핵심 역할</div>
+              <div class="ws-field" id="wsCoreRole" style="min-height:52px;"></div>
+            </div>
+            <div>
+              <div class="ws-label">1호 과제</div>
+              <div class="ws-field" id="wsFirstTask" style="min-height:52px;"></div>
+            </div>
+          </div>
+          <!-- 창직 공식 -->
+          <div class="ws-section">
+            <div class="ws-label">창직 공식</div>
+            <div class="ws-formula" id="wsFormula">
+              <span class="ws-formula-item" id="wsfHolland">홀랜드 유형</span>
+              <span class="ws-formula-arrow">+</span>
+              <span class="ws-formula-item" id="wsfBook">독서 탐구</span>
+              <span class="ws-formula-arrow">+</span>
+              <span class="ws-formula-item" id="wsfSdg">SDGs</span>
+              <span class="ws-formula-arrow">=</span>
+              <span class="ws-formula-result" id="wsfResult">나만의 직업</span>
+            </div>
+          </div>
+          <!-- 사회문제 & 2040루틴 -->
+          <div class="ws-section ws-grid-2">
+            <div>
+              <div class="ws-label">해결하는 사회문제</div>
+              <div class="ws-field" id="wsSocialProblem" style="min-height:60px;"></div>
+            </div>
+            <div>
+              <div class="ws-label">2040년 나의 하루 루틴</div>
+              <div class="ws-field" id="wsDailyRoutine" style="min-height:60px;"></div>
+            </div>
+          </div>
+          <!-- 키워드 -->
+          <div class="ws-section" style="margin-bottom:0;border-bottom:none;">
+            <div class="ws-label">핵심 키워드</div>
+            <div class="ws-badge-row" id="wsKeywords" style="margin-top:6px;"></div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-text">INVENT YOUR CAREER</div>
+          <div class="ws-footer-text" id="wsDateStamp"></div>
         </div>
       </div>
 
-      <!-- DOWNLOAD ACTIONS -->
-      <div class="card-actions no-print">
-        <button class="btn btn-primary" onclick="downloadCardPng()">📥 PNG 다운로드</button>
+      <!-- 숨김 - 하위 호환용 (JS에서 참조) -->
+      <div id="cardFrontPreview" class="hidden"></div>
+      <div id="cardBackPreview" class="hidden"></div>
+      <div id="backFormula" class="hidden">
+        <span id="bfHolland"></span><span id="bfBook"></span>
+        <span id="bfSdg"></span><span id="bfResult"></span>
+      </div>
+      <div id="backSocialProblem" class="hidden"></div>
+      <div id="backDailyRoutine" class="hidden"></div>
+      <div id="cardHollandBadge" class="hidden"></div>
+      <div id="cardSdgBadge" class="hidden"></div>
+      <div id="cardJobName" class="hidden"></div>
+      <div id="cardSlogan" class="hidden"></div>
+      <div id="cardCoreRole" class="hidden"></div>
+      <div id="cardFirstTask" class="hidden"></div>
+      <div id="cardKeywords" class="hidden"></div>
+
+      <!-- 인쇄/다운로드 -->
+      <div class="card-actions no-print" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ 활동지 인쇄 / PDF</button>
         <button class="btn btn-padlet" id="padletBtn" onclick="openPadlet()" style="display:none;">📌 패들렛 열기</button>
-        <button class="btn btn-outline" onclick="openMiriCanvas()">🎨 미리캔버스 열기</button>
-        <button class="btn btn-ghost" onclick="openCanva()">✏️ 캔바 열기</button>
+        <button class="btn btn-outline" onclick="openMiriCanvas()">🎨 미리캔버스</button>
+        <button class="btn btn-ghost" onclick="openCanva()">✏️ 캔바</button>
       </div>
     </div>
 
@@ -2131,6 +2072,21 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   <!-- TEACHER PANEL 5: SETTINGS -->
   <div class="teacher-panel" id="tPanel5">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">⚙️ 설정</h2>
+
+    <!-- CLAUDE API KEY -->
+    <div class="card" style="max-width:600px;margin-bottom:20px;">
+      <div class="card-form-title">🤖 Claude API 키 설정</div>
+      <div class="alert alert-info" style="font-size:13px;margin-bottom:12px;">
+        AI 창직 제안·역량 힌트 기능에 필요합니다. Anthropic 콘솔(console.anthropic.com)에서 발급 후 입력하세요.<br>
+        키는 이 기기에만 저장되며 외부로 전송되지 않습니다.
+      </div>
+      <div class="input-group">
+        <label class="label">API 키</label>
+        <input type="password" id="claudeApiKeyInput" class="input-field" placeholder="sk-ant-...">
+      </div>
+      <button class="btn btn-primary" onclick="saveClaudeApiKey()">저장</button>
+      <div id="claudeApiKeyMsg" style="margin-top:8px;"></div>
+    </div>
 
     <!-- PADLET URL -->
     <div class="card" style="max-width:600px;margin-bottom:20px;">
@@ -2706,7 +2662,56 @@ function restoreCareerForm() {
   if (cc.theme) applyCardTheme(cc.theme);
 }
 
+function updateWorksheet() {
+  const cc = STATE.careerCard;
+  const jobName = document.getElementById('jobName')?.value || cc.jobName || '';
+  const slogan = document.getElementById('jobSlogan')?.value || cc.slogan || '';
+  const coreRole = document.getElementById('coreRole')?.value || cc.coreRole || '';
+  const firstTask = document.getElementById('firstTask')?.value || cc.firstTask || '';
+  const keywords = (document.getElementById('keywords')?.value || cc.keywords || '').split(',').map(k=>k.trim()).filter(Boolean);
+  const problem = document.getElementById('socialProblem')?.value || cc.socialProblem || '';
+  const routine = document.getElementById('dailyRoutine')?.value || cc.dailyRoutine || '';
+  const h = STATE.hollandData;
+  const r1 = h ? (h.rank1||'').toUpperCase() : null;
+  const hData = r1 && HOLLAND[r1] ? HOLLAND[r1] : null;
+  const sdg = cc.selectedSDG ? SDGS.find(s=>s.num===cc.selectedSDG) : null;
+  const r = STATE.readingData;
+
+  const setWs = (id, val, empty='—') => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val || empty;
+    el.classList.toggle('ws-field-empty', !val);
+  };
+
+  setWs('wsJobName', jobName, '직업명을 입력하세요');
+  setWs('wsSlogan', slogan, '슬로건을 입력하세요');
+  setWs('wsCoreRole', coreRole);
+  setWs('wsFirstTask', firstTask);
+  setWs('wsSocialProblem', problem);
+  setWs('wsDailyRoutine', routine);
+  setWs('wsfResult', jobName || '나만의 직업');
+  setWs('wsfHolland', hData ? `${hData.emoji} ${r1}형 ${hData.name}` : '홀랜드 유형');
+  setWs('wsfBook', r ? (r.book||'독서 탐구') : '독서 탐구');
+  setWs('wsfSdg', sdg ? `SDG${sdg.num} ${sdg.name}` : 'SDGs');
+
+  // 배지
+  const hollandBadge = document.getElementById('wsHollandBadge');
+  if (hollandBadge) hollandBadge.textContent = hData ? `${hData.emoji} ${r1}형 ${hData.name}` : '홀랜드 — 미입력';
+  const sdgBadge = document.getElementById('wsSdgBadge');
+  if (sdgBadge) sdgBadge.textContent = sdg ? `${sdg.emoji} SDG${sdg.num} ${sdg.name}` : 'SDGs — 미선택';
+  // 키워드 배지
+  const kwEl = document.getElementById('wsKeywords');
+  if (kwEl) kwEl.innerHTML = keywords.map(k=>`<span class="ws-badge ws-badge-keyword">${k}</span>`).join('') || '<span style="color:#94a3b8;font-size:13px;">키워드 없음</span>';
+  // 학생 정보 & 날짜
+  const si = document.getElementById('wsStudentInfo');
+  if (si) si.innerHTML = `${STATE.studentName||''}<br>${STATE.sessionCode||''}`;
+  const ds = document.getElementById('wsDateStamp');
+  if (ds) ds.textContent = new Date().toLocaleDateString('ko-KR');
+}
+
 function updateCardPreview() {
+  updateWorksheet();
   const cc = STATE.careerCard;
   const jobName = document.getElementById('jobName')?.value || cc.jobName || '직업명을 입력하세요';
   const slogan = document.getElementById('jobSlogan')?.value || cc.slogan || '슬로건을 입력하세요';
@@ -2916,7 +2921,7 @@ function renderSubjectTab() {
             const isSelected = selected.includes(s);
             const isHolland = hollandRec.includes(s);
             const extraClass = isHolland ? ' holland-match' : '';
-            const hollandBadge = isHolland ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:700;">🧭추천</span>' : '';
+            const hollandBadge = isHolland ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:700;" title="근거: Holland(1997) RIASEC 이론 / 교육부 고시 제2022-33호 2022 개정 교육과정 / 경북교육청 계열별 선택과목 안내">🧭추천</span>' : '';
             return `<label class="subject-item${isSelected?' selected':''}${extraClass}" onclick="toggleSubject(event,'${grp.group}','${s}',${grp.count})">
               <div class="subject-check">${isSelected?'✓':''}</div>
               <span class="subject-name">${s}${hollandBadge}</span>
@@ -3427,6 +3432,13 @@ async function saveManualRefUrl(nameEncoded) {
 /* ============================================================
    SETTINGS: GAS URL
    ============================================================ */
+function saveClaudeApiKey() {
+  const key = document.getElementById('claudeApiKeyInput').value.trim();
+  localStorage.setItem('claudeApiKey', key);
+  const msg = document.getElementById('claudeApiKeyMsg');
+  msg.innerHTML = '<div class="alert alert-success">✅ API 키가 저장되었습니다. AI 기능을 사용할 수 있습니다.</div>';
+}
+
 function saveGasUrl() {
   const url = document.getElementById('gasUrlInput').value.trim();
   localStorage.setItem('gasUrl', url);
@@ -3459,6 +3471,8 @@ function openPadlet() {
 
 // Load GAS URL & Padlet URL on page load
 window.addEventListener('load', () => {
+  const savedApiKey = localStorage.getItem('claudeApiKey');
+  if (savedApiKey) { const ek = document.getElementById('claudeApiKeyInput'); if(ek) ek.value = '•'.repeat(20); }
   const savedGas = localStorage.getItem('gasUrl');
   if (savedGas) { const el = document.getElementById('gasUrlInput'); if(el) el.value = savedGas; }
   const savedPadlet = localStorage.getItem('padletUrl');
@@ -3844,9 +3858,20 @@ async function generateJobs() {
 ]`;
 
   try {
+    const apiKey = localStorage.getItem('claudeApiKey') || '';
+    if (!apiKey) {
+      document.getElementById('aiLoading').classList.add('hidden');
+      showToast('AI 기능을 사용하려면 교사 대시보드 설정에서 Claude API 키를 입력해주세요.', 'error', 5000);
+      return;
+    }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -3950,9 +3975,16 @@ async function generateCompetencyHints(jobName) {
   hintArea.classList.remove('hidden');
 
   try {
+    const apiKey = localStorage.getItem('claudeApiKey') || '';
+    if (!apiKey) { hintsEl.innerHTML = '<span style="font-size:12px;color:var(--text3);">API 키 미설정 (교사 대시보드에서 설정)</span>'; return; }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 500,
