@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invent Your Career — 화원고등학교</title>
+<title>Invent Your Career</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -421,7 +421,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   border: 1px solid rgba(255,255,255,0.2);
 }
 .branch-result-label { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-.branch-result-name { font-size: 14px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 6px; word-break: keep-all; }
+.branch-result-name { font-size: 16px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 6px; word-break: keep-all; }
 .branch-result-formula { font-size: 9px; color: rgba(255,255,255,0.6); line-height: 1.5; }
 @media (max-width: 480px) {
   .branch-layout { flex-direction: column; gap: 12px; }
@@ -447,11 +447,11 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .theme-btn.active { border-color: var(--text); transform: scale(1.15); }
 
 .card-preview-container {
-  perspective: 1000px; margin: 0 auto; max-width: 380px;
-  position: relative; height: 240px; margin-bottom: 16px;
+  perspective: 1000px; margin: 0 auto; max-width: 480px;
+  position: relative; height: 340px; margin-bottom: 16px;
 }
 .career-card {
-  width: 100%; height: 240px; border-radius: 18px;
+  width: 100%; height: 340px; border-radius: 18px;
   padding: 0; display: flex; flex-direction: column;
   font-family: var(--font); position: relative; overflow: hidden;
   box-shadow: 0 12px 40px rgba(0,0,0,0.25);
@@ -543,19 +543,19 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
 /* JOB NAME - big */
 .cc-job {
-  font-size: 24px; font-weight: 900; line-height: 1.15;
+  font-size: 28px; font-weight: 900; line-height: 1.15;
   letter-spacing: -0.5px; margin-bottom: 3px;
   word-break: keep-all;
 }
 .cc-slogan {
-  font-size: 10px; opacity: 0.6; margin-bottom: 10px;
+  font-size: 12px; opacity: 0.6; margin-bottom: 10px;
   font-style: italic; letter-spacing: 0.3px;
 }
 
 /* ROLES */
 .cc-roles { flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; overflow: hidden; }
 .cc-role-item {
-  font-size: 10px; opacity: 0.82; display: flex; align-items: flex-start; gap: 4px;
+  font-size: 12px; opacity: 0.82; display: flex; align-items: flex-start; gap: 4px;
   line-height: 1.4;
 }
 .cc-role-item::before { content: '▸'; flex-shrink: 0; opacity: 0.7; }
@@ -563,7 +563,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 /* KEYWORDS */
 .cc-keywords { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
 .cc-kw {
-  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
 }
 .cc-dark .cc-kw { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
 .cc-light .cc-kw { background: #1e40af; color: #fff; }
@@ -597,7 +597,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
 }
 .cc-f-item {
-  font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px;
   display: flex; align-items: center; gap: 3px; line-height: 1.3;
 }
 .cc-dark .cc-f-item { background: rgba(255,255,255,0.14); color: #f1f5f9; }
@@ -633,7 +633,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   font-size: 8px; font-weight: 800; opacity: 0.55;
   letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 3px;
 }
-.cc-back-value { font-size: 9px; opacity: 0.85; line-height: 1.5; }
+.cc-back-value { font-size: 11px; opacity: 0.85; line-height: 1.5; }
 
 .flip-btn-row { display: flex; gap: 8px; margin-bottom: 12px; }
 .flip-btn {
@@ -1010,6 +1010,132 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 /* step toggle */
 .step-toggle { margin-left: auto; font-size: 14px; color: var(--text3); }
 .reading-step-body.closed { display: none; }
+
+/* ===== WORD CLOUD INVENTOR ===== */
+.word-cloud-card { border: 1px solid var(--border); }
+.inventor-context {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.context-chip {
+  font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+  background: var(--primary-light); color: var(--primary);
+}
+.word-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.example-words { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; align-items: center; }
+.example-word-tag {
+  font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+  background: var(--bg2); color: var(--text2); cursor: pointer; border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.example-word-tag:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.word-cloud-area {
+  min-height: 140px; background: var(--bg2); border-radius: 12px;
+  padding: 16px; position: relative; overflow: hidden;
+  border: 1px dashed var(--border);
+}
+.word-bubble {
+  position: absolute; border-radius: 20px; padding: 5px 13px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  animation: floatBubble 3s ease-in-out infinite;
+  transition: all 0.2s; user-select: none;
+}
+.word-bubble:hover { transform: scale(1.1) !important; }
+.word-bubble.removing { animation: popOut 0.3s ease forwards; }
+@keyframes floatBubble {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes popOut { to { transform: scale(0); opacity: 0; } }
+.ai-spinner {
+  width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--primary); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.job-result-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;
+}
+.job-result-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.job-result-card.selected { border-color: var(--primary); background: var(--primary-light); }
+.job-card-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.job-card-desc { font-size: 13px; color: var(--text2); margin-bottom: 8px; line-height: 1.6; }
+.job-card-why { font-size: 12px; color: var(--text3); font-style: italic; }
+.modify-box {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fbbf24; border-radius: 12px; padding: 18px;
+}
+
+/* ===== COMPETENCY CARDS ===== */
+.competency-card {
+  background: var(--surface); border-radius: var(--radius-lg);
+  border: 1px solid var(--border); padding: 20px; box-shadow: var(--shadow);
+}
+.comp-step-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.comp-step-num {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--primary);
+  color: #fff; font-size: 14px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.comp-step-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.comp-step-desc { font-size: 13px; color: var(--text3); }
+.comp-job-display {
+  background: var(--bg2); border-radius: 8px; padding: 12px 16px;
+  margin-bottom: 14px; font-size: 16px; font-weight: 800; color: var(--primary);
+}
+.comp-inputs { display: flex; flex-direction: column; gap: 14px; }
+.comp-input-group { display: flex; flex-direction: column; gap: 6px; }
+.comp-type-label {
+  font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 20px;
+  display: inline-block; width: fit-content;
+}
+.comp-knowledge { background: #dbeafe; color: #1e40af; }
+.comp-skill { background: #fef3c7; color: #92400e; }
+.comp-attitude { background: #d1fae5; color: #065f46; }
+.comp-why { min-height: auto !important; resize: none; font-size: 13px !important; }
+.comp-hint-tag {
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  background: var(--bg2); color: var(--text2); cursor: pointer;
+  border: 1px dashed var(--border); transition: all 0.2s;
+}
+.comp-hint-tag:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+
+/* 역량-과목 매핑 */
+.mapping-row {
+  display: grid; grid-template-columns: 120px 1fr; gap: 12px;
+  align-items: start; margin-bottom: 14px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.mapping-row:last-child { border-bottom: none; }
+.mapping-comp-label { font-size: 13px; font-weight: 700; line-height: 1.5; }
+.mapping-right { display: flex; flex-direction: column; gap: 8px; }
+
+/* 로드맵 */
+.roadmap-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+}
+.roadmap-cell {
+  background: var(--bg2); border-radius: 10px; padding: 12px;
+  border-left: 3px solid var(--primary);
+}
+.roadmap-cell-label { font-size: 11px; font-weight: 700; color: var(--text3); margin-bottom: 6px; }
+.roadmap-cell-subjects { display: flex; flex-wrap: wrap; gap: 4px; }
+.roadmap-subject-tag {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  background: var(--primary-light); color: var(--primary);
+}
+.roadmap-comp-tag {
+  font-size: 10px; padding: 1px 6px; border-radius: 20px;
+  background: #fef3c7; color: #92400e; font-weight: 600;
+}
+.roadmap-sentence {
+  background: linear-gradient(135deg, #1e3a5f, #1d4ed8);
+  color: #fff; border-radius: 10px; padding: 14px 16px;
+  font-size: 14px; font-weight: 700; line-height: 1.7;
+}
+
 </style>
 </head>
 <body>
@@ -1017,7 +1143,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 <!-- ===================== LOGIN SCREEN ===================== -->
 <div id="loginScreen">
   <div class="login-hero">
-    <div class="login-school-badge">🏫 화원고등학교 진로연계교육</div>
+    <div class="login-school-badge">🏫 진로연계교육 프로그램</div>
     <h1 class="login-title">
       <span>Invent Your Career</span><br>
       세상에 없는 나만의 직업 만들기
@@ -1257,6 +1383,90 @@ textarea.input-field { resize: vertical; min-height: 100px; }
     <div class="section-title">💡 융합창직</div>
     <div class="section-desc">홀랜드 유형 + 독서 탐구 + SDGs를 연결해 세상에 없는 나만의 직업을 만들어보세요!</div>
 
+    <!-- 단어구름 창직 발명소 -->
+    <div class="card word-cloud-card" id="inventorCard" style="margin-bottom:24px;">
+      <div class="card-form-title">🚀 나만의 직업 발명소
+        <span style="font-size:13px;font-weight:500;color:var(--text3);">— 관심 단어를 입력하면 AI가 직업을 제안해드려요</span>
+      </div>
+
+      <!-- 자동 불러온 데이터 표시 -->
+      <div class="inventor-context" id="inventorContext"></div>
+
+      <!-- 단어 입력 -->
+      <div class="word-input-row">
+        <input type="text" id="wordInput" class="input-field" placeholder="관심있는 단어 입력 후 Enter (예: 기후, 심리, 청소년...)" style="flex:1;"
+          onkeydown="if(event.key==='Enter'){addWord();event.preventDefault()}">
+        <button class="btn btn-outline btn-sm" onclick="addWord()">+ 추가</button>
+      </div>
+
+      <!-- 예시 단어 -->
+      <div class="example-words">
+        <span style="font-size:12px;color:var(--text3);margin-right:6px;">빠른 추가:</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">기후</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">AI</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">심리</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">청소년</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">예술</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">건강</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">데이터</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">교육</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">환경</span>
+        <span class="example-word-tag" onclick="addExampleWord(this)">문화</span>
+      </div>
+
+      <!-- 단어 구름 영역 -->
+      <div class="word-cloud-area" id="wordCloudArea">
+        <div style="font-size:13px;color:var(--text3);text-align:center;padding-top:20px;">단어를 입력하면 여기에 구름처럼 모여요 ☁️</div>
+      </div>
+
+      <!-- 버튼 -->
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="generateJobs()" id="generateBtn" disabled>
+          🚀 직업 발명하기
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="clearWords()">초기화</button>
+      </div>
+
+      <!-- AI 로딩 -->
+      <div id="aiLoading" class="hidden" style="text-align:center;padding:24px;">
+        <div class="ai-spinner"></div>
+        <div style="font-size:14px;color:var(--text3);margin-top:12px;">AI가 나만의 직업을 발명하는 중...</div>
+      </div>
+
+      <!-- 결과 카드들 -->
+      <div id="jobResultArea" class="hidden" style="margin-top:16px;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text2);">✨ AI가 제안하는 나만의 직업</div>
+        <div id="jobCards" style="display:flex;flex-direction:column;gap:10px;"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="generateJobs()">🔄 다시 생성</button>
+          <button class="btn btn-sm" style="background:var(--text3);color:#fff;" onclick="skipAI()">직접 만들게요 →</button>
+        </div>
+      </div>
+
+      <!-- 선택 후 수정 단계 -->
+      <div id="jobModifyArea" class="hidden" style="margin-top:16px;">
+        <div class="modify-box">
+          <div style="font-size:13px;font-weight:700;color:var(--text3);margin-bottom:8px;">AI가 제안한 직업명 (읽기 전용)</div>
+          <div id="aiOriginalJob" style="font-size:16px;font-weight:800;color:var(--primary);padding:10px;background:var(--bg2);border-radius:8px;margin-bottom:16px;"></div>
+          <div class="input-group">
+            <label class="label">Q1. 이 직업을 선택한 이유 <span style="color:var(--danger)">*</span></label>
+            <textarea id="jobSelectReason" class="input-field" rows="2" placeholder="AI가 제안한 3~5개 중 이 직업을 고른 이유는?" oninput="checkModifyComplete()"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="label">Q2. 내가 새로 붙인 직업명 <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="jobModifiedName" class="input-field" placeholder="AI 제안에서 내가 바꾼 직업명 (바꾸지 않아도 됩니다)" oninput="checkModifyComplete()">
+          </div>
+          <div class="input-group">
+            <label class="label">Q3. AI 제안에서 바꾼 부분과 이유 <span style="color:var(--danger)">*</span></label>
+            <textarea id="jobModifyReason" class="input-field" rows="2" placeholder="무엇을 왜 바꿨나요? (바꾸지 않았다면 '그대로 사용' 이라고 써주세요)" oninput="checkModifyComplete()"></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" id="applyJobBtn" onclick="applySelectedJob()" disabled>
+            창직카드에 적용하기 →
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- STEP 1: SDG SELECTION -->
     <div class="card" style="margin-bottom:24px;">
       <div class="card-form-title">① UN SDGs 선택 <span style="font-size:13px;font-weight:500;color:var(--text3);">— 해결하고 싶은 사회문제를 하나 선택하세요</span></div>
@@ -1412,7 +1622,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
           <div class="cc-keywords" id="cardKeywords"></div>
           <div class="cc-bottom">
             <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
-            <div style="font-size:9px;opacity:0.4;">화원고등학교</div>
+            <div style="font-size:9px;opacity:0.4;">INVENT YOUR CAREER</div>
           </div>
         </div>
       </div>
@@ -1444,7 +1654,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
           </div>
           <div class="cc-bottom">
             <div style="font-size:9px;font-weight:800;opacity:0.4;letter-spacing:1.5px;">INVENT YOUR CAREER</div>
-            <div style="font-size:9px;opacity:0.4;">화원고등학교</div>
+            <div style="font-size:9px;opacity:0.4;">INVENT YOUR CAREER</div>
           </div>
         </div>
       </div>
@@ -1463,7 +1673,68 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   <!-- TAB 4: SUBJECTS -->
   <div class="tab-panel" id="panel3">
     <div class="section-title">📚 과목 선택</div>
-    <div class="section-desc">다음 학년에서 선택할 과목을 골라보세요.</div>
+    <div class="section-desc">창직 직업 → 역량 도출 → 과목 연결 흐름으로 나만의 학습 로드맵을 완성하세요!</div>
+
+    <!-- 역량 도출 STEP 1 -->
+    <div class="competency-card" id="competencyCard">
+      <div class="comp-step-header">
+        <span class="comp-step-num">1</span>
+        <span class="comp-step-title">역량 도출</span>
+        <span class="comp-step-desc">창직카드에서 만든 직업을 위해 어떤 역량이 필요한지 생각해보세요</span>
+      </div>
+      <div class="comp-job-display" id="compJobDisplay">
+        <span style="color:var(--text3);font-size:13px;">창직카드에서 직업명을 입력하면 여기에 표시됩니다</span>
+      </div>
+
+      <!-- AI 역량 힌트 -->
+      <div id="compHintArea" class="hidden">
+        <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">✨ AI 역량 힌트 (참고만 하세요 — 체크하고 수정해도 됩니다)</div>
+        <div id="compHints" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;"></div>
+      </div>
+
+      <!-- 역량 입력 (지식/기술/태도) -->
+      <div class="comp-inputs">
+        <div class="comp-input-group">
+          <div class="comp-type-label comp-knowledge">📚 지식 역량</div>
+          <input type="text" id="compKnowledge" class="input-field" placeholder="이 직업을 위해 알아야 할 것" oninput="updateRoadmap();scheduleSave()">
+          <textarea id="compKnowledgeWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
+        </div>
+        <div class="comp-input-group">
+          <div class="comp-type-label comp-skill">🛠 기술 역량</div>
+          <input type="text" id="compSkill" class="input-field" placeholder="이 직업을 위해 할 수 있어야 하는 것" oninput="updateRoadmap();scheduleSave()">
+          <textarea id="compSkillWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
+        </div>
+        <div class="comp-input-group">
+          <div class="comp-type-label comp-attitude">💛 태도 역량</div>
+          <input type="text" id="compAttitude" class="input-field" placeholder="이 직업인으로서 가져야 할 자세" oninput="updateRoadmap();scheduleSave()">
+          <textarea id="compAttitudeWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 역량-과목 매핑 STEP 2 -->
+    <div class="competency-card" id="mappingCard" style="margin-top:16px;">
+      <div class="comp-step-header">
+        <span class="comp-step-num">2</span>
+        <span class="comp-step-title">역량 → 과목 연결</span>
+        <span class="comp-step-desc">각 역량을 기르는 데 도움이 되는 과목을 선택하고 이유를 써보세요</span>
+      </div>
+      <div id="mappingArea">
+        <div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">역량을 먼저 입력하면 여기에 매핑 칸이 나타납니다</div>
+      </div>
+    </div>
+
+    <!-- 로드맵 STEP 3 -->
+    <div class="competency-card" id="roadmapCard" style="margin-top:16px;display:none;">
+      <div class="comp-step-header">
+        <span class="comp-step-num">3</span>
+        <span class="comp-step-title">나의 학습 로드맵</span>
+        <span class="comp-step-desc">선택한 과목들이 학기별로 정리됩니다</span>
+      </div>
+      <div id="roadmapSummary" style="margin-bottom:16px;"></div>
+      <div class="roadmap-grid" id="roadmapGrid"></div>
+      <div class="roadmap-sentence" id="roadmapSentence"></div>
+    </div>
 
     <!-- 전공 연계 검색 -->
     <div class="major-search-box" id="majorSearchBox">
@@ -1602,7 +1873,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 <div id="teacherDashboard" class="hidden">
   <div class="teacher-header">
     <div>
-      <h1>👩‍🏫 교사 대시보드 — 화원고등학교 진로연계교육</h1>
+      <h1>👩‍🏫 교사 대시보드</h1>
       <p>Invent Your Career 프로그램 관리</p>
     </div>
     <button class="btn btn-ghost btn-sm" onclick="logoutTeacher()" style="color:white;background:rgba(255,255,255,0.15);">로그아웃</button>
@@ -2040,6 +2311,7 @@ let STATE = {
   selectedSubjects: {}, subjectReasons: {},
   majorLinkageData: [],
   timeCapsule: { email:'', letter:'', declaration:'', saved: false },
+  competency: {}, compMapping: {}, compMappingReasons: {}, competencyHintLoaded: false,
   lastSaved: null
 };
 
@@ -2178,6 +2450,9 @@ function showStudentApp() {
   updateDeclaration();
   updatePadletBtn();
   loadMajorLinkage();
+  updateInventorContext();
+  updateInventorContext();
+  updateCompetencyPanel();
   checkTabDone();
 }
 
@@ -3455,6 +3730,384 @@ function switchTeacherTab(idx) {
   document.querySelectorAll('.teacher-tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
   if (idx === 0) loadAllStudents();
 }
+
+
+/* ============================================================
+   WORD CLOUD INVENTOR
+   ============================================================ */
+let inventorWords = [];
+const BUBBLE_COLORS = [
+  {bg:'#dbeafe',color:'#1e40af'},{bg:'#fce7f3',color:'#9d174d'},
+  {bg:'#d1fae5',color:'#065f46'},{bg:'#fef3c7',color:'#92400e'},
+  {bg:'#ede9fe',color:'#5b21b6'},{bg:'#fee2e2',color:'#991b1b'},
+  {bg:'#e0f2fe',color:'#0c4a6e'},{bg:'#fdf4ff',color:'#6b21a8'}
+];
+
+function updateInventorContext() {
+  const el = document.getElementById('inventorContext');
+  if (!el) return;
+  const chips = [];
+  const h = STATE.hollandData;
+  const r1 = h ? (h.rank1||'').toUpperCase() : null;
+  if (r1 && HOLLAND[r1]) chips.push(`${HOLLAND[r1].emoji} ${r1}형 ${HOLLAND[r1].name}`);
+  if (STATE.readingData && STATE.readingData.book) chips.push(`📖 ${STATE.readingData.book.slice(0,12)}`);
+  if (STATE.careerCard.selectedSDG) {
+    const sdg = SDGS.find(s=>s.num===STATE.careerCard.selectedSDG);
+    if (sdg) chips.push(`${sdg.emoji} SDG${sdg.num}`);
+  }
+  el.innerHTML = chips.map(t=>`<span class="context-chip">${t}</span>`).join('');
+}
+
+function addWord() {
+  const inp = document.getElementById('wordInput');
+  const w = inp.value.trim();
+  if (!w || inventorWords.includes(w)) { inp.value=''; return; }
+  inventorWords.push(w);
+  inp.value = '';
+  renderWordCloud();
+  document.getElementById('generateBtn').disabled = inventorWords.length === 0;
+}
+
+function addExampleWord(el) {
+  const w = el.textContent.trim();
+  if (inventorWords.includes(w)) return;
+  inventorWords.push(w);
+  renderWordCloud();
+  document.getElementById('generateBtn').disabled = false;
+}
+
+function clearWords() {
+  inventorWords = [];
+  renderWordCloud();
+  document.getElementById('generateBtn').disabled = true;
+  document.getElementById('jobResultArea').classList.add('hidden');
+  document.getElementById('jobModifyArea').classList.add('hidden');
+}
+
+function renderWordCloud() {
+  const area = document.getElementById('wordCloudArea');
+  if (!inventorWords.length) {
+    area.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding-top:20px;">단어를 입력하면 여기에 구름처럼 모여요 ☁️</div>';
+    return;
+  }
+  // Place bubbles in non-overlapping positions
+  area.innerHTML = '';
+  const areaW = area.offsetWidth || 300;
+  const positions = [];
+  inventorWords.forEach((word, i) => {
+    const col = BUBBLE_COLORS[i % BUBBLE_COLORS.length];
+    const delay = (i * 0.4) % 3;
+    const el = document.createElement('div');
+    el.className = 'word-bubble';
+    el.style.cssText = `background:${col.bg};color:${col.color};animation-delay:${delay}s;`;
+    el.innerHTML = `${word} <span style="font-size:11px;opacity:0.6;cursor:pointer;" onclick="removeWord('${word}')">✕</span>`;
+    // Simple grid placement
+    const col2 = i % 3;
+    const row2 = Math.floor(i / 3);
+    el.style.left = (20 + col2 * (areaW/3 - 10)) + 'px';
+    el.style.top = (12 + row2 * 44) + 'px';
+    area.appendChild(el);
+  });
+  area.style.minHeight = Math.max(140, Math.ceil(inventorWords.length/3)*44 + 30) + 'px';
+}
+
+function removeWord(word) {
+  inventorWords = inventorWords.filter(w => w !== word);
+  renderWordCloud();
+  document.getElementById('generateBtn').disabled = inventorWords.length === 0;
+}
+
+async function generateJobs() {
+  if (!inventorWords.length) return;
+  document.getElementById('aiLoading').classList.remove('hidden');
+  document.getElementById('jobResultArea').classList.add('hidden');
+  document.getElementById('jobModifyArea').classList.add('hidden');
+
+  const h = STATE.hollandData;
+  const r1 = h ? (h.rank1||'').toUpperCase() : '';
+  const hName = r1 && HOLLAND[r1] ? `${r1}형(${HOLLAND[r1].name})` : '';
+  const book = STATE.readingData ? (STATE.readingData.book || '') : '';
+  const sdg = STATE.careerCard.selectedSDG ? SDGS.find(s=>s.num===STATE.careerCard.selectedSDG) : null;
+  const sdgText = sdg ? `SDG${sdg.num} ${sdg.name}` : '';
+
+  const prompt = `학생 정보:
+- 홀랜드 유형: ${hName || '미입력'}
+- 탐구한 도서: ${book || '미입력'}
+- 선택한 SDGs: ${sdgText || '미입력'}
+- 학생이 입력한 관심 키워드: ${inventorWords.join(', ')}
+
+위 정보를 바탕으로 "세상에 없는 창의적인 직업 아이디어"를 4가지 제안해주세요.
+각 직업은 반드시 아래 JSON 형식으로만 응답하세요 (다른 텍스트 없이):
+[
+  {"name":"직업명","desc":"이 직업이 하는 일 (1~2문장)","why":"키워드들이 어떻게 연결됐는지 (1문장)"},
+  ...
+]`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content||[]).map(b=>b.text||'').join('');
+    let jobs = [];
+    try {
+      const match = text.match(/\[[\s\S]*\]/);
+      if (match) jobs = JSON.parse(match[0]);
+    } catch(e) { jobs = []; }
+
+    document.getElementById('aiLoading').classList.add('hidden');
+
+    if (!jobs.length) {
+      showToast('직업 생성에 실패했어요. 다시 시도해주세요.', 'error');
+      return;
+    }
+
+    const cardsEl = document.getElementById('jobCards');
+    cardsEl.innerHTML = jobs.map((j,i) => `
+      <div class="job-result-card" id="jcard${i}" onclick="selectJobCard(${i}, '${(j.name||'').replace(/'/g,"\'")}')">
+        <div class="job-card-name">${j.name}</div>
+        <div class="job-card-desc">${j.desc}</div>
+        <div class="job-card-why">💡 ${j.why}</div>
+      </div>`).join('');
+
+    document.getElementById('jobResultArea').classList.remove('hidden');
+  } catch(e) {
+    document.getElementById('aiLoading').classList.add('hidden');
+    showToast('API 오류: ' + e.message, 'error');
+  }
+}
+
+function selectJobCard(idx, name) {
+  document.querySelectorAll('.job-result-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('jcard'+idx)?.classList.add('selected');
+  document.getElementById('aiOriginalJob').textContent = name;
+  document.getElementById('jobSelectReason').value = '';
+  document.getElementById('jobModifiedName').value = '';
+  document.getElementById('jobModifyReason').value = '';
+  document.getElementById('applyJobBtn').disabled = true;
+  document.getElementById('jobModifyArea').classList.remove('hidden');
+  document.getElementById('jobModifyArea').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function skipAI() {
+  document.getElementById('inventorCard').style.display = 'none';
+  document.getElementById('jobName').focus();
+  showToast('직접 창직카드를 작성해보세요! ✏️');
+}
+
+function checkModifyComplete() {
+  const r1 = document.getElementById('jobSelectReason').value.trim();
+  const r3 = document.getElementById('jobModifyReason').value.trim();
+  document.getElementById('applyJobBtn').disabled = !(r1 && r3);
+}
+
+function applySelectedJob() {
+  const original = document.getElementById('aiOriginalJob').textContent;
+  const modified = document.getElementById('jobModifiedName').value.trim();
+  const finalName = modified || original;
+  const reason1 = document.getElementById('jobSelectReason').value.trim();
+  const reason3 = document.getElementById('jobModifyReason').value.trim();
+
+  // Apply to career card form
+  document.getElementById('jobName').value = finalName;
+  STATE.careerCard.jobName = finalName;
+  STATE.careerCard.aiOriginalJob = original;
+  STATE.careerCard.aiSelectReason = reason1;
+  STATE.careerCard.aiModifyReason = reason3;
+  updateCardPreview();
+  updateFormulaBox();
+  scheduleSave();
+
+  // Collapse inventor card
+  document.getElementById('inventorCard').style.background = 'var(--green-light)';
+  document.getElementById('jobModifyArea').innerHTML = `
+    <div style="padding:12px;background:var(--green-light);border-radius:8px;margin-top:12px;">
+      <strong style="color:var(--green);">✅ 창직카드에 적용 완료!</strong>
+      <div style="font-size:13px;margin-top:4px;color:var(--text2);">직업명: <strong>${finalName}</strong></div>
+    </div>`;
+
+  showToast(`"${finalName}" 창직카드에 적용됐습니다! 🎉`, 'success');
+  // Scroll to career form
+  document.getElementById('jobName').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ============================================================
+   COMPETENCY: HINT GENERATION (Claude API)
+   ============================================================ */
+async function generateCompetencyHints(jobName) {
+  if (!jobName) return;
+  const hintArea = document.getElementById('compHintArea');
+  const hintsEl = document.getElementById('compHints');
+  if (!hintArea || !hintsEl) return;
+
+  hintsEl.innerHTML = '<span style="font-size:12px;color:var(--text3);">힌트 생성 중...</span>';
+  hintArea.classList.remove('hidden');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        messages: [{ role: 'user', content:
+          `직업명: "${jobName}"
+이 직업을 위해 필요한 역량을 지식·기술·태도 각 3개씩, 짧은 키워드로만 JSON으로 답해주세요:
+{"knowledge":["역량1","역량2","역량3"],"skill":["역량1","역량2","역량3"],"attitude":["역량1","역량2","역량3"]}`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content||[]).map(b=>b.text||'').join('');
+    let hints = {};
+    try {
+      const m = text.match(/\{[\s\S]*\}/);
+      if (m) hints = JSON.parse(m[0]);
+    } catch(e){}
+
+    const all = [
+      ...(hints.knowledge||[]).map(h=>({h,type:'knowledge',label:'📚'})),
+      ...(hints.skill||[]).map(h=>({h,type:'skill',label:'🛠'})),
+      ...(hints.attitude||[]).map(h=>({h,type:'attitude',label:'💛'}))
+    ];
+    hintsEl.innerHTML = all.map(({h,type,label})=>
+      `<span class="comp-hint-tag" onclick="applyHint('${type}','${h.replace(/'/g,"\'")}')">
+        ${label} ${h}
+      </span>`
+    ).join('');
+  } catch(e) {
+    hintsEl.innerHTML = '<span style="font-size:12px;color:var(--danger);">힌트 생성 실패</span>';
+  }
+}
+
+function applyHint(type, hint) {
+  const map = {knowledge:'compKnowledge', skill:'compSkill', attitude:'compAttitude'};
+  const el = document.getElementById(map[type]);
+  if (!el) return;
+  const cur = el.value.trim();
+  el.value = cur ? cur + ', ' + hint : hint;
+  updateRoadmap();
+  scheduleSave();
+}
+
+/* ============================================================
+   COMPETENCY: MAPPING & ROADMAP
+   ============================================================ */
+function updateCompetencyPanel() {
+  const jobName = STATE.careerCard.jobName || '';
+  const el = document.getElementById('compJobDisplay');
+  if (el) el.textContent = jobName ? `🎯 ${jobName}` : '창직카드에서 직업명을 입력하면 여기에 표시됩니다';
+  if (jobName && !STATE.competencyHintLoaded) {
+    STATE.competencyHintLoaded = true;
+    generateCompetencyHints(jobName);
+  }
+  updateRoadmap();
+}
+
+function updateRoadmap() {
+  const knowledge = document.getElementById('compKnowledge')?.value.trim() || '';
+  const skill = document.getElementById('compSkill')?.value.trim() || '';
+  const attitude = document.getElementById('compAttitude')?.value.trim() || '';
+
+  // Save to state
+  STATE.competency = { knowledge, skill, attitude,
+    knowledgeWhy: document.getElementById('compKnowledgeWhy')?.value || '',
+    skillWhy: document.getElementById('compSkillWhy')?.value || '',
+    attitudeWhy: document.getElementById('compAttitudeWhy')?.value || ''
+  };
+
+  // Update mapping area
+  const mappingEl = document.getElementById('mappingArea');
+  if (!mappingEl) return;
+  const comps = [{type:'knowledge',label:'📚 지식',val:knowledge,cls:'comp-knowledge'},
+                 {type:'skill',label:'🛠 기술',val:skill,cls:'comp-skill'},
+                 {type:'attitude',label:'💛 태도',val:attitude,cls:'comp-attitude'}].filter(c=>c.val);
+
+  if (!comps.length) {
+    mappingEl.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">역량을 먼저 입력하면 여기에 매핑 칸이 나타납니다</div>';
+    document.getElementById('roadmapCard').style.display = 'none';
+    return;
+  }
+
+  const allSubjects = (STATE.grade===1 ? SUBJECTS_G1 : SUBJECTS_G2).flatMap(g=>g.subjects);
+  mappingEl.innerHTML = comps.map(comp => `
+    <div class="mapping-row">
+      <div>
+        <span class="comp-type-label ${comp.cls}" style="font-size:12px;">${comp.label}</span>
+        <div style="font-size:13px;font-weight:700;margin-top:4px;">${comp.val}</div>
+      </div>
+      <div class="mapping-right">
+        <select class="input-field" id="map_${comp.type}" onchange="updateRoadmapGrid();scheduleSave()" style="font-size:14px;">
+          <option value="">과목 선택...</option>
+          ${allSubjects.map(s=>`<option value="${s}" ${(STATE.compMapping||{})[comp.type]===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <textarea class="input-field comp-why" id="mapReason_${comp.type}" rows="1"
+          placeholder="이 과목을 선택한 이유..."
+          oninput="scheduleSave()">${(STATE.compMappingReasons||{})[comp.type]||''}</textarea>
+      </div>
+    </div>`).join('');
+
+  updateRoadmapGrid();
+}
+
+function updateRoadmapGrid() {
+  const mapping = {};
+  const reasons = {};
+  ['knowledge','skill','attitude'].forEach(t => {
+    const el = document.getElementById('map_'+t);
+    const rel = document.getElementById('mapReason_'+t);
+    if (el && el.value) { mapping[t]=el.value; }
+    if (rel && rel.value) { reasons[t]=rel.value; }
+  });
+  STATE.compMapping = mapping;
+  STATE.compMappingReasons = reasons;
+
+  const allSel = Object.values(STATE.selectedSubjects).flat();
+  const mapped = Object.values(mapping).filter(Boolean);
+
+  if (!mapped.length) { document.getElementById('roadmapCard').style.display='none'; return; }
+  document.getElementById('roadmapCard').style.display='';
+
+  // Build roadmap grid by semester
+  const subjects = STATE.grade===1?SUBJECTS_G1:SUBJECTS_G2;
+  const semesters = {};
+  subjects.forEach(g => {
+    const sem = g.semester;
+    const sel = (STATE.selectedSubjects[g.group]||[]);
+    if (sel.length) {
+      if (!semesters[sem]) semesters[sem]=[];
+      sel.forEach(s => semesters[sem].push({subject:s, compTag: Object.entries(mapping).find(([,v])=>v===s)?.[0]}));
+    }
+  });
+
+  const roadmapEl = document.getElementById('roadmapGrid');
+  roadmapEl.innerHTML = Object.entries(semesters).slice(0,4).map(([sem,items])=>`
+    <div class="roadmap-cell">
+      <div class="roadmap-cell-label">${sem}</div>
+      <div class="roadmap-cell-subjects">
+        ${items.map(it=>`
+          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:4px;">
+            <span class="roadmap-subject-tag">${it.subject}</span>
+            ${it.compTag?`<span class="roadmap-comp-tag">${it.compTag==='knowledge'?'📚지식':it.compTag==='skill'?'🛠기술':'💛태도'}</span>`:''}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // Summary sentence
+  const job = STATE.careerCard.jobName||'나만의 직업';
+  const comps = [STATE.competency?.knowledge,STATE.competency?.skill,STATE.competency?.attitude].filter(Boolean);
+  document.getElementById('roadmapSentence').innerHTML =
+    `나는 <strong>「${job}」</strong>이(가) 되기 위해<br>${comps.join(' · ')} 역량을 기르는 과목들을 선택했습니다.`;
+
+  scheduleSave();
+}
+
 
 </script>
 </body>
