@@ -2150,7 +2150,10 @@ textarea.input-field { resize: vertical; min-height: 100px; }
         <label class="label">API 키</label>
         <input type="password" id="claudeApiKeyInput" class="input-field" placeholder="sk-ant-...">
       </div>
-      <button class="btn btn-primary" onclick="saveClaudeApiKey()">저장</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="saveClaudeApiKey()">저장</button>
+        <button class="btn btn-outline btn-sm" onclick="resetApiKey()">🔄 키 변경</button>
+      </div>
       <div id="claudeApiKeyMsg" style="margin-top:8px;"></div>
     </div>
 
@@ -3556,11 +3559,33 @@ async function saveManualRefUrl(nameEncoded) {
 /* ============================================================
    SETTINGS: GAS URL
    ============================================================ */
-function saveClaudeApiKey() {
-  const key = document.getElementById('claudeApiKeyInput').value.trim();
-  localStorage.setItem('claudeApiKey', key);
+function resetApiKey() {
+  const ek = document.getElementById('claudeApiKeyInput');
+  if (ek) { ek.value = ''; ek.focus(); }
   const msg = document.getElementById('claudeApiKeyMsg');
-  msg.innerHTML = '<div class="alert alert-success">✅ API 키가 저장되었습니다. AI 기능을 사용할 수 있습니다.</div>';
+  if (msg) msg.innerHTML = '<div style="font-size:12px;color:var(--text3);">새 API 키를 입력하고 저장하세요.</div>';
+}
+
+function saveClaudeApiKey() {
+  const raw = document.getElementById('claudeApiKeyInput').value.trim();
+  // 점(•)으로만 이뤄진 경우 = 마스킹 표시 → 기존 저장값 그대로 유지
+  const isMasked = /^[••]+$/.test(raw);
+  const msg = document.getElementById('claudeApiKeyMsg');
+  if (isMasked) {
+    const existing = localStorage.getItem('claudeApiKey');
+    if (existing) {
+      msg.innerHTML = '<div class="alert alert-success">✅ 기존 API 키가 유지됩니다.</div>';
+      return;
+    }
+  }
+  if (!raw || raw.length < 10) {
+    msg.innerHTML = '<div class="alert alert-error">❌ API 키를 입력해주세요.</div>';
+    return;
+  }
+  localStorage.setItem('claudeApiKey', raw);
+  // 저장 후 마스킹
+  document.getElementById('claudeApiKeyInput').value = '•'.repeat(20);
+  msg.innerHTML = '<div class="alert alert-success">✅ API 키가 저장되었습니다! AI 기능을 사용할 수 있습니다.</div>';
 }
 
 function saveGasUrl() {
@@ -3596,7 +3621,12 @@ function openPadlet() {
 // Load GAS URL & Padlet URL on page load
 window.addEventListener('load', () => {
   const savedApiKey = localStorage.getItem('claudeApiKey');
-  if (savedApiKey) { const ek = document.getElementById('claudeApiKeyInput'); if(ek) ek.value = '•'.repeat(20); }
+  if (savedApiKey && !savedApiKey.includes('•')) {
+    const ek = document.getElementById('claudeApiKeyInput');
+    if (ek) ek.value = '•'.repeat(20);
+    const msg = document.getElementById('claudeApiKeyMsg');
+    if (msg) msg.innerHTML = '<div style="font-size:12px;color:var(--success);margin-top:4px;">✅ API 키 저장됨 — AI 기능 사용 가능</div>';
+  }
   const savedGas = localStorage.getItem('gasUrl');
   if (savedGas) { const el = document.getElementById('gasUrlInput'); if(el) el.value = savedGas; }
   const savedPadlet = localStorage.getItem('padletUrl');
