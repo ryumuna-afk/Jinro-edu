@@ -1541,6 +1541,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
           <div class="ai-spinner"></div>
           <div style="font-size:14px;color:var(--text3);margin-top:12px;">AI가 나만의 직업을 발명하는 중...</div>
         </div>
+        <div id="aiErrorBox" class="hidden" style="margin-top:12px;padding:14px 16px;background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;font-size:14px;color:#991b1b;line-height:1.7;"></div>
         <div id="jobResultArea" class="hidden" style="margin-top:16px;">
           <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--text);">✨ AI가 제안하는 나만의 직업</div>
           <div id="jobCards" style="display:flex;flex-direction:column;gap:10px;"></div>
@@ -4070,6 +4071,7 @@ async function generateJobs() {
   document.getElementById('aiLoading').classList.remove('hidden');
   document.getElementById('jobResultArea').classList.add('hidden');
   document.getElementById('jobModifyArea').classList.add('hidden');
+  clearAiError();
 
   const h = STATE.hollandData;
   const r1 = h ? (h.rank1||'').toUpperCase() : '';
@@ -4093,9 +4095,9 @@ async function generateJobs() {
 
   try {
     const apiKey = localStorage.getItem('claudeApiKey') || '';
-    if (!apiKey) {
+    if (!apiKey || apiKey.includes('•') || apiKey.length < 20) {
       document.getElementById('aiLoading').classList.add('hidden');
-      showToast('AI 기능을 사용하려면 교사 대시보드 설정에서 Claude API 키를 입력해주세요.', 'error', 5000);
+      showAiError('🔑 API 키가 설정되지 않았습니다.<br><br>교사 대시보드 → ⚙️ 설정 → <strong>🔄 키 변경</strong> 클릭 후 API 키를 새로 입력하고 저장해주세요.<br><br>키 발급: <a href="https://console.anthropic.com" target="_blank" style="color:#1d4ed8;">console.anthropic.com</a>');
       return;
     }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -4113,6 +4115,31 @@ async function generateJobs() {
       })
     });
     const data = await res.json();
+
+    // API 오류 응답 처리
+    if (data.error) {
+      document.getElementById('aiLoading').classList.add('hidden');
+      const errType = data.error.type || '';
+      const errMsg = data.error.message || '';
+      if (errType === 'authentication_error') {
+        showAiError('❌ API 키가 올바르지 않습니다. 교사 대시보드 → ⚙️ 설정 → 🔄 키 변경 후 다시 입력해주세요.');
+      } else if (errType === 'permission_error') {
+        showAiError('❌ API 키 권한 오류: ' + errMsg);
+      } else if (errType.includes('rate')) {
+        showAiError('❌ 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
+      } else {
+        showToast('❌ API 오류: ' + errMsg, 'error', 6000);
+      }
+      console.error('API error:', data.error);
+      return;
+    }
+
+    if (!res.ok) {
+      document.getElementById('aiLoading').classList.add('hidden');
+      showAiError('❌ 서버 오류 ' + res.status + ': ' + (data.error?.message || ''));
+      return;
+    }
+
     const text = (data.content||[]).map(b=>b.text||'').join('');
     let jobs = [];
     try {
@@ -4123,7 +4150,8 @@ async function generateJobs() {
     document.getElementById('aiLoading').classList.add('hidden');
 
     if (!jobs.length) {
-      showToast('직업 생성에 실패했어요. 다시 시도해주세요.', 'error');
+      showAiError('직업 생성에 실패했어요. 다시 시도해주세요.');
+      console.log('API 응답:', text);
       return;
     }
 
@@ -4138,8 +4166,19 @@ async function generateJobs() {
     document.getElementById('jobResultArea').classList.remove('hidden');
   } catch(e) {
     document.getElementById('aiLoading').classList.add('hidden');
-    showToast('API 오류: ' + e.message, 'error');
+    showAiError('API 연결 오류: ' + e.message);
   }
+}
+
+function showAiError(msg) {
+  document.getElementById('aiLoading').classList.add('hidden');
+  const box = document.getElementById('aiErrorBox');
+  if (box) { box.innerHTML = msg; box.classList.remove('hidden'); }
+}
+
+function clearAiError() {
+  const box = document.getElementById('aiErrorBox');
+  if (box) box.classList.add('hidden');
 }
 
 function selectJobCard(idx, name) {
