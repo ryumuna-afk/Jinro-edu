@@ -2981,7 +2981,7 @@ function applyDeclarationDraft() {
     updateDeclarationCount();
     scheduleSave();
     input.focus();
-    showToast('초안이 입력창에 적용됐어요. 자유롭게 다듬어보세요! ✏️');
+    
   }
 }
 
@@ -3620,7 +3620,7 @@ function updatePadletBtn() {
 
 function openPadlet() {
   const url = localStorage.getItem('padletUrl');
-  if (!url) { showToast('패들렛 URL이 설정되지 않았습니다.', 'error'); return; }
+  if (!url) {  return; }
   window.open(url, '_blank');
 }
 
@@ -4128,7 +4128,7 @@ async function generateJobs() {
       } else if (errType.includes('rate')) {
         showAiError('❌ 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
       } else {
-        showToast('❌ API 오류: ' + errMsg, 'error', 6000);
+        
       }
       console.error('API error:', data.error);
       return;
@@ -4196,7 +4196,7 @@ function selectJobCard(idx, name) {
 function skipAI() {
   document.getElementById('inventorCard').style.display = 'none';
   document.getElementById('jobName').focus();
-  showToast('직접 창직카드를 작성해보세요! ✏️');
+  
 }
 
 function checkModifyComplete() {
@@ -4230,7 +4230,7 @@ function applySelectedJob() {
       <div style="font-size:13px;margin-top:4px;color:var(--text2);">직업명: <strong>${finalName}</strong></div>
     </div>`;
 
-  showToast(`"${finalName}" 창직카드에 적용됐습니다! 🎉`, 'success');
+  
   // Scroll to career form
   document.getElementById('jobName').scrollIntoView({behavior:'smooth', block:'center'});
 }
