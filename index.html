@@ -2337,7 +2337,7 @@ let STATE = {
   selectedSubjects: {}, subjectReasons: {},
   majorLinkageData: [],
   timeCapsule: { email:'', letter:'', declaration:'', saved: false },
-  competency: {}, compMapping: {}, compMappingReasons: {}, competencyHintLoaded: false,
+  competency: {}, compMapping: {}, compMappingReasons: {}, competencyHintLoaded: false, _lastHintJob: '',
   lastSaved: null
 };
 
@@ -4244,7 +4244,7 @@ async function generateCompetencyHints(jobName) {
   const hintsEl = document.getElementById('compHints');
   if (!hintArea || !hintsEl) return;
 
-  hintsEl.innerHTML = '<span style="font-size:12px;color:var(--text3);">힌트 생성 중...</span>';
+  hintsEl.innerHTML = `<span style="font-size:12px;color:var(--text3);">✨ "${jobName}" 역량 분석 중...</span>`;
   hintArea.classList.remove('hidden');
 
   try {
@@ -4262,9 +4262,27 @@ async function generateCompetencyHints(jobName) {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 500,
         messages: [{ role: 'user', content:
-          `직업명: "${jobName}"
-이 직업을 위해 필요한 역량을 지식·기술·태도 각 3개씩, 짧은 키워드로만 JSON으로 답해주세요:
-{"knowledge":["역량1","역량2","역량3"],"skill":["역량1","역량2","역량3"],"attitude":["역량1","역량2","역량3"]}`
+(() => {
+            const h = STATE.hollandData;
+            const r1 = h ? (h.rank1||'').toUpperCase() : '';
+            const hName = r1 && HOLLAND[r1] ? `${r1}형(${HOLLAND[r1].name})` : '';
+            const sdg = STATE.careerCard.selectedSDG ? SDGS.find(s=>s.num===STATE.careerCard.selectedSDG) : null;
+            const sdgText = sdg ? `SDG${sdg.num} ${sdg.name}` : '';
+            const problem = STATE.careerCard.socialProblem || document.getElementById('socialProblem')?.value || '';
+            const book = STATE.readingData?.book || '';
+            return `다음 정보를 가진 고등학생이 창직한 직업의 역량을 추천해주세요.
+
+직업명: "${jobName}"
+홀랜드 유형: ${hName || '미입력'}
+탐구 도서: ${book || '미입력'}
+선택한 SDGs: ${sdgText || '미입력'}
+해결하려는 사회문제: ${problem || '미입력'}
+
+위 직업명과 맥락에 꼭 맞는 역량을 지식·기술·태도 각 3개씩 추천하세요.
+직업명과 관련 없는 역량은 절대 포함하지 마세요.
+짧은 키워드(2~5자)로만 JSON 형식으로만 답하세요 (다른 텍스트 없이):
+{"knowledge":["역량1","역량2","역량3"],"skill":["역량1","역량2","역량3"],"attitude":["역량1","역량2","역량3"]}`;
+          })()
         }]
       })
     });
@@ -4306,14 +4324,14 @@ function applyHint(type, hint) {
    ============================================================ */
 function updateCompetencyPanel() {
   const jobName = STATE.careerCard.jobName || document.getElementById('jobName')?.value || '';
-  // 융합창직 탭의 역량 찾기
   const el = document.getElementById('compJobDisplay');
   if (el) el.textContent = jobName ? `🎯 ${jobName}` : '직업명을 입력하면 여기에 표시됩니다';
-  if (jobName && !STATE.competencyHintLoaded) {
-    STATE.competencyHintLoaded = true;
+
+  // 직업명이 바뀌었을 때만 힌트 재생성
+  if (jobName && jobName !== STATE._lastHintJob) {
+    STATE._lastHintJob = jobName;
     generateCompetencyHints(jobName);
   }
-  // 선택과목 탭의 역량 요약 표시
   updateCompSummaryDisplay();
   updateRoadmap();
 }
