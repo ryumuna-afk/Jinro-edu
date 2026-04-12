@@ -1719,18 +1719,6 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       </div>
     </div>
 
-    <!-- STEP 3: 로드맵 -->
-    <div class="competency-card" id="roadmapCard" style="margin-bottom:20px;display:none;">
-      <div class="comp-step-header">
-        <span class="comp-step-num">3</span>
-        <span class="comp-step-title">나의 학습 로드맵</span>
-        <span class="comp-step-desc">선택한 과목들이 학기별로 정리됩니다</span>
-      </div>
-      <div id="roadmapSummary" style="margin-bottom:16px;"></div>
-      <div class="roadmap-grid" id="roadmapGrid"></div>
-      <div class="roadmap-sentence" id="roadmapSentence"></div>
-    </div>
-
     <!-- STEP 4: 과목 선택 -->
     <div class="competency-card" style="margin-bottom:20px;">
       <div class="comp-step-header">
@@ -1760,23 +1748,29 @@ textarea.input-field { resize: vertical; min-height: 100px; }
         <div id="majorSearchResult" class="major-search-result hidden"></div>
       </div>
 
-      <!-- 홀랜드 연계 안내 -->
-      <div class="subject-insight-box" id="hollandSubjectBox" style="display:none;margin-bottom:12px;">
-        <div class="insight-label">🧭 홀랜드 유형 추천 과목</div>
-        <div id="hollandSubjectContent"></div>
-      </div>
-
-      <!-- 선택 조합 진단 -->
-      <div class="subject-diagnosis-box" id="subjectDiagnosisBox" style="display:none;margin-bottom:12px;">
-        <div class="diagnosis-label">📊 선택 조합 진단</div>
-        <div id="subjectDiagnosisContent"></div>
-      </div>
-
       <div id="refFileBtnArea" class="hidden" style="margin-bottom:12px;">
         <a id="refFileBtn" class="ref-file-btn" target="_blank">📄 대학 전공 연계 권장과목 안내 보기</a>
       </div>
 
       <div id="subjectGradeArea"></div>
+
+      <!-- 선택 조합 진단 (과목 선택 후 표시) -->
+      <div class="subject-diagnosis-box" id="subjectDiagnosisBox" style="display:none;margin-top:20px;">
+        <div class="diagnosis-label">📊 선택 조합 진단</div>
+        <div id="subjectDiagnosisContent"></div>
+      </div>
+
+      <!-- 로드맵 (과목 선택 후 표시) -->
+      <div class="competency-card" id="roadmapCard" style="margin-top:20px;display:none;">
+        <div class="comp-step-header">
+          <span class="comp-step-num">✓</span>
+          <span class="comp-step-title">나의 학습 로드맵</span>
+          <span class="comp-step-desc">선택한 과목들이 학기별로 정리됩니다</span>
+        </div>
+        <div id="roadmapSummary" style="margin-bottom:16px;"></div>
+        <div class="roadmap-grid" id="roadmapGrid"></div>
+        <div class="roadmap-sentence" id="roadmapSentence"></div>
+      </div>
     </div>
 
   </div>
@@ -2294,6 +2288,85 @@ const SDGS = [
   { num:16, name:"평화·정의", emoji:"🕊️", color:"#00689D" },
   { num:17, name:"파트너십", emoji:"🌐", color:"#19486A" }
 ];
+
+
+/* ============================================================
+   SUBJECT INFO — 2022 개정 교육과정 (교육부 고시 제2022-33호) 기반
+   ============================================================ */
+const SUBJECT_INFO = {
+  "독서토론과글쓰기": { desc:"다양한 텍스트를 비판적으로 읽고 논리적으로 쓰는 능력", comp:"비판적 사고·논증·표현력", src:"2022 개정 교육과정" },
+  "확률과통계": { desc:"자료를 수집·분석하고 불확실성을 수학적으로 표현", comp:"통계적 사고·데이터 분석", src:"2022 개정 교육과정" },
+  "인공지능수학": { desc:"AI 알고리즘의 수학적 원리 이해와 적용", comp:"수리적 사고·AI 이해", src:"2022 개정 교육과정" },
+  "세계문화와영어": { desc:"세계 다양한 문화를 영어로 이해하고 소통", comp:"문화 이해·영어 소통", src:"2022 개정 교육과정" },
+  "동아시아역사기행": { desc:"동아시아 역사·문화를 탐구하고 현재와 연결", comp:"역사적 사고·문화 이해", src:"2022 개정 교육과정" },
+  "현대사회와윤리": { desc:"현대 사회 문제를 윤리적 관점에서 분석", comp:"윤리적 판단·사회 문제 분석", src:"2022 개정 교육과정" },
+  "세계시민과지리": { desc:"지구적 관점에서 지리·환경·지속가능성 탐구", comp:"공간적 사고·세계시민의식", src:"2022 개정 교육과정" },
+  "정치": { desc:"민주주의 원리·정치 제도·시민 참여 방식 탐구", comp:"정치적 판단·시민 참여", src:"2022 개정 교육과정" },
+  "세계사": { desc:"인류 역사의 흐름과 문명 간 상호작용 이해", comp:"역사적 사고·문화 비교", src:"2022 개정 교육과정" },
+  "윤리와사상": { desc:"동서양 윤리 사상을 바탕으로 삶의 의미 탐구", comp:"철학적 사고·가치 판단", src:"2022 개정 교육과정" },
+  "도시의미래탐구": { desc:"지속가능한 도시 설계와 미래 환경 문제 탐구", comp:"공간 설계·환경 문제 해결", src:"2022 개정 교육과정" },
+  "법과사회": { desc:"법의 원리와 사회 규범을 이해하고 권리 탐구", comp:"법적 사고·사회 분석", src:"2022 개정 교육과정" },
+  "물리학": { desc:"힘·에너지·파동 등 자연 현상의 수학적 원리", comp:"과학적 사고·수리 분석", src:"2022 개정 교육과정" },
+  "화학": { desc:"물질의 구조·반응·에너지 변환 원리 탐구", comp:"분석적 사고·실험 탐구", src:"2022 개정 교육과정" },
+  "생명과학": { desc:"생명 현상의 원리와 생태계·유전·진화 이해", comp:"탐구력·생명 이해", src:"2022 개정 교육과정" },
+  "지구과학": { desc:"지구 시스템과 우주·대기·해양 현상 탐구", comp:"탐구력·시스템 사고", src:"2022 개정 교육과정" },
+  "역학과에너지": { desc:"운동과 에너지의 원리를 심화 탐구", comp:"물리적 사고·에너지 분석", src:"2022 개정 교육과정" },
+  "물질과에너지": { desc:"물질 변환과 에너지 전환 원리 심화", comp:"화학적 사고·분석력", src:"2022 개정 교육과정" },
+  "세포와물질대사": { desc:"세포 구조와 생명 유지 물질대사 원리 심화", comp:"생물학적 사고·실험 탐구", src:"2022 개정 교육과정" },
+  "지구시스템과학": { desc:"지구 내부·대기·해양 시스템 상호작용 심화", comp:"시스템 사고·지구과학 탐구", src:"2022 개정 교육과정" },
+  "데이터과학": { desc:"데이터 수집·분석·시각화·머신러닝 기초", comp:"데이터 분석·AI 활용", src:"2022 개정 교육과정" },
+  "음악연주와창작": { desc:"악기 연주와 창작으로 음악적 표현 능력 심화", comp:"예술적 표현·창의성", src:"2022 개정 교육과정" },
+  "미술창작": { desc:"다양한 매체와 기법으로 시각적 아이디어 표현", comp:"시각적 사고·창의적 표현", src:"2022 개정 교육과정" },
+  "프로그래밍": { desc:"알고리즘과 프로그래밍 언어로 문제 해결", comp:"컴퓨팅 사고·문제 해결", src:"2022 개정 교육과정" },
+  "인공지능기초": { desc:"AI 원리·머신러닝·데이터 활용 기초 이해", comp:"AI 리터러시·데이터 사고", src:"2022 개정 교육과정" },
+  "한문": { desc:"한자·한문 독해와 동아시아 고전 문화 이해", comp:"언어 분석·문화 이해", src:"2022 개정 교육과정" },
+  "중국어": { desc:"중국어 의사소통 능력과 중국 문화 이해", comp:"언어 소통·문화 이해", src:"2022 개정 교육과정" },
+  "일본어": { desc:"일본어 의사소통 능력과 일본 문화 이해", comp:"언어 소통·문화 이해", src:"2022 개정 교육과정" },
+  "소프트웨어와생활": { desc:"소프트웨어가 일상에 미치는 영향과 활용 원리", comp:"디지털 리터러시·AI 이해", src:"2022 개정 교육과정" },
+  "사물인터넷과센서제어": { desc:"IoT 기기 원리와 센서 기반 자동화 시스템 이해", comp:"공학적 사고·기술 활용", src:"2022 개정 교육과정" },
+  "언어생활과한자": { desc:"일상 언어 속 한자 어휘 이해와 바른 언어 생활", comp:"언어 이해·표현력", src:"2022 개정 교육과정" },
+  "중국문화": { desc:"중국의 역사·사회·문화 이해와 글로벌 소통", comp:"문화 이해·글로벌 역량", src:"2022 개정 교육과정" },
+  "일본문화": { desc:"일본의 역사·사회·문화 이해와 글로벌 소통", comp:"문화 이해·글로벌 역량", src:"2022 개정 교육과정" },
+  "화법과언어": { desc:"말하기·듣기·언어 구조 분석과 효과적 소통 전략", comp:"의사소통·언어 분석", src:"2022 개정 교육과정" },
+  "언어생활탐구": { desc:"언어 현상을 탐구하고 국어 생활 성찰", comp:"언어적 사고·탐구력", src:"2022 개정 교육과정" },
+  "미적분Ⅱ": { desc:"미분·적분의 심화 개념과 수학적 모델링", comp:"수리적 사고·논리력", src:"2022 개정 교육과정" },
+  "실용통계": { desc:"실생활 자료를 수집·분석하고 합리적 의사결정", comp:"통계적 사고·데이터 활용", src:"2022 개정 교육과정" },
+  "영어독해와작문": { desc:"영어 텍스트 분석·독해 전략과 논리적 작문", comp:"영어 독해·작문", src:"2022 개정 교육과정" },
+  "영미문학읽기": { desc:"영미 문학 작품 감상과 문화적 맥락 이해", comp:"문학적 감수성·영어 이해", src:"2022 개정 교육과정" },
+  "주제탐구독서": { desc:"관심 주제를 심층 탐구하는 독서 활동", comp:"탐구력·비판적 읽기", src:"2022 개정 교육과정" },
+  "기하": { desc:"공간 도형의 성질과 기하학적 추론 심화", comp:"공간적 사고·논리적 추론", src:"2022 개정 교육과정" },
+  "심화영어": { desc:"고급 영어 독해·토론·발표 능력 심화", comp:"영어 심화·발표력", src:"2022 개정 교육과정" },
+  "문학과영상": { desc:"문학과 영상 매체의 상호 연관성 탐구", comp:"미디어 리터러시·문화 분석", src:"2022 개정 교육과정" },
+  "수학과제탐구": { desc:"수학적 방법으로 현실 문제를 탐구하고 해결", comp:"수학적 모델링·탐구력", src:"2022 개정 교육과정" },
+  "이산수학": { desc:"알고리즘·그래프이론·논리 등 디지털 수학 기초", comp:"논리적 사고·알고리즘 이해", src:"2022 개정 교육과정" },
+  "심화영어독해와작문": { desc:"심화 영어 텍스트 분석과 고급 작문 전략", comp:"영어 심화·논리적 작문", src:"2022 개정 교육과정" },
+  "매체의사소통": { desc:"다양한 미디어 매체를 비판적으로 이해하고 활용", comp:"미디어 리터러시·소통", src:"2022 개정 교육과정" },
+  "경제수학": { desc:"경제 현상을 수학적으로 분석하는 응용 수학", comp:"경제적 사고·수리 분석", src:"2022 개정 교육과정" },
+  "미디어영어": { desc:"영어 미디어 콘텐츠 이해와 미디어 리터러시", comp:"영어 활용·미디어 이해", src:"2022 개정 교육과정" },
+  "한국사회의이해": { desc:"한국 사회의 구조적 문제와 변화 과정 탐구", comp:"사회 분석·비판적 사고", src:"2022 개정 교육과정" },
+  "인문학과윤리": { desc:"인문학적 사유로 삶의 의미와 윤리 문제 탐구", comp:"철학적 사고·가치 탐구", src:"2022 개정 교육과정" },
+  "한국지리탐구": { desc:"한국의 자연환경·지역성·공간 변화 탐구", comp:"공간적 사고·지리 분석", src:"2022 개정 교육과정" },
+  "사회와문화": { desc:"사회 구조·문화·사회변동 현상을 사회학적으로 탐구", comp:"사회적 사고·문화 분석", src:"2022 개정 교육과정" },
+  "전자기와양자": { desc:"전자기 현상과 양자역학 기초 원리 탐구", comp:"물리적 사고·과학적 탐구", src:"2022 개정 교육과정" },
+  "화학반응의세계": { desc:"화학 반응 원리와 물질 변환의 세계 심화 탐구", comp:"화학적 사고·실험 탐구", src:"2022 개정 교육과정" },
+  "생물의유전": { desc:"유전의 원리와 생명공학·진화의 관계 심화 탐구", comp:"생물학적 사고·탐구력", src:"2022 개정 교육과정" },
+  "행성우주과학": { desc:"태양계·우주의 구조와 우주 탐사 원리 탐구", comp:"과학적 상상력·탐구력", src:"2022 개정 교육과정" },
+  "정보과학": { desc:"알고리즘·자료구조·네트워크 등 컴퓨터과학 기초", comp:"컴퓨팅 사고·문제 해결", src:"2022 개정 교육과정" },
+  "역사로탐구하는현대세계": { desc:"역사적 사고로 현대 세계 문제의 뿌리를 탐구", comp:"역사적 사고·현대 이해", src:"2022 개정 교육과정" },
+  "윤리문제탐구": { desc:"현대 사회 윤리 문제를 다양한 시각으로 탐구", comp:"윤리적 판단·비판적 사고", src:"2022 개정 교육과정" },
+  "여행지리": { desc:"세계 지역의 지리적 특성과 여행 문화 탐구", comp:"지리적 사고·문화 이해", src:"2022 개정 교육과정" },
+  "사회문제탐구": { desc:"사회 현상을 사회과학적 방법으로 연구·탐구", comp:"사회 분석·연구 방법론", src:"2022 개정 교육과정" },
+  "과학의역사와문화": { desc:"과학 발전의 역사와 사회·문화적 맥락 탐구", comp:"과학적 소양·비판적 사고", src:"2022 개정 교육과정" },
+  "기후변화와환경생태": { desc:"기후변화 메커니즘과 생태계 변화 대응 탐구", comp:"환경 감수성·지속가능사고", src:"2022 개정 교육과정" },
+  "융합과학탐구": { desc:"물리·화학·생물·지구과학을 융합하여 현상 탐구", comp:"융합적 사고·탐구력", src:"2022 개정 교육과정" },
+  "정보과제연구": { desc:"정보과학 주제를 선정해 심층 연구·보고서 작성", comp:"연구 역량·컴퓨팅 사고", src:"2022 개정 교육과정" },
+  "창의공학설계": { desc:"공학적 문제를 창의적으로 설계하고 해결", comp:"공학적 사고·창의 설계", src:"2022 개정 교육과정" },
+  "한문고전읽기": { desc:"한문 고전 작품 독해와 동양 사상의 지혜 탐구", comp:"고전 이해·인문학적 사고", src:"2022 개정 교육과정" },
+  "중국어회화": { desc:"중국어 실용 회화와 중국 문화 심화 이해", comp:"언어 소통·글로벌 역량", src:"2022 개정 교육과정" },
+  "일본어회화": { desc:"일본어 실용 회화와 일본 문화 심화 이해", comp:"언어 소통·글로벌 역량", src:"2022 개정 교육과정" },
+  "지식재산일반": { desc:"발명·특허·저작권 등 지식재산권 이해와 활용", comp:"창의적 사고·법적 이해", src:"2022 개정 교육과정" },
+  "논술": { desc:"논리적 사고와 근거를 갖춘 체계적 글쓰기 훈련", comp:"논리적 사고·설득적 글쓰기", src:"2022 개정 교육과정" }
+};
 
 const SUBJECTS_G1 = [
   { group:"선택군1", label:"선택군 1", semester:"2학년 2학기", count:1,
@@ -3088,9 +3161,16 @@ function toggleSubject(e, group, subject, maxCount) {
   STATE.selectedSubjects[group] = selected;
   scheduleSave();
   renderSubjectTab();
+  updateRoadmapGrid();
+  updateSubjectDiagnosis();
   // Re-open current group
   const body = document.getElementById(`sgBody_${group}`);
   if (body) body.classList.remove('closed');
+}
+
+function updateSubjectDiagnosis() {
+  // 과목 선택 변경 시 진단 업데이트 (updateSubjectInsights 내 진단 로직 재호출)
+  updateSubjectInsights();
 }
 
 function toggleSubjectGroup(header) {
@@ -3817,27 +3897,7 @@ const FIELD_DIAGNOSIS = [
 function updateSubjectInsights() {
   const allSubs = Object.values(STATE.selectedSubjects).flat();
 
-  // 1. 홀랜드 연계 과목 표시
-  const hollandBox = document.getElementById('hollandSubjectBox');
-  const hollandContent = document.getElementById('hollandSubjectContent');
-  const h = STATE.hollandData;
-  const r1 = h ? (h.rank1||'').toUpperCase() : null;
-  if (r1 && HOLLAND_SUBJECT_KEYWORDS[r1]) {
-    const hkw = HOLLAND_SUBJECT_KEYWORDS[r1];
-    const recommended = hkw.keywords;
-    hollandBox.style.display = '';
-    const matched = recommended.filter(s => allSubs.includes(s));
-    hollandContent.innerHTML = `
-      <div style="font-size:12px;color:#065f46;margin-bottom:8px;">${r1}형(${hkw.label}) 추천 과목 — 선택 시 ✓ 표시</div>
-      <div class="insight-subject-tags">
-        ${recommended.map(s => `<span class="insight-tag ${allSubs.includes(s)?'highlight':''}">${allSubs.includes(s)?'✓ ':''}${s}</span>`).join('')}
-      </div>
-      <div style="font-size:12px;color:#059669;margin-top:8px;font-weight:700;">현재 ${matched.length}/${recommended.length}개 선택됨</div>`;
-  } else {
-    hollandBox.style.display = 'none';
-  }
-
-  // 2. 선택 조합 진단
+  // 선택 조합 진단
   const diagBox = document.getElementById('subjectDiagnosisBox');
   const diagContent = document.getElementById('subjectDiagnosisContent');
   if (allSubs.length > 0) {
@@ -4309,6 +4369,19 @@ async function generateCompetencyHints(jobName) {
   }
 }
 
+function showSubjectInfo(type, subject) {
+  const info = SUBJECT_INFO[subject];
+  const boxId = `subjectInfoBox_${type}`;
+  const el = document.getElementById(boxId);
+  if (!el) return;
+  if (!info || !subject) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div style="font-size:13px;color:#1e3a5f;font-weight:700;margin-bottom:4px;">📖 ${info.desc}</div>
+    <div style="font-size:12px;color:#475569;margin-bottom:3px;">💪 기르는 역량: <strong>${info.comp}</strong></div>
+    <div style="font-size:11px;color:#94a3b8;">출처: ${info.src}</div>`;
+}
+
 function applyHint(type, hint) {
   const map = {knowledge:'compKnowledge', skill:'compSkill', attitude:'compAttitude'};
   const el = document.getElementById(map[type]);
@@ -4388,10 +4461,11 @@ function updateRoadmap() {
         <div style="font-size:13px;font-weight:700;margin-top:4px;">${comp.val}</div>
       </div>
       <div class="mapping-right">
-        <select class="input-field" id="map_${comp.type}" onchange="updateRoadmapGrid();scheduleSave()" style="font-size:14px;">
+        <select class="input-field" id="map_${comp.type}" onchange="updateRoadmapGrid();showSubjectInfo('${comp.type}',this.value);scheduleSave()" style="font-size:14px;">
           <option value="">과목 선택...</option>
           ${allSubjects.map(s=>`<option value="${s}" ${(STATE.compMapping||{})[comp.type]===s?'selected':''}>${s}</option>`).join('')}
         </select>
+        <div id="subjectInfoBox_${comp.type}" style="display:none;background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;margin:6px 0;"></div>
         <textarea class="input-field comp-why" id="mapReason_${comp.type}" rows="1"
           placeholder="이 과목을 선택한 이유..."
           oninput="scheduleSave()">${(STATE.compMappingReasons||{})[comp.type]||''}</textarea>
