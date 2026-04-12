@@ -1605,17 +1605,17 @@ textarea.input-field { resize: vertical; min-height: 100px; }
       <div class="comp-inputs">
         <div class="comp-input-group">
           <div class="comp-type-label comp-knowledge">📚 지식 역량</div>
-          <input type="text" id="compKnowledge" class="input-field" placeholder="이 직업을 위해 알아야 할 것" oninput="updateRoadmap();scheduleSave()">
+          <input type="text" id="compKnowledge" class="input-field" placeholder="이 직업을 위해 알아야 할 것" oninput="updateRoadmap();updateWorksheet();scheduleSave()">
           <textarea id="compKnowledgeWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
         </div>
         <div class="comp-input-group">
           <div class="comp-type-label comp-skill">🛠 기술 역량</div>
-          <input type="text" id="compSkill" class="input-field" placeholder="이 직업을 위해 할 수 있어야 하는 것" oninput="updateRoadmap();scheduleSave()">
+          <input type="text" id="compSkill" class="input-field" placeholder="이 직업을 위해 할 수 있어야 하는 것" oninput="updateRoadmap();updateWorksheet();scheduleSave()">
           <textarea id="compSkillWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
         </div>
         <div class="comp-input-group">
           <div class="comp-type-label comp-attitude">💛 태도 역량</div>
-          <input type="text" id="compAttitude" class="input-field" placeholder="이 직업인으로서 가져야 할 자세" oninput="updateRoadmap();scheduleSave()">
+          <input type="text" id="compAttitude" class="input-field" placeholder="이 직업인으로서 가져야 할 자세" oninput="updateRoadmap();updateWorksheet();scheduleSave()">
           <textarea id="compAttitudeWhy" class="input-field comp-why" rows="1" placeholder="왜 이 역량이 필요한가요?" oninput="scheduleSave()"></textarea>
         </div>
       </div>
